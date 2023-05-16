@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import '../css/Login.css';
 import { Link } from 'react-router-dom';
-//import { useHistory } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { NotificationManager } from "react-notifications";
+import { LoginAPI } from '../URL/ApiList';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 
 
 
 const Login = () => {
   const [inputState, setInputState] = useState({
-    email: '',
+    userName: '',
     password: ""
   });
   const navigate = useNavigate();
@@ -31,19 +33,18 @@ const Login = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     //const history = useHistory();
     //console.log("submit",data);
 
     e.preventDefault();
-    const { email, password } = inputState;
+    const { userName, password } = inputState;
 
 
 
-    if (email === "") {
-      alert("Please Enter Email");
+    if (userName === "") {
+      alert("Please Enter userName");
       // NotificationManager.warning("Enter Email", "Click to Remove", 5000);
-
       return;
     }
 
@@ -53,13 +54,33 @@ const Login = () => {
       return;
     }
 
-    if (email === "mehedi@gmail.com" && password === "12345") {
-      //history.push('/details');
-      //alert("OK");
-      navigate('/details', { state: { email, password } });
-    }
 
-    console.log("submit value", inputState);
+    
+    try{
+      let loginCall = await axios.post(LoginAPI, inputState);
+      console.log("loginCall", loginCall.data);
+      let loginData = loginCall.data;
+      localStorage.setItem("AuthToken", loginData.token);
+      if(loginData.response === 1){
+        //alert("Login Successfull");
+         toast("Login Successfull");
+        // NotificationManager.success("Login Successfull", "Success", 5000);
+        navigate('/details',{ replace: true });
+      }else{
+        alert("Invalid Credentials");
+      }
+
+    }catch(err){
+      if (err.response) {
+        let message = err.response.data.message;
+        alert(message);
+      } else if (err.request) {
+        alert('Error Connecting ...', err.request);
+      } else if (err) {
+        alert(err.toString());
+      }
+
+    }
 
   }
 
@@ -71,11 +92,11 @@ const Login = () => {
         <form>
 
           <input
-            type="email"
-            placeholder="Enter email"
-            name="email"
+            type="text"
+            placeholder="Enter User Name"
+            name="userName"
             onChange={setVal}
-            value={inputState.email}
+            value={inputState.userName}
             autoComplete='off'
           />
           <input

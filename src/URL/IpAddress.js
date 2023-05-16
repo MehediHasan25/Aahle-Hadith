@@ -1,0 +1,1 @@
+export const hostIp = `https://localhost:7052/`;
