@@ -3,7 +3,8 @@ import '../css/Login.css';
 import { Link } from 'react-router-dom';
 //import { useHistory } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-// import { NotificationManager} from 'react-notifications';
+import { NotificationManager } from "react-notifications";
+
 
 
 
@@ -41,7 +42,7 @@ const Login = () => {
 
     if (email === "") {
       alert("Please Enter Email");
-      // NotificationManager.success('You have added a new book!', 'Successful!', 2000);
+      // NotificationManager.warning("Enter Email", "Click to Remove", 5000);
 
       return;
     }
@@ -52,7 +53,7 @@ const Login = () => {
       return;
     }
 
-    if (email === "mehedi@gmail.com" && password === "123456") {
+    if (email === "mehedi@gmail.com" && password === "12345") {
       //history.push('/details');
       //alert("OK");
       navigate('/details', { state: { email, password } });
