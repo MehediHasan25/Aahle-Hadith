@@ -55,7 +55,8 @@ const Login = () => {
     }
 
 
-    
+    // console.log("submit value", inputState);
+
     try{
       let loginCall = await axios.post(LoginAPI, inputState);
       console.log("loginCall", loginCall.data);
