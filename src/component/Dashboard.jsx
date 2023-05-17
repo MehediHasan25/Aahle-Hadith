@@ -1,8 +1,12 @@
 import React from 'react'
+// import BG from '../assets/bg.png'
 
 const Dashboard = () => {
   return (
-    <h3>Dashboard</h3>
+  <div>
+      <h3>Dashboard</h3>
+    {/* <img src={BG} alt="" /> */}
+  </div>
   )
 }
 

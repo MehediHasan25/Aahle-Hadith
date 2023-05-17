@@ -1,4 +1,4 @@
-import { FaTh, FaRegChartBar, FaCommentAlt } from "react-icons/fa";
+import { FaTh, FaRegChartBar, FaCommentAlt, FaUser } from "react-icons/fa";
 import { BiImageAdd,BiHomeAlt } from "react-icons/bi";
 
 const menu = [
@@ -6,6 +6,28 @@ const menu = [
         title: 'Dashboard',
         icon:<BiHomeAlt/>,
     path: "/dashboard",
+  },
+  {
+    title: "Basic Setup",
+    icon: <FaUser />,
+    childrens: [
+      {
+        title: "Division",
+        path: "/division",
+      },
+      {
+        title: "District",
+        path: "/district",
+      },
+      {
+        title: "Upozilla",
+        path: "/upozilla",
+      },
+      {
+        title: "Mosque",
+        path: "/mosque",
+      },
+    ],
   },
   {
     title: "Add Product",
