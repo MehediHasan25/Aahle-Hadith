@@ -80,7 +80,7 @@ display: flex;
   /* background-color: #ccc; */
   padding-left: 235px;
   transition: all 0.5s;
-  background-image: url('../src/assets/bg.png');
+  /* background-image: url('../src/assets/bg.png'); */
   background-size: cover;
 height: 100%;
 }
