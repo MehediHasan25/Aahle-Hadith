@@ -62,11 +62,12 @@ const Login = () => {
       console.log("loginCall", loginCall.data);
       let loginData = loginCall.data;
       localStorage.setItem("AuthToken", loginData.token);
+      localStorage.setItem("userName",inputState.userName );
       if(loginData.response === 1){
         //alert("Login Successfull");
          toast("Login Successfull");
         // NotificationManager.success("Login Successfull", "Success", 5000);
-        navigate('/details',{ replace: true });
+        navigate('/dashboard',{ replace: true });
       }else{
         alert("Invalid Credentials");
       }

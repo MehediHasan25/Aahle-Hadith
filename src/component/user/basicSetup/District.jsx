@@ -2,7 +2,9 @@ import React from 'react'
 import { BiEditAlt } from 'react-icons/bi';
 
 import { BsTrash } from "react-icons/bs";
+
 const District = () => {
+
   return (
     <div className="page-content p-4">
     <div className="pg_title">
