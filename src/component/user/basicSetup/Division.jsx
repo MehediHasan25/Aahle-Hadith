@@ -1,4 +1,6 @@
 import React from "react";
+import { BiEditAlt } from "react-icons/bi";
+import { BsTrash } from "react-icons/bs";
 
 const Division = () => {
   return (
@@ -47,10 +49,16 @@ const Division = () => {
                   />
                 </div>
               </div>
+              <div className="text-end">
+         <button type="button" className="btn btn-sm btn-primary">Submit</button>
+         </div>
             </form>
           </div>
         </div>
-        <div className="col-md-6">
+    
+      </div>
+      <div className="row pt-4">
+      <div className="col-md-6">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
@@ -64,12 +72,16 @@ const Division = () => {
                 <tr>
                   <th>Division</th>
                   <th>Code</th>
+                  <th colspan="2"> Action</th>
+
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>Dhaka</td>
                   <td>1206</td>
+                  <td><BsTrash/></td>
+                <td><BiEditAlt/></td>
                 </tr>
               </tbody>
             </table>

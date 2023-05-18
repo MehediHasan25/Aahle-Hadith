@@ -88,6 +88,10 @@ height: 100%;
   border:1px solid #555 !important;
   padding: 0.5em;
 }
+.form button{
+width: 150px;
+margin: 0 auto;
+}
 /* 
 .s-parent {
   border-bottom: 2px solid #ccc;

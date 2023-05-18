@@ -1,4 +1,6 @@
 import React from 'react'
+import { BiEditAlt } from 'react-icons/bi'
+import { BsTrash } from 'react-icons/bs'
 
 const Upozilla = () => {
   return (
@@ -73,34 +75,43 @@ const Upozilla = () => {
                 />
               </div>
             </div>
+            <div className="text-end">
+         <button type="button" className="btn btn-sm btn-primary">Submit</button>
+         </div>
           </form>
         </div>
       </div>
-      <div className="col-md-6">
-        <div className="table form-tbl">
-          <form className="d-flex w-50">
-            <input
-              className="form-control me-2"
-              type="text"
-              placeholder="Search"
-            />
-          </form>
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Upozilla</th>
-                <th>Code</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Dhaka</td>
-                <td>1206</td>
-              </tr>
-            </tbody>
-          </table>
+    </div>
+    <div className="row pt-4">
+    <div className="col-md-6">
+          <div className="table form-tbl">
+            <form className="d-flex w-50">
+              <input
+                className="form-control me-2"
+                type="text"
+                placeholder="Search"
+              />
+            </form>
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Mosque</th>
+                  <th>Code</th>
+                <th colspan="2"> Action</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Dhaka</td>
+                  <td>1206</td>
+                  <td><BsTrash/></td>
+                <td><BiEditAlt/></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
     </div>
   </div>
   )
