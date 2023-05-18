@@ -84,7 +84,10 @@ display: flex;
   background-size: cover;
 height: 100%;
 }
-
+.form-tbl{
+  border:1px solid #555 !important;
+  padding: 0.5em;
+}
 /* 
 .s-parent {
   border-bottom: 2px solid #ccc;
