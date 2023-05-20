@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { BiEditAlt } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
-import { GetDivisionCode, GetDivisionList, SaveDivision } from "../../../URL/ApiList";
+import toast, { Toaster } from 'react-hot-toast';
+import { GetDivisionCode, GetDivisionList, SaveDivision,DeleteDivision } from "../../../URL/ApiList";
 
 const Division = () => {
   const [division, setDivision] = useState({
+    DivisionId:"",
     DivisionNameEn: "",
     DivisionNameBn: "",
     DivisionCode: "",
@@ -13,8 +15,10 @@ const Division = () => {
   });
 
   const [listDivision, setListDivision] = useState([]);
-
-  const [isUpdate, setIsUpdate] = useState(false);
+  const [search, setSearch] = useState("");
+  const [track, setTrack] = useState(false);
+  const [codeDivision, setCodeDivision]= useState("");
+  //const [divTrack, setDivTrack]= useState(false);
 
   useEffect(() => {
     divisionCode();
@@ -22,12 +26,17 @@ const Division = () => {
   }, []);
 
   useEffect(() => {
-    console.log("useE",isUpdate);
-    if(isUpdate === true){
+    if(track === true){
       getDivision();
     }
+
+    return (() => {
+      setTrack(false);
+    })
    
-  }, [isUpdate]);
+  }, [track]);
+
+
 
 
   const setDivisionVal = (e) => {
@@ -38,48 +47,150 @@ const Division = () => {
         [name]: value
       }
     })
+  };
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const codeDivisionVal = (e)=>{
+    setCodeDivision(e.target.value);
   }
 
   const divisionCode = async () => {
+    try{
     let codeDiv = await axios.get(GetDivisionCode);
     let divCode = codeDiv.data.divGenCode;
-    setDivision({ ...division, DivisionCode: divCode });
+   // console.log("divCode", divCode);
+    setCodeDivision(divCode);
+    }catch(err){
+      console.log("error",err);
+    if (err.response) {
+      let message = err.response.data.message;
+      alert(message);
+    } else if (err.request) {
+      alert('Error Connecting ...', err.request);
+    } else if (err) {
+      alert(err.toString());
+    }
+    }
   };
 
   const getDivision = async () => {
-    let divGet = await axios.get(GetDivisionList);
-    let getDivList = divGet.data._divisionList;
-    //console.log("divisionList",divGet.data._divisionList);
-    setListDivision(getDivList);
+    try{
+      let divGet = await axios.get(GetDivisionList);
+      let getDivList = divGet.data._divisionList;
+      setListDivision(getDivList);
+    }catch(err){
+      console.log("error",err);
+    if (err.response) {
+      let message = err.response.data.message;
+      alert(message);
+    } else if (err.request) {
+      alert('Error Connecting ...', err.request);
+    } else if (err) {
+      alert(err.toString());
+    }
+    }
   }
 
 
   const handleSubmit = async (e) => {
+    
+    const {DivisionId,DivisionNameEn,DivisionNameBn,AddedBy} = division;
     e.preventDefault();
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
-    console.log("divisionState", division);
-    console.log("up1",isUpdate);
-    try {
-      let saveDiv = await axios.post(SaveDivision, division, { headers });
-
-     
-      console.log("saveDiv", saveDiv.data.success);
-      let newData = saveDiv.data.success;
-      if(newData === true){
-        setIsUpdate(current => !current);
-      }
-      console.log("up2",isUpdate);
-      setIsUpdate(false);
-    } catch (error) {
-      console.log(error);
+    let payload = {
+      DivisionId:DivisionId === "" ? 0 : DivisionId,
+      DivisionNameEn: DivisionNameEn,
+      DivisionNameBn: DivisionNameBn,
+      DivisionCode: codeDivision,
+      AddedBy: AddedBy
     }
 
 
-    //setUpTableData("");
+   // console.log("Payload", payload);
     
-  }
+    try {
+      let saveDiv = await axios.post(SaveDivision, payload, { headers });
+     // console.log("saveDiv", saveDiv.data.success);
 
+      let newData = saveDiv.data.success;
+       
+      if(newData === true){
+        if(DivisionId > 0){
+          toast.success('Successfully Updated!',{duration: 4000,position: 'top-center'});  
+        
+        }else{
+          toast.success('Successfully Added!',{duration: 4000,position: 'top-center'});  
+        
+        }
+        
+        divisionCode();
+        setTrack(true);
+        setDivision({
+          ...division,
+          DivisionId:"",
+          DivisionNameEn: "",
+          DivisionNameBn: "",
+        });
+
+      }        
+
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        let message = error.response.data.message;
+        alert(message);
+      } else if (error.request) {
+        alert('Error Connecting ...', error.request);
+      } else if (error) {
+        alert(error.toString());
+      }
+    }
+ }
+
+
+ const handleEdit =(editData) =>{
+  //console.log("Edit", editData);
+  const {divisionId,divisionNameEn,divisionNameBn,divisionCode,addedBy} = editData;
+  setCodeDivision(divisionCode);
+  setDivision({
+    ...division,
+    DivisionId: divisionId,
+    DivisionNameEn:divisionNameEn,
+    DivisionNameBn: divisionNameBn,
+    AddedBy:localStorage.getItem('userName')
+  });
+ }
+
+
+ const handleDelete = async(id) =>{
+  //console.log("id",id);
+ 
+  try{
+   let deleteData = await axios.get(DeleteDivision+id);
+   console.log("deleteRes", deleteData.data);
+   let resDel = deleteData.data.success;
+
+   if(resDel === true){
+    toast.success('Successfully Deleted!',{duration: 4000,position: 'top-center'});  
+    divisionCode();
+    setTrack(true);
+   }
+  }catch(err){
+    console.log("error",err);
+    if (err.response) {
+      let message = err.response.data.message;
+      alert(message);
+    } else if (err.request) {
+      alert('Error Connecting ...', err.request);
+    } else if (err) {
+      alert(err.toString());
+    }
+  }
+ }
 
 
 
@@ -88,6 +199,7 @@ const Division = () => {
       <div className="pg_title">
         <h3>Division</h3>
       </div>
+
       <div className="row pt-4">
         <div className="col-md-6">
           <div className="form">
@@ -128,9 +240,9 @@ const Division = () => {
                   <input
                     type="text"
                     placeholder="Enter Division Code"
-                    name="DivisionCode"
-                    onChange={setDivisionVal}
-                    value={division.DivisionCode}
+                    name="codeDivision"
+                    onChange={codeDivisionVal}
+                    value={codeDivision}
                     disabled
                     autoComplete='off'
                   />
@@ -144,14 +256,19 @@ const Division = () => {
         </div>
 
       </div>
+
       <div className="row pt-4">
         <div className="col-md-6">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
-                className="form-control me-2"
                 type="text"
-                placeholder="Search"
+                className="form-control me-2"
+                placeholder="Search By Division Name (English)"
+                name="search"
+                onChange={handleSearch}
+                value={search}
+                autoComplete='off'
               />
             </form>
             <table className="table table-bordered">
@@ -160,18 +277,20 @@ const Division = () => {
                   <th>Division(English)</th>
                   <th>Division(Bangla)</th>
                   <th>Code</th>
-                  <th colspan="2"> Action</th>
+                  <th colSpan="2"> Action</th>
 
                 </tr>
               </thead>
               <tbody>
-                {listDivision.map(item => (
+                {listDivision.filter((item)=>{
+                  return search.toLowerCase()==="" ? item : item.divisionNameEn.toLowerCase().includes(search.toLowerCase())
+                  }).map(item => (
                   <tr key={item.divisionId}>
                     <td>{item.divisionNameEn}</td>
                     <td>{item.divisionNameBn}</td>
                     <td>{item.divisionCode}</td>
-                    <td onClick={() => handleDelete(item.divisionId)}><BsTrash /></td>
-                    <td onClick={() => handleEdit(item.divisionId)}><BiEditAlt /></td>
+                    <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></td>
+                    <td onClick={() => handleEdit(item)}><BiEditAlt /></td>
                   </tr>
                 ))}
               </tbody>

@@ -14,13 +14,18 @@ import Division from './component/user/basicSetup/Division';
 import District from './component/user/basicSetup/District';
 import Upozilla from './component/user/basicSetup/Upozilla';
 import Mosque from './component/user/basicSetup/Mosque';
+// import District from './component/District';
 // import { NotificationContainer } from 'react-notifications';
+import toast, { Toaster } from 'react-hot-toast';
+
+
+
 
 function App() {
 
 
   return (
-
+<>
 
     <Routes>
       <Route exact path="/" element={<Login />} />
@@ -33,8 +38,8 @@ function App() {
       <Route  path="/mosque" element={ <MainLayout><Mosque/></MainLayout>}/>
     </Routes>
 
-
-
+    <Toaster />
+    </>
     
   )
 }
