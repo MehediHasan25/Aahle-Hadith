@@ -12,7 +12,7 @@ import MainLayout from './layout/MainLayout';
 import Dashboard from './component/Dashboard';
 import Division from './component/user/basicSetup/Division';
 import District from './component/user/basicSetup/District';
-import Upozilla from './component/user/basicSetup/Upozilla';
+import Upazila from './component/user/basicSetup/Upazila';
 import Mosque from './component/user/basicSetup/Mosque';
 // import District from './component/District';
 // import { NotificationContainer } from 'react-notifications';
@@ -34,7 +34,7 @@ function App() {
       <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
       <Route  path="/division" element={ <MainLayout><Division/></MainLayout>}/>
       <Route  path="/district" element={ <MainLayout><District/></MainLayout>}/>
-      <Route  path="/upozilla" element={ <MainLayout><Upozilla/></MainLayout>}/>
+      <Route  path="/upazila" element={ <MainLayout><Upazila/></MainLayout>}/>
       <Route  path="/mosque" element={ <MainLayout><Mosque/></MainLayout>}/>
     </Routes>
 

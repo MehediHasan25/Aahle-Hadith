@@ -20,8 +20,8 @@ const menu = [
         path: "/district",
       },
       {
-        title: "Upozilla",
-        path: "/upozilla",
+        title: "Upazila",
+        path: "/upazila",
       },
       {
         title: "Mosque",

@@ -368,7 +368,9 @@ const District = () => {
               <thead>
                 <tr>
                   <th>Division</th>
+                  <th>Division(Bangla)</th>
                   <th>District</th>
+                  <th>District(Bangla)</th>
                   <th>Code</th>
                   <th colSpan="2"> Action</th>
                 </tr>
@@ -381,7 +383,9 @@ const District = () => {
 
                     <tr key={item.districtId}>
                       <td>{item.divisionNameEn}</td>
+                      <td>{item.divisionNameBn}</td>
                       <td>{item.districtNameEn}</td>
+                      <td>{item.districtNameBn}</td>
                       <td>{item.districtCode}</td>
                       <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.districtId)}><BsTrash /></td>
                       <td onClick={() => handleEdit(item)}><BiEditAlt /></td>
