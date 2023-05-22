@@ -28,5 +28,5 @@ export const GetUpazilaList = hostIp + `api/v1/Upazila/get-upazila`;
 // Mosque
 export const GetMosqueCode = hostIp + `api/v1/Mosque/get-mosque-code`;
 export const SaveMosque = hostIp + `api/v1/Mosque/Save`;
-export const DeleteMosque = hostIp+ + `api/v1/Mosque/Delete/`;
+export const DeleteMosque = hostIp + `api/v1/Mosque/Delete/`;
 export const GetMosqueList = hostIp + `api/v1/Mosque/get-mosque`;

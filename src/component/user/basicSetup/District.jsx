@@ -51,15 +51,17 @@ const District = () => {
 
       setListDivision(getDivList);
     } catch (err) {
-      console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+      console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
     }
   }
 
@@ -67,37 +69,41 @@ const District = () => {
     try {
       let codeDis = await axios.get(GetDistrictCode);
       let disCode = codeDis.data.disGenCode;
-      console.log("disCode", codeDis.data.disGenCode);
+      //console.log("disCode", codeDis.data.disGenCode);
       setCodeDistrict(disCode);
     } catch (err) {
-      console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+      console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
     }
   };
 
   const getDistrictData = async () => {
     try {
       let distData = await axios.get(GetDistrictList);
-      console.log("distData", distData.data._districtList);
+      //console.log("distData", distData.data._districtList);
       let getDistrictData = distData.data._districtList;
       setListDistrict(getDistrictData);
     } catch (err) {
-      console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+      console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
 
     }
   }
@@ -110,8 +116,8 @@ const District = () => {
   const onSearch = (searchTerm, val) => {
     setAsearch(searchTerm);
     setSelectVal(val);
-    console.log("search", searchTerm);
-    console.log("idvAL", val);
+    // console.log("search", searchTerm);
+    // console.log("idvAL", val);
 
   }
 
@@ -139,6 +145,29 @@ const District = () => {
     const {DistrictId,DistrictNameEn,DistrictNameBn,AddedBy} = district;
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
+
+    let divisionArr = listDivision.map(item=> item.divisionNameEn);
+
+    if(setAsearch === ""){
+      toast.error('Please Enter Division',{duration: 5000,position: 'top-center'});
+      return;
+    }
+
+    if(divisionArr.includes(setAsearch) === false){
+      toast.error('Invalid Division Name... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+      return;
+    }
+
+    if(DistrictNameEn === ""){
+      toast.error('Please Enter Name of District (English)',{duration: 5000,position: 'top-center'});
+      return;
+    }
+
+    if(DistrictNameEn === ""){
+      toast.error('Please Enter Name of District (Bangla)',{duration: 5000,position: 'top-center'});
+      return;
+    }
+
 
     let payload = {
       DistrictId: DistrictId === "" ? 0 : DistrictId,
@@ -173,21 +202,23 @@ const District = () => {
         setAsearch("");
       }
 
-    }catch(error){
-      console.log(error);
-      if (error.response) {
-        let message = error.response.data.message;
-        alert(message);
-      } else if (error.request) {
-        alert('Error Connecting ...', error.request);
-      } else if (error) {
-        alert(error.toString());
-      }
+    }catch(err){
+      console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
     }
   }
 
   const handleEdit = (editData) =>{
-    console.log("edit",editData);
+   // console.log("edit",editData);
     setDistrict({
       ...district,
       DistrictId: editData.districtId,
@@ -209,7 +240,7 @@ const District = () => {
    
     try{
      let deleteData = await axios.get(DeleteDistrict+id);
-     console.log("deleteRes", deleteData.data);
+     //console.log("deleteRes", deleteData.data);
      let resDel = deleteData.data.success;
   
      if(resDel === true){
@@ -219,14 +250,16 @@ const District = () => {
      }
     }catch(err){
       console.log("error",err);
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
     }
    }
   

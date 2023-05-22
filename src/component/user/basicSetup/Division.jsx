@@ -65,14 +65,16 @@ const Division = () => {
     setCodeDivision(divCode);
     }catch(err){
       console.log("error",err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
     }
   };
 
@@ -83,14 +85,16 @@ const Division = () => {
       setListDivision(getDivList);
     }catch(err){
       console.log("error",err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+      if (err.response) {
+        let message = err.response.data.message;
+        toast.error(message,{duration: 5000,position: 'top-center'});
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+      }
     }
   }
 
@@ -101,6 +105,18 @@ const Division = () => {
     e.preventDefault();
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
+
+    if(DivisionNameEn === ""){
+      toast.error('Please Enter Name of Division (English)',{duration: 5000,position: 'top-center'});
+      return;
+    }
+
+    if(DivisionNameBn === ""){
+      toast.error('Please Enter Name of Division (Bangla)',{duration: 5000,position: 'top-center'});
+      return;
+    }    
+
+
     let payload = {
       DivisionId:DivisionId === "" ? 0 : DivisionId,
       DivisionNameEn: DivisionNameEn,
@@ -114,8 +130,6 @@ const Division = () => {
     
     try {
       let saveDiv = await axios.post(SaveDivision, payload, { headers });
-     // console.log("saveDiv", saveDiv.data.success);
-
       let newData = saveDiv.data.success;
        
       if(newData === true){
@@ -139,15 +153,17 @@ const Division = () => {
       }        
 
     } catch (error) {
-      console.log(error);
-      if (error.response) {
-        let message = error.response.data.message;
-        alert(message);
-      } else if (error.request) {
-        alert('Error Connecting ...', error.request);
-      } else if (error) {
-        alert(error.toString());
-      }
+      console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
     }
  }
 
@@ -171,7 +187,7 @@ const Division = () => {
  
   try{
    let deleteData = await axios.get(DeleteDivision+id);
-   console.log("deleteRes", deleteData.data);
+   //console.log("deleteRes", deleteData.data);
    let resDel = deleteData.data.success;
 
    if(resDel === true){
@@ -181,14 +197,16 @@ const Division = () => {
    }
   }catch(err){
     console.log("error",err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
   }
  }
 

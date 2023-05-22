@@ -111,15 +111,17 @@ const getDivisionData = async () => {
     //console.log("division", getDivList);
     setListDivision(getDivList);
   } catch (err) {
-    console.log("error", err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+    console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
   }
 }
 
@@ -130,15 +132,17 @@ const getDistrictData = async () => {
     let getDistrictData = distData.data._districtList;
     setListDistrict(getDistrictData);
   } catch (err) {
-    console.log("error", err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+    console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
 
   }
 }
@@ -150,15 +154,17 @@ const getUpazila = async(e) =>{
     let getUpaData = upaData.data._upazilaList;
     setListUpazila(getUpaData);
   }catch(err){
-    console.log("error", err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+    console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
   }
 }
 
@@ -169,15 +175,17 @@ const upazilaCode = async() =>{
     let getCodeUpazila = codeUpazila.data.upaGenCode;
     setCodeUpazila(getCodeUpazila);
   }catch(err){
-    console.log("error", err);
-    if (err.response) {
-      let message = err.response.data.message;
-      alert(message);
-    } else if (err.request) {
-      alert('Error Connecting ...', err.request);
-    } else if (err) {
-      alert(err.toString());
-    }
+    console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
   }
 }
 
@@ -190,24 +198,36 @@ const handleSubmit =async(e) =>{
   const getDivData = listDivision.map(item=> item.divisionNameEn);
   const getDisData = listDistrict.filter(item=>item.divisionNameEn === divSearch).map(item=> item.districtNameEn);
   
-
-  if(getDivData.includes(divSearch)=== false){
-    alert("No Match found on District. Please type your desired district and Select it by autoSearch");
+  if(divSearch === ""){
+    toast.error('Please Enter Name of Division',{duration: 5000,position: 'top-center'});
     return;
   }
 
+  if(getDivData.includes(divSearch)=== false){
+   // alert("No Match found on District. Please type your desired district and Select it by autoSearch");
+   toast.error('Invalid Division Select .. Please Select Using Auto Complete',{duration: 5000,position: 'top-center'});
+    return;
+  }
+
+  if(disSearch === ""){
+    toast.error('Please Enter Name of District',{duration: 5000,position: 'top-center'});
+  }
+
   if(getDisData.includes(disSearch) === false){
-    alert("No Match found on District. Please type your desired district and Select it by autoSearch");
+    //alert("No Match found on District. Please type your desired district and Select it by autoSearch");
+    toast.error('Invalid District Select .. Please Select Using Auto Complete',{duration: 5000,position: 'top-center'});
     return;
   }
 
   if(UpazilaNameEn === ""){
-    alert("Please Enter Upzila Name English");
+    //alert("Please Enter Upzila Name English");
+    toast.error("Please Enter Upzila Name English",{duration: 5000,position: 'top-center'});
     return;
   }
 
   if(UpazilaNameBn === ""){
-    alert("Please Enter Upazila Name Bangla");
+    //alert("Please Enter Upazila Name Bangla");
+    toast.error("Please Enter Upazila Name Bangla",{duration: 5000,position: 'top-center'});
     return;
   }
 
@@ -246,15 +266,17 @@ const handleSubmit =async(e) =>{
     }
   
   }catch(err){
-    console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+    console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
   }
 }
 
@@ -288,14 +310,16 @@ const handleDelete = async(id) =>{
 
   }catch(err){
     console.log("error",err);
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
   }
 }
 
