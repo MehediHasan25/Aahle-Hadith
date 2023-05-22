@@ -200,9 +200,9 @@ const Division = () => {
         <h3>Division</h3>
       </div>
 
-      <div className="row pt-4">
-        <div className="col-md-6">
-          <div className="form">
+      <div className="row pt-2">
+        <div className="col-md-8">
+          <div className="form card p-3">
             <form action="" className="form-horizontal">
               <div className="mb-3 row">
                 <label className="col-md-4 col-form-label">
@@ -258,7 +258,7 @@ const Division = () => {
       </div>
 
       <div className="row pt-4">
-        <div className="col-md-6">
+        <div className="col-md-8">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
@@ -271,13 +271,13 @@ const Division = () => {
                 autoComplete='off'
               />
             </form>
-            <table className="table table-bordered">
+            <table className="table table-striped table-bordered">
               <thead>
                 <tr>
+                  <th> Action</th>
                   <th>Division(English)</th>
                   <th>Division(Bangla)</th>
                   <th>Code</th>
-                  <th colSpan="2"> Action</th>
 
                 </tr>
               </thead>
@@ -286,11 +286,18 @@ const Division = () => {
                   return search.toLowerCase()==="" ? item : item.divisionNameEn.toLowerCase().includes(search.toLowerCase())
                   }).map(item => (
                   <tr key={item.divisionId}>
+                    <td>
+                      <div className="act_icon">
+
+                      <span  onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></span>
+                      <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
+                      </div>
+                    </td>
                     <td>{item.divisionNameEn}</td>
                     <td>{item.divisionNameBn}</td>
                     <td>{item.divisionCode}</td>
-                    <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></td>
-                    <td onClick={() => handleEdit(item)}><BiEditAlt /></td>
+                    {/* <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></td>
+                    <td onClick={() => handleEdit(item)}><BiEditAlt /></td> */}
                   </tr>
                 ))}
               </tbody>

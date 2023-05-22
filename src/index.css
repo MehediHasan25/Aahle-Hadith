@@ -7,10 +7,15 @@
 }
 a{
   text-decoration: none !important;
-  color: #666 !important;
+  color: #666;
 }
-.header{
+.header {
   color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
 }
 .main{
 display: flex;
@@ -21,11 +26,14 @@ display: flex;
   position: fixed;
   width: 235px;
   left: 0;
-  background: #fff;
-  color: #666;
-  height: 100%;
-  overflow: auto;
+  background: #333;
+  color: #fff;
+  /* height: 100%;
+  overflow: auto; */
   transition: all 0.5s;
+}
+.sidebar .inner_content {
+  padding-top: 69px;
 }
 .sidebar-item {
   padding: .5rem 1rem;
@@ -41,20 +49,31 @@ display: flex;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #666;
+  color: #fff !important;
   /* font-size: 1.2em; */
 }
 .sidebar-title .icon{
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
+}
+.sidebar-title .icon svg{
+  font-size: 20px;
+  color: #fff !important;
+
+}
+.sidebar-title .title{
+  width: max-content;
+  color: #fff !important;
+
+  
 }
 .sidebar-title .toggle_btn {
   cursor: pointer;
   transition: all 0.5s;
 }
 .sidebar-title .toggle_btn svg{
-  color: #666 !important;
+  color: #fff !important;
 }
 .sidebar-item.open .title{
   font-weight: bold;
@@ -83,14 +102,66 @@ display: flex;
   /* background-image: url('../src/assets/bg.png'); */
   background-size: cover;
 height: 100%;
+padding-top: 69px;
+/* position: relative; */
+}
+.form.card{
+  border-top: 4px solid #2196F3;
+}
+.search-container {
+  width: initial;
+}
+.dropdown {
+  border-radius: 10px;
+  width: 200px;
+}
+.dropdown-row {
+  border: 1px solid gray;
+  padding: 2px 5px;
+  border-radius: 10px;
+  /*border: 0;
+  *//*border: 1px solid gray;
+  *//*border-bottom: 1px solid black;
+   */
+}
+.search-inner {
+
+  width: initial;
+
 }
 .form-tbl{
   border:1px solid #555 !important;
   padding: 0.5em;
+  background: #ddd;
+}
+.form-tbl table thead{
+  background-color: green;
+}
+.form-tbl table tr:nth-child(2n + 1){
+  /* background: #555; */
 }
 .form button{
 width: 150px;
 margin: 0 auto;
+}
+table  .act_icon{
+ /* display: flex;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 20px; */
+}
+table  .act_icon span {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  text-align: center;
+  background-color: red;
+  color: #fff;
+  margin: 5px;
+  /* padding-bottom: 7px; */
+}
+table  .act_icon span:nth-child(2){
+  background-color: green;
 }
 /* 
 .s-parent {

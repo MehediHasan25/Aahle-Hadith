@@ -111,9 +111,9 @@ const Mosque = () => {
       <div className="pg_title">
         <h3>Mosque</h3>
       </div>
-      <div className="row pt-4">
+      <div className="row pt-2">
         <div className="col-md-6">
-          <div className="form">
+          <div className="form card p-3">
             <form action="" className="form-horizontal">
               <div className="mb-3 row">
                 

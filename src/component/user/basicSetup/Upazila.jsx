@@ -306,9 +306,9 @@ const handleDelete = async(id) =>{
     <div className="pg_title">
       <h3>Upazila</h3>
     </div>
-    <div className="row pt-4">
+    <div className="row pt-2">
       <div className="col-md-6">
-        <div className="form">
+        <div className="form card p-3">
           <form action="" className="form-horizontal">
           <div className="mb-3 row">
               {/* Start */}
@@ -459,9 +459,10 @@ const handleDelete = async(id) =>{
                 autoComplete='off'
               />
             </form>
-            <table className="table table-bordered">
+            <table className="table table-striped table-bordered">
               <thead>
                 <tr>
+                  <th> Action</th>
                   <th>Division</th>
                   <th>Division (Bangla)</th>
                   <th>District</th>
@@ -469,7 +470,6 @@ const handleDelete = async(id) =>{
                   <th>Upazila</th>
                   <th>Upazila (Bangla)</th>
                   <th>Upazila Code </th>
-                <th colSpan="2"> Action</th>
 
                 </tr>
               </thead>
@@ -478,6 +478,12 @@ const handleDelete = async(id) =>{
                     return search.toLowerCase() === "" ? item : item.upazilaNameEn.toLowerCase().includes(search.toLowerCase())
                   }).map((item)=>(
                    <tr key={item.upazilaId}>
+                    <td>
+                      <div className="act_icon">
+                      <span onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.upazilaId)}><BsTrash /></span>
+                      <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
+                      </div>
+                    </td>
                    <td>{item.divisionNameEn}</td>
                    <td>{item.divisionNameBn}</td>
                    <td>{item.districtNameEn}</td>
@@ -485,8 +491,8 @@ const handleDelete = async(id) =>{
                    <td>{item.upazilaNameEn}</td>
                    <td>{item.upazilaNameBn}</td>
                    <td>{item.upazilaCode}</td>
-                   <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.upazilaId)}><BsTrash/></td>
-                 <td onClick={() => handleEdit(item)}><BiEditAlt/></td>
+                   {/* <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.upazilaId)}><BsTrash/></td>
+                 <td onClick={() => handleEdit(item)}><BiEditAlt/></td> */}
                  </tr>
                 ))
                  
