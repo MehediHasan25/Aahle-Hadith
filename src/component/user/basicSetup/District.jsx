@@ -390,7 +390,7 @@ const District = () => {
               <input
                 type="text"
                 className="form-control me-2"
-                placeholder="Search by District Name (English)"
+                placeholder="Search by District Name"
                 name="search"
                 onChange={handleSearch}
                 value={search}
@@ -411,7 +411,7 @@ const District = () => {
               <tbody>
                 {
                   listDistrict.filter((item) => {
-                    return search.toLowerCase() === "" ? item : item.districtNameEn.toLowerCase().includes(search.toLowerCase())
+                    return search.toLowerCase() === "" ? item : item.districtNameEn.toLowerCase().includes(search.toLowerCase())||item.districtNameBn.toLowerCase().includes(search.toLowerCase())
                   }).map((item) => (
 
                     <tr key={item.districtId}>

@@ -282,7 +282,7 @@ const Division = () => {
               <input
                 type="text"
                 className="form-control me-2"
-                placeholder="Search By Division Name (English)"
+                placeholder="Search By Division Name"
                 name="search"
                 onChange={handleSearch}
                 value={search}
@@ -301,7 +301,7 @@ const Division = () => {
               </thead>
               <tbody>
                 {listDivision.filter((item)=>{
-                  return search.toLowerCase()==="" ? item : item.divisionNameEn.toLowerCase().includes(search.toLowerCase())
+                  return search.toLowerCase()==="" ? item : item.divisionNameEn.toLowerCase().includes(search.toLowerCase()) || item.divisionNameBn.toLowerCase().includes(search.toLowerCase())
                   }).map(item => (
                   <tr key={item.divisionId}>
                     <td>

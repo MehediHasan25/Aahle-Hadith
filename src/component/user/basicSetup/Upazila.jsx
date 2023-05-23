@@ -476,7 +476,7 @@ const handleDelete = async(id) =>{
               <input
                 type="text"
                 className="form-control me-2"
-                placeholder="Search by Upazila Name (English)"
+                placeholder="Search by Upazila Name"
                 name="search"
                 onChange={handleSearch}
                 value={search}
@@ -499,7 +499,7 @@ const handleDelete = async(id) =>{
               </thead>
               <tbody>
                 {listUpazila.filter((item) => {
-                    return search.toLowerCase() === "" ? item : item.upazilaNameEn.toLowerCase().includes(search.toLowerCase())
+                    return search.toLowerCase() === "" ? item : item.upazilaNameEn.toLowerCase().includes(search.toLowerCase()) || item.upazilaNameBn.toLowerCase().includes(search.toLowerCase())
                   }).map((item)=>(
                    <tr key={item.upazilaId}>
                     <td>

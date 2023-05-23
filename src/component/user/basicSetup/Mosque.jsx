@@ -386,7 +386,7 @@ const Mosque = () => {
               <input
                 type="text"
                 className="form-control me-2"
-                placeholder="Search by District Name (English)"
+                placeholder="Search by Mosque Name"
                 name="search"
                 onChange={handleSearch}
                 value={search}
@@ -411,7 +411,7 @@ const Mosque = () => {
               </thead>
               <tbody>
                 { listMosque.filter((item) => {
-                    return search.toLowerCase() === "" ? item : item.mosqueNameEn.toLowerCase().includes(search.toLowerCase())
+                    return search.toLowerCase() === "" ? item : item.mosqueNameEn.toLowerCase().includes(search.toLowerCase()) || item.mosqueNameBn.toLowerCase().includes(search.toLowerCase())
                   }).map((item)=>(
                   <tr key={item.mosqueId}>
                     <td>
