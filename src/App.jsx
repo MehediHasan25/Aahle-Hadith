@@ -16,6 +16,8 @@ import Upazila from './component/user/basicSetup/Upazila';
 import Mosque from './component/user/basicSetup/Mosque';
 import DonarEnrollment from './component/user/basicSetup/DonarEnrollment';
 import Occupation from './component/user/basicSetup/Occupation';
+import Education from './component/user/basicSetup/Education';
+import DonationAmount from './component/user/basicSetup/DonationAmount';
 // import District from './component/District';
 // import { NotificationContainer } from 'react-notifications';
 import toast, { Toaster } from 'react-hot-toast';
@@ -40,6 +42,8 @@ function App() {
       <Route  path="/mosque" element={ <MainLayout><Mosque/></MainLayout>}/>
       <Route  path="/donar" element={ <MainLayout><DonarEnrollment/></MainLayout>}/>
       <Route  path="/occupation" element={ <MainLayout><Occupation/></MainLayout>}/>
+      <Route  path="/education" element={ <MainLayout><Education/></MainLayout>}/>
+      <Route  path="/donation-amount" element={ <MainLayout><DonationAmount/></MainLayout>}/>
     </Routes>
 
     <Toaster />

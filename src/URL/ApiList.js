@@ -33,3 +33,16 @@ export const GetMosqueList = hostIp + `api/v1/Mosque/get-mosque`;
 
 // Occupation
 export const SaveOccupation = hostIp + `api/v1/BasicSetup/occupation-save`;
+export const  GetOccupationList = hostIp + `api/v1/BasicSetup/occupation-list`;
+export const DeleteOccupation = hostIp + `api/v1/BasicSetup/Delete-Occup/`;
+
+// Education
+export const SaveEducation = hostIp + `api/v1/BasicSetup/eduqua-save`;
+export const  GetEducationList = hostIp + `api/v1/BasicSetup/eduqua-list`;
+export const DeleteEducaiton = hostIp + `api/v1/BasicSetup/Delete-EduQua/`;
+
+// Donation Amount
+export const SaveDonationAmt = hostIp + `api/v1/BasicSetup/donation-save`;
+export const  GetDonationAmtList = hostIp + `api/v1/BasicSetup/donamt-list`;
+export const DeleteDonationAmt = hostIp + `api/v1/BasicSetup/Delete-DonAmt/`;
+

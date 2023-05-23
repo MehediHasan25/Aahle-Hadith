@@ -314,8 +314,7 @@ const Division = () => {
                     <td>{item.divisionNameEn}</td>
                     <td>{item.divisionNameBn}</td>
                     <td>{item.divisionCode}</td>
-                    {/* <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></td>
-                    <td onClick={() => handleEdit(item)}><BiEditAlt /></td> */}
+                    
                   </tr>
                 ))}
               </tbody>

@@ -28,6 +28,18 @@ const menu = [
         path: "/mosque",
       },
       {
+        title: "Occupation",
+        path: "/occupation",
+      },
+      {
+        title: "Education",
+        path: "/Education",
+      },
+      {
+        title: "Donation Amount",
+        path: "/donation-amount",
+      },
+      {
         title: "Donar Enrollment",
         path: "/donar",
       },
