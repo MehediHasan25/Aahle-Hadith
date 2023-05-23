@@ -132,7 +132,7 @@ padding-top: 69px;
 .form-tbl{
   border:1px solid #555 !important;
   padding: 0.5em;
-  background: #ddd;
+  background: #efefef;
 }
 .form-tbl table thead{
   background-color: green;
@@ -145,6 +145,8 @@ width: 150px;
 margin: 0 auto;
 }
 table  .act_icon{
+  display: flex;
+  gap: 5px;
  /* display: flex;
  align-items: center;
  flex-wrap: wrap;
@@ -157,7 +159,7 @@ table  .act_icon span {
   text-align: center;
   background-color: red;
   color: #fff;
-  margin: 5px;
+  /* margin: 5px; */
   /* padding-bottom: 7px; */
 }
 table  .act_icon span:nth-child(2){

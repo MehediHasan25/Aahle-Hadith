@@ -380,7 +380,7 @@ const Mosque = () => {
     
       </div>
       <div className="row pt-4">
-      <div className="col-md-8">
+      <div className="col-md-12">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
@@ -393,9 +393,10 @@ const Mosque = () => {
                 autoComplete='off'
               />
             </form>
-            <table className="table table-bordered">
+            <table className="table table-striped table-bordered">
               <thead>
                 <tr>
+                <th> Action</th>
                   <th>Division</th>
                   <th>Division (Bangla)</th>
                   <th>District</th> 
@@ -405,7 +406,6 @@ const Mosque = () => {
                   <th>Mosque</th> 
                   <th>Mosque (Bangla)</th> 
                   <th>Mosque Code</th>
-                <th colSpan="2"> Action</th>
 
                 </tr>
               </thead>
@@ -414,6 +414,12 @@ const Mosque = () => {
                     return search.toLowerCase() === "" ? item : item.mosqueNameEn.toLowerCase().includes(search.toLowerCase())
                   }).map((item)=>(
                   <tr key={item.mosqueId}>
+                    <td>
+                      <div className="act_icon">
+                      <span onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.mosqueId)}><BsTrash /></span>
+                      <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
+                      </div>
+                    </td>
                   <td>{item.divisionNameEn}</td>
                   <td>{item.divisionNameBn}</td>
                   <td>{item.districtNameEn}</td>
@@ -423,8 +429,8 @@ const Mosque = () => {
                   <td>{item.mosqueNameEn}</td>
                   <td>{item.mosqueNameBn}</td>
                   <td>{item.mosqueCode}</td>
-                  <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.mosqueId)}><BsTrash/></td>
-                  <td onClick={() => handleEdit(item)}><BiEditAlt/></td>
+                  {/* <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.mosqueId)}><BsTrash/></td>
+                  <td onClick={() => handleEdit(item)}><BiEditAlt/></td> */}
                 </tr>
 
                 )) 

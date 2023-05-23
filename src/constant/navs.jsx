@@ -27,6 +27,10 @@ const menu = [
         title: "Mosque",
         path: "/mosque",
       },
+      {
+        title: "Donar Enrollment",
+        path: "/donar",
+      },
     ],
   },
   {
