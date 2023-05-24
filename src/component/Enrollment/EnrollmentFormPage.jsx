@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { GetEducationList, GetOccupationList,GetUpazilaList,GetMosqueList,GetDonationAmtList } from '../../URL/ApiList';
+import { month, year } from '../../../Utils/EnrollmentData';
+import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList } from '../../URL/ApiList';
 
 const EnrollmentFormPage = () => {
     const [personal, setPersonal] = useState({
@@ -64,7 +65,7 @@ const EnrollmentFormPage = () => {
 
 
     // Mosque Auto Complete
-    const [listMosque, setListMosque]= useState([]);
+    const [listMosque, setListMosque] = useState([]);
     const [selectAutoMosqueVal, setSelectAutoMosqueVal] = useState({
         MosqueSearch: "",
         OrgMosqueId: ""
@@ -101,6 +102,8 @@ const EnrollmentFormPage = () => {
     })
 
 
+
+
     useEffect(() => {
         getEduList();
         getOccupation();
@@ -131,6 +134,48 @@ const EnrollmentFormPage = () => {
         })
     }
 
+    const handleaddressChange = (e) => {
+        const { name, value } = e.target;
+        SetAddress((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+
+    const handleDonationDataChange = (e) => {
+        const { name, value } = e.target;
+        setDonationData((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+    const handleLifeChange = (e) => {
+        const { name, value } = e.target;
+        setLife((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+
+        if(e.target.name === "LifeStatus" && e.target.value === "Alive"){
+            DeadDate(e.target.value);
+        }
+       
+    }
+
+    const DeadDate = (data) =>{
+        setLife({
+            LifeStatus:data,
+            DeadDate:""
+        })
+    }
 
     //  education dropdown
     const getEduList = async () => {
@@ -221,26 +266,26 @@ const EnrollmentFormPage = () => {
     ////////Occupation dropdown 
 
     // Get Upazila List ////////
-    const getUpazila = async(e) =>{
-        try{
-          let upaData = await axios.get(GetUpazilaList);
-          //console.log("upaDataList", upaData.data._upazilaList);
-          let getUpaData = upaData.data._upazilaList;
-          setListUpazila(getUpaData);
-        }catch(err){
-          console.log("error",err);
-              if (err.response) {
+    const getUpazila = async (e) => {
+        try {
+            let upaData = await axios.get(GetUpazilaList);
+            //console.log("upaDataList", upaData.data._upazilaList);
+            let getUpaData = upaData.data._upazilaList;
+            setListUpazila(getUpaData);
+        } catch (err) {
+            console.log("error", err);
+            if (err.response) {
                 let message = err.response.data.message;
-                toast.error(message,{duration: 5000,position: 'top-center'});
-              } else if (err.request) {
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-              } else if (err) {
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
                 console.log(err.toString());
-                toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-              }
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
         }
-      }
+    }
     // Get Upazila List ////////
 
 
@@ -262,33 +307,33 @@ const EnrollmentFormPage = () => {
     }
 
     // Org Upazila Search /////////
-    
+
     //List Mosque Autocomplete
 
-    const getMosque = async() =>{
-        try{
-          let getMosqueData = await axios.get(GetMosqueList);
-          let getDataMosque = getMosqueData.data._mosqueList;
-          // console.log("mosqueList", getDataMosque);
-          setListMosque(getDataMosque);
-    
-        }catch(err){
-          console.log("error",err);
+    const getMosque = async () => {
+        try {
+            let getMosqueData = await axios.get(GetMosqueList);
+            let getDataMosque = getMosqueData.data._mosqueList;
+            // console.log("mosqueList", getDataMosque);
+            setListMosque(getDataMosque);
+
+        } catch (err) {
+            console.log("error", err);
             if (err.response) {
-              let message = err.response.data.message;
-              toast.error(message,{duration: 5000,position: 'top-center'});
+                let message = err.response.data.message;
+                toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
-              console.log('Error Connecting ...', err.request);
-              toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
             } else if (err) {
-              console.log(err.toString());
-              toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
             }
         }
-      }
+    }
 
 
-      const handleMosqueSearchChange = (e) => {
+    const handleMosqueSearchChange = (e) => {
         setSelectAutoMosqueVal({
             ...selectAutoMosqueVal,
             MosqueSearch: e.target.value
@@ -308,17 +353,17 @@ const EnrollmentFormPage = () => {
 
 
     // Donation Amount AutoComplete/////////
-    const getDonationAmt = async()=>{
+    const getDonationAmt = async () => {
         let token = localStorage.getItem("AuthToken");
         const headers = { 'Authorization': 'Bearer ' + token };
 
-        try{
-            let getDonaAmt = await axios.get(GetDonationAmtList,{headers});
+        try {
+            let getDonaAmt = await axios.get(GetDonationAmtList, { headers });
             let getAmtList = getDonaAmt.data._listData;
             // console.log("list", getAmtList);
             setListDonationAmt(getAmtList);
 
-        }catch(err){
+        } catch (err) {
             console.log("error", err);
             if (err.response) {
                 let message = err.response.data.message;
@@ -353,22 +398,22 @@ const EnrollmentFormPage = () => {
         NetAmount(searchTerm);
     }
 
-    
+
     // Donation Amount AutoComplete/////////
 
- const NetAmount =(data)=>{
-    console.log("net val",data+2);
-    let {DisPerAmt} = donationAmt;
-    let calcData = (data*DisPerAmt) / 100 ;
-     let netData = data-calcData;
-    setDonationAmt({
-        ...donationAmt,
-        NetAmount:netData
-    })
- }
-    
+    const NetAmount = (data) => {
+        // console.log("net val",data+2);
+        let { DisPerAmt } = donationAmt;
+        let calcData = (data * DisPerAmt) / 100;
+        let netData = data - calcData;
+        setDonationAmt({
+            ...donationAmt,
+            NetAmount: netData
+        })
+    }
 
 
+    console.log("Life",life);
     return (
         <div className="page-content p-4">
             <div className="pg_title">
@@ -603,7 +648,14 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Present Address
                                 </label>
-                                <input type="text" className="form-control" placeholder=" Present Address" name="address" />
+                                <input
+                                    className="form-control"
+                                    name="PreAddress"
+                                    value={address.PreAddress}
+                                    onChange={handleaddressChange}
+                                    placeholder="Enter Present Address"
+                                    autoComplete='off'
+                                />
                             </div>
                         </div>
                     </div>
@@ -613,7 +665,14 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Permanent Address
                                 </label>
-                                <input type="text" className="form-control" placeholder="Permanent Address" name="address" />
+                                <input
+                                    className="form-control"
+                                    name="PerAddress"
+                                    value={address.PerAddress}
+                                    onChange={handleaddressChange}
+                                    placeholder="Enter Permanent Address"
+                                    autoComplete='off'
+                                />
                             </div>
                         </div>
                     </div>
@@ -668,9 +727,9 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Org Mosque
                                 </label>
-                                 {/*  */}
+                                {/*  */}
 
-                                 <div className='search-container'>
+                                <div className='search-container'>
                                     <div className='search-inner'>
                                         <input
                                             type="text"
@@ -711,7 +770,7 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Donation Amount
                                 </label>
-                                
+
                                 {/*  */}
 
                                 <div className='search-container'>
@@ -765,7 +824,7 @@ const EnrollmentFormPage = () => {
                                     placeholder="Donation Net Amount"
                                     autoComplete='off'
                                     disabled
-                                    />
+                                />
                             </div>
                         </div>
                     </div>
@@ -777,7 +836,14 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Donation Month
                                 </label>
-                                <input type="date" className='form-control' />
+
+                                <select class="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                    <option selected>---Select----</option>
+                                    {month.map((item) => (
+                                        <option value={item.value}>{item.label}</option>
+                                    ))}
+
+                                </select>
                             </div>
 
                         </div>
@@ -786,7 +852,13 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Year
                                 </label>
-                                <input type="date" className='form-control' />
+                                <select class="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                    <option selected>---Select----</option>
+                                    {year.map((item) => (
+                                        <option value={item.value}>{item.label}</option>
+                                    ))}
+
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -796,7 +868,7 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Enrollment Date
                                 </label>
-                                <input type="date" className='form-control' />
+                                <input type="date" name="EnrollmentDate" className='form-control' onChange={handleDonationDataChange} />
                             </div>
 
                         </div>
@@ -805,26 +877,35 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Life Status
                                 </label>
-                                <select className="form-select" name="">
-                                    <option>Alive</option>
-                                    <option>Dead</option>
+                                <select className="form-select" name="LifeStatus" onChange={handleLifeChange}>
+                                    <option selected>---Select----</option>
+                                    <option value="Alive">Alive</option>
+                                    <option value="Dead">Dead</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
+                    {life.LifeStatus === "Dead" ?
+                        (
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div>
+                                        <label className="form-label">
+                                            Dead Date
+                                        </label>
+                                        <input type="date" name="DeadDate" className='form-control' onChange={handleLifeChange}/>
+                                    </div>
 
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div>
-                                <label className="form-label">
-                                    Dead Date
-                                </label>
-                                <input type="date" className='form-control' />
+                                </div>
                             </div>
+                        )
+                        :
+                        (<></>)
 
-                        </div>
-                    </div>
+
+                    }
+
                 </form>
             </div>
 
