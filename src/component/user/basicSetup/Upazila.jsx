@@ -340,6 +340,8 @@ const handleDelete = async(id) =>{
                   Name of Division
                 </label>
                 <div className="col-md-8">
+
+
                   <div className='search-container'>
                     <div className='search-inner'>
                       <input
@@ -371,6 +373,8 @@ const handleDelete = async(id) =>{
                       }
                     </div>
                   </div>
+
+                  
 
                 </div>
             {/* End */}
