@@ -18,9 +18,12 @@ import DonarEnrollment from './component/user/basicSetup/DonarEnrollment';
 import Occupation from './component/user/basicSetup/Occupation';
 import Education from './component/user/basicSetup/Education';
 import DonationAmount from './component/user/basicSetup/DonationAmount';
-// import District from './component/District';
-// import { NotificationContainer } from 'react-notifications';
 import toast, { Toaster } from 'react-hot-toast';
+
+///import UpazilaDistrict from './component/Enrollment/UpazilaDistrict';
+// import { ToastContainer, toast } from 'react-toastify';
+//   import 'react-toastify/dist/ReactToastify.css';
+
 
 
 
@@ -45,7 +48,7 @@ function App() {
       <Route  path="/education" element={ <MainLayout><Education/></MainLayout>}/>
       <Route  path="/donation-amount" element={ <MainLayout><DonationAmount/></MainLayout>}/>
     </Routes>
-
+    {/* <ToastContainer  closeButton={false}/> */}
     <Toaster />
     </>
     

@@ -28,9 +28,9 @@ const DonarEnrollment = () => {
                     New
                 </label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="update" onClick={()=> handleUpdate()}/>
-                    <label class="form-check-label" for="exampleRadios2">
+            <div className="form-check">
+                <input className="form-check-input" type="radio" name="update" onClick={()=> handleUpdate()}/>
+                    <label className="form-check-label" htmlFor="exampleRadios2">
                         Update
                     </label>
             </div> */}

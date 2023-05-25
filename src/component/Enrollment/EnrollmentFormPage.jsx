@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { month, year } from '../../../Utils/EnrollmentData';
 import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList } from '../../URL/ApiList';
+import UpazilaDistrict from './UpazilaDistrict';
 
 const EnrollmentFormPage = () => {
     const [personal, setPersonal] = useState({
@@ -33,7 +34,7 @@ const EnrollmentFormPage = () => {
     //Occupation AutoComplete/////
 
     //Address
-    const [sameAddress, setSameAddress] = useState(false);
+    const [sameAddress, setSameAddress] = useState(true);
 
     const [address, SetAddress] = useState({
         PreAddress: "",
@@ -45,7 +46,8 @@ const EnrollmentFormPage = () => {
     //Present Upazila AutoComplete
     const [selectAutoPreUpaVal, setSelectAutoPreUpaVal] = useState({
         PreUpaSearch: "",
-        PreUpazilaId: ""
+        PreUpazilaId: "",
+        PreDistrict: ""
     });
 
     //Present Upazila AutoComplete
@@ -53,7 +55,8 @@ const EnrollmentFormPage = () => {
     //Permanent Upazila AutoComplete
     const [selectAutoPerUpaVal, setSelectAutoPerUpaVal] = useState({
         PerUpaSearch: "",
-        PerUpazilaId: ""
+        PerUpazilaId: "",
+        PerDistrict: ""
     });
 
     //Permanent Upazila AutoComplete
@@ -164,16 +167,16 @@ const EnrollmentFormPage = () => {
             }
         })
 
-        if(e.target.name === "LifeStatus" && e.target.value === "Alive"){
+        if (e.target.name === "LifeStatus" && e.target.value === "Alive") {
             DeadDate(e.target.value);
         }
-       
+
     }
 
-    const DeadDate = (data) =>{
+    const DeadDate = (data) => {
         setLife({
-            LifeStatus:data,
-            DeadDate:""
+            LifeStatus: data,
+            DeadDate: ""
         })
     }
 
@@ -211,8 +214,8 @@ const EnrollmentFormPage = () => {
     }
 
     const handleEduSearch = (searchTerm, val) => {
-        console.log("edusearch", searchTerm);
-        console.log("eduId", val);
+        // console.log("edusearch", searchTerm);
+        // console.log("eduId", val);
         setSelectAutoEduVal({
             eduSearch: searchTerm,
             EduQualificationId: val
@@ -255,8 +258,8 @@ const EnrollmentFormPage = () => {
     }
 
     const handleOccSearch = (searchTerm, val) => {
-        console.log("occsearch", searchTerm);
-        console.log("occId", val);
+        // console.log("occsearch", searchTerm);
+        // console.log("occId", val);
         setSelectAutoOccVal({
             OccSearch: searchTerm,
             OccupationId: val
@@ -298,8 +301,8 @@ const EnrollmentFormPage = () => {
     }
 
     const handleOrgUpaSearch = (searchTerm, val) => {
-        console.log("Upasearch", searchTerm);
-        console.log("UpaId", val);
+        // console.log("Upasearch", searchTerm);
+        // console.log("UpaId", val);
         setOrgUpazila({
             OrgUpaSearch: searchTerm,
             OrgUpazilaId: val
@@ -412,17 +415,83 @@ const EnrollmentFormPage = () => {
         })
     }
 
+    const sendData = (searchTerm, val, districtName) => {
+        // console.log("data", searchTerm, val, districtName);
+        setSelectAutoPreUpaVal({
+            PreUpaSearch: searchTerm,
+            PreUpazilaId: val,
+            PreDistrict: districtName
+        });
+    }
 
-    console.log("Life",life);
+    const myData = (searchTerm, val, districtName) => {
+        // console.log("data2", searchTerm, val, districtName);
+        setSelectAutoPerUpaVal({
+            PerUpaSearch: searchTerm,
+            PerUpazilaId: val,
+            PerDistrict: districtName
+        });
+    }
+
+
+    const handleSame = () => {
+        setSameAddress(!sameAddress);
+        handleAddressFunc();
+        // console.log("same", sameAddress);
+    }
+
+    const handleAddressFunc = () => {
+        if (sameAddress === true) {
+            SetAddress({
+                ...address,
+                PerAddress: address.PreAddress
+            });
+
+            setSelectAutoPerUpaVal({
+                PerUpaSearch: selectAutoPreUpaVal.PreUpaSearch,
+                PerUpazilaId: selectAutoPreUpaVal.PreUpazilaId,
+                PerDistrict: selectAutoPreUpaVal.PreDistrict
+            });
+
+
+        } else {
+            SetAddress({
+                ...address,
+                PerAddress: ""
+            });
+
+            setSelectAutoPerUpaVal({
+                PerUpaSearch: "",
+                PerUpazilaId: "",
+                PerDistrict: ""
+            });
+        }
+    }
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        
+	console.log("OccupationId",selectAutoOccVal.OccupationId);
+	console.log("EducationId",selectAutoEduVal.EduQualificationId);
+	console.log("PresentAddressUpazilaId", selectAutoPreUpaVal.PreUpazilaId);
+	console.log("PermanentAddressUpazilaId",selectAutoPerUpaVal.PerUpazilaId);
+	console.log("OrganizationUpazilaId",orgUpazila.OrgUpazilaId);
+	console.log("OrganizationMosqueId",selectAutoMosqueVal.OrgMosqueId);
+	console.log("DonationAmountId",selectAutoDonationVal.DonationAmtId);
+
+    }
+
+
     return (
         <div className="page-content p-3">
             <div className="pg_title">
                 <h3>Enrollment</h3>
             </div>
+
             {/* <div className="form card p-3"> */}
-                <form action="">
-                    <div className="form card shadow p-3">
-                        <h5 className="text_primary text-uppercase">Personal Information</h5>
+            <form action="">
+                <div className="form card shadow p-3">
+                    <h5 className="text_primary text-uppercase">Personal Information</h5>
                     <div className="row pt-3">
                         <div className="col-md-4">
                             <div>
@@ -502,7 +571,6 @@ const EnrollmentFormPage = () => {
                                     autoComplete='off'
                                 />
                             </div>
-
                         </div>
                         <div className="col-md-4">
                             <div className="">
@@ -519,6 +587,7 @@ const EnrollmentFormPage = () => {
                                 />
                             </div>
                         </div>
+
                     </div>
 
                     <div className="row">
@@ -578,7 +647,7 @@ const EnrollmentFormPage = () => {
                                                 const searchTerm = selectAutoEduVal.eduSearch.toLowerCase();
                                                 const fullName = item.eduQualification.toLowerCase();
 
-                                                return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
+                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
                                             }).slice(0, 10)
                                                 .map((item) => (
                                                     <div
@@ -593,11 +662,10 @@ const EnrollmentFormPage = () => {
                                 </div>
                                 {/*  */}
                             </div>
-
                         </div>
                     </div>
                     <div className="row">
-                  
+
                         <div className="col-md-6">
                             <div className="">
                                 <label className="form-label">
@@ -625,7 +693,7 @@ const EnrollmentFormPage = () => {
                                                 const searchTerm = selectAutoOccVal.OccSearch.toLowerCase();
                                                 const fullName = item.occupationName.toLowerCase();
 
-                                                return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
+                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
                                             }).slice(0, 10)
                                                 .map((item) => (
                                                     <div
@@ -639,14 +707,12 @@ const EnrollmentFormPage = () => {
                                     </div>
                                 </div>
                                 {/*  */}
-
-
                             </div>
                         </div>
                     </div>
-                    </div>
-                    <div className="form card shadow p-3 mt-3">
-                        <h5 className="text_primary text-uppercase">Address</h5>
+                </div>
+                <div className="form card shadow p-3 mt-3">
+                    <h5 className="text_primary text-uppercase">Address</h5>
                     <div className="row pt-3">
                         <div className="col-md-6">
                             <div>
@@ -662,11 +728,11 @@ const EnrollmentFormPage = () => {
                                     autoComplete='off'
                                 />
                             </div>
-                            <div className="row mb-3">
+                            {/* <div className="row mb-3">
 
                                 <div className="col-md-6">
                                     <div className="row">
-                                        <label  className="col-sm-4 col-form-label text-end">Upozilla</label>
+                                        <label  className="col-sm-4 col-form-label text-end">Upazila</label>
                                         <div className="col-sm-8">
                                         <input type="email" className="form-control" id="inputEmail3" />
                                         </div>
@@ -680,16 +746,19 @@ const EnrollmentFormPage = () => {
                                     </div>
                                    </div>
                                 </div>
-                            </div>
+                            </div> */}
+
+                            <UpazilaDistrict sendData={sendData} />
+
 
                         </div>
                         <div className="col-md-6">
                             <div className='form-check'>
-                            
+
                                 <label className=" form-label d-flex w-100 justify-content-between">
                                     <div className="">Permanent Address</div>
-                                     <div className="form-check d-flex gap-2 align-item-center">
-                                        <input className="w-auto mb-0" type="checkbox" value="" id="flexCheckDefault"/>
+                                    <div className="form-check d-flex gap-2 align-item-center">
+                                        <input className="w-auto mb-0" onChange={handleSame} type="checkbox" value="" id="flexCheckDefault" />
                                         <label className="form-check-label">
                                             As Same
                                         </label>
@@ -702,106 +771,152 @@ const EnrollmentFormPage = () => {
                                     onChange={handleaddressChange}
                                     placeholder="Enter Permanent Address"
                                     autoComplete='off'
+                                    disabled={!sameAddress}
                                 />
                             </div>
+
+                            {sameAddress ?
+                                (
+                                    <UpazilaDistrict sendData={myData} />
+                                )
+                                :
+                                (
+                                    <div className="row mb-3">
+
+                                        <div className="col-md-6">
+                                            <div className="row">
+                                                <label className="col-sm-4 col-form-label text-end">Upazila</label>
+                                                <div className="col-sm-8">
+                                                    <input 
+                                                    type="text" 
+                                                    className="form-control" 
+                                                    name="PerUpaSearch"
+                                                    value={selectAutoPerUpaVal.PerUpaSearch}
+                                                    placeholder='type and select Upazila'
+                                                    disabled
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="row">
+                                                <label className="col-sm-4 col-form-label text-end">District</label>
+                                                <div className="col-sm-8">
+                                                    <input 
+                                                    type="text" 
+                                                    className="form-control" 
+                                                    name='PerDistrict'
+                                                    value={selectAutoPerUpaVal.PerDistrict}
+                                                    disabled
+                                                     />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+
+
                         </div>
                     </div>
 
-                    </div>
-                    <div className="form card shadow p-3 mt-3">
-                        <h5 className="text_primary text-uppercase">organization</h5> 
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div>
-                                    <label className="form-label">
-                                        Org Upazilla
-                                    </label>
+                </div>
+                <div className="form card shadow p-3 mt-3">
+                    <h5 className="text_primary text-uppercase">organization</h5>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div>
+                                <label className="form-label">
+                                    Org Upazilla
+                                </label>
 
-                                    {/*  */}
+                                {/*  */}
 
-                                    <div className='search-container'>
-                                        <div className='search-inner'>
-                                            <input
-                                                type="text"
-                                                placeholder="Type Org Upazila Name (English)"
-                                                name="OrgUpaSearch"
-                                                onChange={handleOrgUpaSearchChange}
-                                                value={orgUpazila.OrgUpaSearch}
-                                                autoComplete='off'
-                                                style={{ width: "2000px" }}
-                                            />
-                                        </div>
-                                        <div className='dropdown'>
-                                            {
-                                                listUpazila.filter(item => {
-                                                    const searchTerm = orgUpazila.OrgUpaSearch.toLowerCase();
-                                                    const fullName = item.upazilaNameEn.toLowerCase();
-
-                                                    return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                                }).slice(0, 10)
-                                                    .map((item) => (
-                                                        <div
-                                                            key={item.upazilaId}
-                                                            onClick={() => handleOrgUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                                                            className='dropdown-row'>
-                                                            {item.upazilaNameEn}
-                                                        </div>
-                                                    ))
-                                            }
-                                        </div>
+                                <div className='search-container'>
+                                    <div className='search-inner'>
+                                        <input
+                                            type="text"
+                                            placeholder="Type Org Upazila Name (English)"
+                                            name="OrgUpaSearch"
+                                            onChange={handleOrgUpaSearchChange}
+                                            value={orgUpazila.OrgUpaSearch}
+                                            autoComplete='off'
+                                            style={{ width: "2000px" }}
+                                        />
                                     </div>
-                                    {/*  */}
+                                    <div className='dropdown'>
+                                        {
+                                            listUpazila.filter(item => {
+                                                const searchTerm = orgUpazila.OrgUpaSearch.toLowerCase();
+                                                const fullName = item.upazilaNameEn.toLowerCase();
 
-
+                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
+                                            }).slice(0, 10)
+                                                .map((item) => (
+                                                    <div
+                                                        key={item.upazilaId}
+                                                        onClick={() => handleOrgUpaSearch(item.upazilaNameEn, item.upazilaId)}
+                                                        className='dropdown-row'>
+                                                        {item.upazilaNameEn}
+                                                    </div>
+                                                ))
+                                        }
+                                    </div>
                                 </div>
+                                {/*  */}
+
 
                             </div>
-                            <div className="col-md-6">
-                                <div className="">
-                                    <label className="form-label">
-                                        Org Mosque
-                                    </label>
-                                    {/*  */}
 
-                                    <div className='search-container'>
-                                        <div className='search-inner'>
-                                            <input
-                                                type="text"
-                                                placeholder="Type Mosque Name (English)"
-                                                name="MosqueSearch"
-                                                onChange={handleMosqueSearchChange}
-                                                value={selectAutoMosqueVal.MosqueSearch}
-                                                autoComplete='off'
-                                                style={{ width: "2000px" }}
-                                            />
-                                        </div>
-                                        <div className='dropdown'>
-                                            {
-                                                listMosque.filter(item => {
-                                                    const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
-                                                    const fullName = item.mosqueNameEn.toLowerCase();
+                        </div>
 
-                                                    return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                                }).slice(0, 10)
-                                                    .map((item) => (
-                                                        <div
-                                                            key={item.mosqueId}
-                                                            onClick={() => handleMosqueSearch(item.mosqueNameEn, item.mosqueId)}
-                                                            className='dropdown-row'>
-                                                            {item.mosqueNameEn}
-                                                        </div>
-                                                    ))
-                                            }
-                                        </div>
-                                    </div>
-                                    {/*  */}
+                    </div>
+                    <div className="col-md-6">
+                        <div className="">
+                            <label className="form-label">
+                                Org Mosque
+                            </label>
+                            {/*  */}
+
+                            <div className='search-container'>
+                                <div className='search-inner'>
+                                    <input
+                                        type="text"
+                                        placeholder="Type Mosque Name (English)"
+                                        name="MosqueSearch"
+                                        onChange={handleMosqueSearchChange}
+                                        value={selectAutoMosqueVal.MosqueSearch}
+                                        autoComplete='off'
+                                        style={{ width: "2000px" }}
+                                    />
                                 </div>
+                                <div className='dropdown'>
+                                    {
+                                        listMosque.filter(item=> item.upazilaNameEn === orgUpazila.OrgUpaSearch)
+                                        .filter(item => {
+                                            const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
+                                            const fullName = item.mosqueNameEn.toLowerCase();
+
+                                            return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
+                                        }).slice(0, 10)
+                                            .map((item) => (
+                                                <div
+                                                    key={item.mosqueId}
+                                                    onClick={() => handleMosqueSearch(item.mosqueNameEn, item.mosqueId)}
+                                                    className='dropdown-row'>
+                                                    {item.mosqueNameEn}
+                                                </div>
+                                            ))
+                                    }
+                                </div>
+                                {/*  */}
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="form card shadow p-3 mt-3">
-                        <h5 className="text_primary text-uppercase">donation</h5>
+                <div className="form card shadow p-3 mt-3">
+                    <h5 className="text_primary text-uppercase">donation</h5>
                     <div className="row">
                         <div className="col-md-6">
                             <div>
@@ -829,7 +944,7 @@ const EnrollmentFormPage = () => {
                                                 const searchTerm = selectAutoDonationVal.DonationSearch;
                                                 const fullName = item.donationAmt;
 
-                                                return searchTerm && fullName.toString().startsWith(searchTerm) && fullName != searchTerm;
+                                                return searchTerm && fullName.toString().includes(searchTerm) && fullName != searchTerm;
                                             }).slice(0, 10)
                                                 .map((item) => (
                                                     <div
@@ -843,8 +958,6 @@ const EnrollmentFormPage = () => {
                                     </div>
                                 </div>
                                 {/*  */}
-
-
 
                             </div>
 
@@ -875,10 +988,10 @@ const EnrollmentFormPage = () => {
                                     Donation Month
                                 </label>
 
-                                <select class="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
-                                    <option selected>---Select----</option>
+                                <select className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                    <option value="">---Select----</option>
                                     {month.map((item) => (
-                                        <option value={item.value}>{item.label}</option>
+                                        <option key={item.label} value={item.value}>{item.label}</option>
                                     ))}
 
                                 </select>
@@ -890,10 +1003,10 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Year
                                 </label>
-                                <select class="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
-                                    <option selected>---Select----</option>
+                                <select className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                    <option value="">---Select----</option>
                                     {year.map((item) => (
-                                        <option value={item.value}>{item.label}</option>
+                                        <option key={item.label} value={item.value}>{item.label}</option>
                                     ))}
 
                                 </select>
@@ -932,7 +1045,7 @@ const EnrollmentFormPage = () => {
                                         <label className="form-label">
                                             Dead Date
                                         </label>
-                                        <input type="date" name="DeadDate" className='form-control' onChange={handleLifeChange}/>
+                                        <input type="date" name="DeadDate" className='form-control' onChange={handleLifeChange} />
                                     </div>
 
                                 </div>
@@ -943,13 +1056,13 @@ const EnrollmentFormPage = () => {
 
 
                     }
-                    </div>
-                    <div className="d-flex gap-3 justify-content-center mt-4">
-                        <button className="btn btn-success w-auto">Save</button>
-                        <button className="btn btn-warning w-auto">Update</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div className="d-flex gap-3 justify-content-center mt-4">
+                    <button className="btn btn-success w-auto" onClick={handleSubmit}>Save</button>
+                    <button className="btn btn-warning w-auto">Update</button>
+                </div>
+            </form>
+        </div>
 
         // </div>
     )
