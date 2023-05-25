@@ -415,14 +415,16 @@ const EnrollmentFormPage = () => {
 
     console.log("Life",life);
     return (
-        <div className="page-content p-4">
+        <div className="page-content p-3">
             <div className="pg_title">
                 <h3>Enrollment</h3>
             </div>
-            <div className="form card p-3">
+            {/* <div className="form card p-3"> */}
                 <form action="">
-                    <div className="row">
-                        <div className="col-md-6">
+                    <div className="form card shadow p-3">
+                        <h5 className="text_primary text-uppercase">Personal Information</h5>
+                    <div className="row pt-3">
+                        <div className="col-md-4">
                             <div>
                                 <label className="form-label">
                                     Name (Eng)
@@ -438,9 +440,9 @@ const EnrollmentFormPage = () => {
                             </div>
 
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div className="row">
-                                <label className="form-label col-md-4">
+                                <label className="form-label">
                                     Name (Bangla)
                                 </label>
                                 <input
@@ -453,9 +455,7 @@ const EnrollmentFormPage = () => {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div>
                                 <label className="form-label">
                                     Mobile no
@@ -471,7 +471,9 @@ const EnrollmentFormPage = () => {
                             </div>
 
                         </div>
-                        <div className="col-md-6">
+                    </div>
+                    <div className="row">
+                        <div className="col-md-4">
                             <div className="">
                                 <label className="form-label">
                                     Email
@@ -486,9 +488,7 @@ const EnrollmentFormPage = () => {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div>
                                 <label className="form-label">
                                     Father's Name
@@ -504,7 +504,7 @@ const EnrollmentFormPage = () => {
                             </div>
 
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div className="">
                                 <label className="form-label">
                                     Mother's Name
@@ -520,8 +520,9 @@ const EnrollmentFormPage = () => {
                             </div>
                         </div>
                     </div>
+
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div>
                                 <label className="form-label">
                                     NID No
@@ -537,7 +538,7 @@ const EnrollmentFormPage = () => {
                             </div>
 
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div className="">
                                 <label className="form-label">
                                     Birth Certificate
@@ -552,9 +553,7 @@ const EnrollmentFormPage = () => {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                             <div>
                                 <label className="form-label">
                                     Education
@@ -596,6 +595,9 @@ const EnrollmentFormPage = () => {
                             </div>
 
                         </div>
+                    </div>
+                    <div className="row">
+                  
                         <div className="col-md-6">
                             <div className="">
                                 <label className="form-label">
@@ -642,8 +644,11 @@ const EnrollmentFormPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-md-12">
+                    </div>
+                    <div className="form card shadow p-3 mt-3">
+                        <h5 className="text_primary text-uppercase">Address</h5>
+                    <div className="row pt-3">
+                        <div className="col-md-6">
                             <div>
                                 <label className="form-label">
                                     Present Address
@@ -657,13 +662,38 @@ const EnrollmentFormPage = () => {
                                     autoComplete='off'
                                 />
                             </div>
+                            <div className="row mb-3">
+
+                                <div className="col-md-6">
+                                    <div className="row">
+                                        <label  className="col-sm-4 col-form-label text-end">Upozilla</label>
+                                        <div className="col-sm-8">
+                                        <input type="email" className="form-control" id="inputEmail3" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                   <div className="row">
+                                   <label  className="col-sm-4 col-form-label text-end">District</label>
+                                    <div className="col-sm-8">
+                                    <input type="email" className="form-control" id="inputEmail3" />
+                                    </div>
+                                   </div>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div>
-                                <label className="form-label">
-                                    Permanent Address
+                        <div className="col-md-6">
+                            <div className='form-check'>
+                            
+                                <label className=" form-label d-flex w-100 justify-content-between">
+                                    <div className="">Permanent Address</div>
+                                     <div className="form-check d-flex gap-2 align-item-center">
+                                        <input className="w-auto mb-0" type="checkbox" value="" id="flexCheckDefault"/>
+                                        <label className="form-check-label">
+                                            As Same
+                                        </label>
+                                    </div>
                                 </label>
                                 <input
                                     className="form-control"
@@ -676,94 +706,102 @@ const EnrollmentFormPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div>
-                                <label className="form-label">
-                                    Org Upazilla
-                                </label>
 
-                                {/*  */}
+                    </div>
+                    <div className="form card shadow p-3 mt-3">
+                        <h5 className="text_primary text-uppercase">organization</h5> 
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div>
+                                    <label className="form-label">
+                                        Org Upazilla
+                                    </label>
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Org Upazila Name (English)"
-                                            name="OrgUpaSearch"
-                                            onChange={handleOrgUpaSearchChange}
-                                            value={orgUpazila.OrgUpaSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
+                                    {/*  */}
+
+                                    <div className='search-container'>
+                                        <div className='search-inner'>
+                                            <input
+                                                type="text"
+                                                placeholder="Type Org Upazila Name (English)"
+                                                name="OrgUpaSearch"
+                                                onChange={handleOrgUpaSearchChange}
+                                                value={orgUpazila.OrgUpaSearch}
+                                                autoComplete='off'
+                                                style={{ width: "2000px" }}
+                                            />
+                                        </div>
+                                        <div className='dropdown'>
+                                            {
+                                                listUpazila.filter(item => {
+                                                    const searchTerm = orgUpazila.OrgUpaSearch.toLowerCase();
+                                                    const fullName = item.upazilaNameEn.toLowerCase();
+
+                                                    return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
+                                                }).slice(0, 10)
+                                                    .map((item) => (
+                                                        <div
+                                                            key={item.upazilaId}
+                                                            onClick={() => handleOrgUpaSearch(item.upazilaNameEn, item.upazilaId)}
+                                                            className='dropdown-row'>
+                                                            {item.upazilaNameEn}
+                                                        </div>
+                                                    ))
+                                            }
+                                        </div>
                                     </div>
-                                    <div className='dropdown'>
-                                        {
-                                            listUpazila.filter(item => {
-                                                const searchTerm = orgUpazila.OrgUpaSearch.toLowerCase();
-                                                const fullName = item.upazilaNameEn.toLowerCase();
+                                    {/*  */}
 
-                                                return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.upazilaId}
-                                                        onClick={() => handleOrgUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                                                        className='dropdown-row'>
-                                                        {item.upazilaNameEn}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
+
                                 </div>
-                                {/*  */}
-
 
                             </div>
+                            <div className="col-md-6">
+                                <div className="">
+                                    <label className="form-label">
+                                        Org Mosque
+                                    </label>
+                                    {/*  */}
 
-                        </div>
-                        <div className="col-md-6">
-                            <div className="">
-                                <label className="form-label">
-                                    Org Mosque
-                                </label>
-                                {/*  */}
+                                    <div className='search-container'>
+                                        <div className='search-inner'>
+                                            <input
+                                                type="text"
+                                                placeholder="Type Mosque Name (English)"
+                                                name="MosqueSearch"
+                                                onChange={handleMosqueSearchChange}
+                                                value={selectAutoMosqueVal.MosqueSearch}
+                                                autoComplete='off'
+                                                style={{ width: "2000px" }}
+                                            />
+                                        </div>
+                                        <div className='dropdown'>
+                                            {
+                                                listMosque.filter(item => {
+                                                    const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
+                                                    const fullName = item.mosqueNameEn.toLowerCase();
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Mosque Name (English)"
-                                            name="MosqueSearch"
-                                            onChange={handleMosqueSearchChange}
-                                            value={selectAutoMosqueVal.MosqueSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
+                                                    return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
+                                                }).slice(0, 10)
+                                                    .map((item) => (
+                                                        <div
+                                                            key={item.mosqueId}
+                                                            onClick={() => handleMosqueSearch(item.mosqueNameEn, item.mosqueId)}
+                                                            className='dropdown-row'>
+                                                            {item.mosqueNameEn}
+                                                        </div>
+                                                    ))
+                                            }
+                                        </div>
                                     </div>
-                                    <div className='dropdown'>
-                                        {
-                                            listMosque.filter(item => {
-                                                const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
-                                                const fullName = item.mosqueNameEn.toLowerCase();
-
-                                                return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.mosqueId}
-                                                        onClick={() => handleMosqueSearch(item.mosqueNameEn, item.mosqueId)}
-                                                        className='dropdown-row'>
-                                                        {item.mosqueNameEn}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
+                                    {/*  */}
                                 </div>
-                                {/*  */}
                             </div>
                         </div>
                     </div>
+
+                    <div className="form card shadow p-3 mt-3">
+                        <h5 className="text_primary text-uppercase">donation</h5>
                     <div className="row">
                         <div className="col-md-6">
                             <div>
@@ -905,11 +943,15 @@ const EnrollmentFormPage = () => {
 
 
                     }
-
+                    </div>
+                    <div className="d-flex gap-3 justify-content-center mt-4">
+                        <button className="btn btn-success w-auto">Save</button>
+                        <button className="btn btn-warning w-auto">Update</button>
+                    </div>
                 </form>
             </div>
 
-        </div>
+        // </div>
     )
 }
 

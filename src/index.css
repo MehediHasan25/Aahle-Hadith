@@ -1,15 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+:root{
+  --main-color:#303778;
+}
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+html{
+  font-size: 14px;
+}
+body{
+  background: #f1f3f6 !important;
+}
 a{
   text-decoration: none !important;
   color: #666;
 }
+.bg-primary{
+  background-color: var(--main-color) !important;
+}
+.text_primary{
+color:#303778;
+}
 .header {
+  background-color: #303778 !important;
   color: #fff;
   position: fixed;
   top: 0;
@@ -26,8 +42,8 @@ display: flex;
   position: fixed;
   width: 235px;
   left: 0;
-  background: #333;
-  color: #fff;
+  background: #fff;
+  /* color: #fff; */
   /* height: 100%;
   overflow: auto; */
   transition: all 0.5s;
@@ -49,7 +65,8 @@ display: flex;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #fff !important;
+  color: #333 !important;
+  overflow: hidden;
   /* font-size: 1.2em; */
 }
 .sidebar-title .icon{
@@ -59,12 +76,12 @@ display: flex;
 }
 .sidebar-title .icon svg{
   font-size: 20px;
-  color: #fff !important;
+  color: #333 !important;
 
 }
 .sidebar-title .title{
   width: max-content;
-  color: #fff !important;
+  color: #333 !important;
 
   
 }
@@ -73,7 +90,7 @@ display: flex;
   transition: all 0.5s;
 }
 .sidebar-title .toggle_btn svg{
-  color: #fff !important;
+  color: #333 !important;
 }
 .sidebar-item.open .title{
   font-weight: bold;

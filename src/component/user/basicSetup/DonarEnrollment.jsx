@@ -14,7 +14,15 @@ const DonarEnrollment = () => {
 
     return (
         <div>
-            <div class="form-check">
+            <div className="d-flex gap-3 p-3 justify-content-center">
+                <div  className={update?"btn btn-small btn-success":"btn btn-outline-success"} onClick={()=> handleNew()}>
+                   New
+                </div>
+                <div  className={update?"btn btn-outline-success":"btn btn-success"} onClick={()=> handleUpdate()}> 
+                    Update
+                </div>
+
+            {/* <div class="form-check">
                 <input class="form-check-input" type="radio" name="update" checked= {update} onClick={()=> handleNew()} />
                 <label class="form-check-label" for="exampleRadios1">
                     New
@@ -25,6 +33,7 @@ const DonarEnrollment = () => {
                     <label class="form-check-label" for="exampleRadios2">
                         Update
                     </label>
+            </div> */}
             </div>
 
 
