@@ -48,4 +48,5 @@ export const DeleteDonationAmt = hostIp + `api/v1/BasicSetup/Delete-DonAmt/`;
 
 //Donar Enrollment Page
 export const GetDistrictfromUpazila = hostIp +`api/v1/DonarEnrollment/donar-district/`;
+export const SaveEnrollmentData = hostIp + `api/v1/DonarEnrollment/donenrol-save`;
 

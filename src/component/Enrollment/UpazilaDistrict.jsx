@@ -5,6 +5,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 
 const UpazilaDistrict = ({ sendData }) => {
+
+    // console.log("upClean", saveComplete);
     const [listUpazila, setListUpazila] = useState([]);
     const [compData, setCompData] = useState({
         UpaSearch: "",
@@ -14,7 +16,15 @@ const UpazilaDistrict = ({ sendData }) => {
 
     useEffect(() => {
         getUpazila();
-    }, [])
+    }, []);
+
+    // if(saveComplete === true){
+    //     setCompData({
+    //         UpaSearch: "",
+    //         UpaId: "",
+    //         district: ""
+    //     });
+    // }
 
     const getUpazila = async (e) => {
         try {
@@ -69,6 +79,12 @@ const UpazilaDistrict = ({ sendData }) => {
             });
 
             sendData(searchTerm, val, districtName);
+
+            // setCompData({
+            //     UpaSearch: "",
+            //     UpaId: "",
+            //     district: ""
+            // });
 
         } catch (err) {
             console.log(err);

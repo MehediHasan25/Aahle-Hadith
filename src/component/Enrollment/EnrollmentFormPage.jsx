@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { month, year } from '../../../Utils/EnrollmentData';
-import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList } from '../../URL/ApiList';
+import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList, SaveEnrollmentData } from '../../URL/ApiList';
+import { Modal, Button } from "react-bootstrap";
 import UpazilaDistrict from './UpazilaDistrict';
+import { handleEnrollmentPayload } from '../../../Utils/EnrollmentPayload';
 
 const EnrollmentFormPage = () => {
     const [personal, setPersonal] = useState({
+        DonerEnrollmentId: "",
         DonerName: "",
         DonerNameBng: "",
         MobileNo: "",
@@ -96,13 +99,21 @@ const EnrollmentFormPage = () => {
     const [donationData, setDonationData] = useState({
         DonationMonth: "",
         DonationYear: "",
-        EnrollmentDate: "",
+        EnrollmentDate: ""
     });
 
     const [life, setLife] = useState({
         LifeStatus: "",
         DeadDate: ""
-    })
+    });
+
+    const [show, setShow] = useState(false);
+
+
+    const [saveOutput, setSaveOutput] = useState({
+        DonerActualId: "",
+        OrganisationalId: ""
+    });
 
 
 
@@ -468,26 +479,166 @@ const EnrollmentFormPage = () => {
         }
     }
 
-    const handleSubmit = (e) =>{
-        e.preventDefault();
-        
-	console.log("OccupationId",selectAutoOccVal.OccupationId);
-	console.log("EducationId",selectAutoEduVal.EduQualificationId);
-	console.log("PresentAddressUpazilaId", selectAutoPreUpaVal.PreUpazilaId);
-	console.log("PermanentAddressUpazilaId",selectAutoPerUpaVal.PerUpazilaId);
-	console.log("OrganizationUpazilaId",orgUpazila.OrgUpazilaId);
-	console.log("OrganizationMosqueId",selectAutoMosqueVal.OrgMosqueId);
-	console.log("DonationAmountId",selectAutoDonationVal.DonationAmtId);
+    /////////////////////////////////Empty handle Input ///////////////////////////////////////
 
+    const handleFieldEmpty = () => {
+        setPersonal({
+            DonerEnrollmentId: "",
+            DonerName: "",
+            DonerNameBng: "",
+            MobileNo: "",
+            Email: "",
+            FatherName: "",
+            MotherName: "",
+            NIDNo: "",
+            BirthCerNo: ""
+        });
+
+        // Education autoComplete////
+
+        setSelectAutoEduVal({
+            eduSearch: "",
+            EduQualificationId: ""
+        });
+        // Education autoComplete////
+
+        //Occupation AutoComplete/////
+        setSelectAutoOccVal({
+            OccSearch: "",
+            OccupationId: ""
+        });
+        //Occupation AutoComplete/////
+
+        //Address
+        //setSameAddress(true);
+
+        SetAddress({
+            PreAddress: "",
+            PerAddress: ""
+        });
+
+
+        //Present Upazila AutoComplete
+        setSelectAutoPreUpaVal({
+            PreUpaSearch: "",
+            PreUpazilaId: "",
+            PreDistrict: ""
+        });
+
+        //Present Upazila AutoComplete
+
+        //Permanent Upazila AutoComplete
+        setSelectAutoPerUpaVal({
+            PerUpaSearch: "",
+            PerUpazilaId: "",
+            PerDistrict: ""
+        });
+
+        //Permanent Upazila AutoComplete
+        setOrgUpazila({
+            OrgUpaSearch: "",
+            OrgUpazilaId: ""
+        });
+
+
+        // Mosque Auto Complete
+
+        setSelectAutoMosqueVal({
+            MosqueSearch: "",
+            OrgMosqueId: ""
+        });
+        // Mosque Auto Complete
+
+
+        // Donation Auto Complete
+        setSelectAutoDonationVal({
+            DonationSearch: "",
+            DonationAmtId: ""
+        });
+        // Donation Auto Complete
+
+
+        // Donation Amount
+        setDonationAmt({
+            DisPerAmt: 20,
+            NetAmount: ""
+        });
+
+        // Donation Amount
+        setDonationData({
+            DonationMonth: "",
+            DonationYear: "",
+            EnrollmentDate: ""
+        });
+
+        setLife({
+            LifeStatus: "",
+            DeadDate: ""
+        });
+
+
+        // setReUpaClean(false);
+        // setReUpaClean(!reUpaClean);
     }
 
 
+    /////////////////////////////////Empty handle Input ///////////////////////////////////////
+
+
+
+
+
+
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        let token = localStorage.getItem("AuthToken");
+        const headers = { 'Authorization': 'Bearer ' + token };
+
+        let payload = handleEnrollmentPayload(personal, selectAutoEduVal, selectAutoOccVal, address, selectAutoPreUpaVal, selectAutoPerUpaVal, orgUpazila, selectAutoMosqueVal, selectAutoDonationVal, donationAmt, donationData, life);
+        console.log("EnPayload", payload);
+        try {
+            let saveEnroll = await axios.post(SaveEnrollmentData, payload, { headers });
+            let enrollSave = saveEnroll.data;
+            console.log("sAVE", enrollSave);
+            if (enrollSave.success === true) {
+                setSaveOutput({
+                    DonerActualId: enrollSave.donerActualId,
+                    OrganisationalId: enrollSave.organisationalId
+                });
+
+                setShow(true);
+            }
+
+        } catch (err) {
+            console.log("error", err);
+            if (err.response) {
+                let message = err.response.data.message;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
+        }
+    
+    }
+
+    const handleClose = () => {
+        window.location.reload(true);
+        setShow(false);
+    };
     return (
         <div className="page-content p-3">
             <div className="pg_title">
                 <h3>Enrollment</h3>
             </div>
 
+           
             {/* <div className="form card p-3"> */}
             <form action="">
                 <div className="form card shadow p-3">
@@ -748,7 +899,7 @@ const EnrollmentFormPage = () => {
                                 </div>
                             </div> */}
 
-                            <UpazilaDistrict sendData={sendData} />
+                            <UpazilaDistrict sendData={sendData}  />
 
 
                         </div>
@@ -777,7 +928,7 @@ const EnrollmentFormPage = () => {
 
                             {sameAddress ?
                                 (
-                                    <UpazilaDistrict sendData={myData} />
+                                    <UpazilaDistrict sendData={myData}  />
                                 )
                                 :
                                 (
@@ -787,13 +938,13 @@ const EnrollmentFormPage = () => {
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label text-end">Upazila</label>
                                                 <div className="col-sm-8">
-                                                    <input 
-                                                    type="text" 
-                                                    className="form-control" 
-                                                    name="PerUpaSearch"
-                                                    value={selectAutoPerUpaVal.PerUpaSearch}
-                                                    placeholder='type and select Upazila'
-                                                    disabled
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name="PerUpaSearch"
+                                                        value={selectAutoPerUpaVal.PerUpaSearch}
+                                                        placeholder='type and select Upazila'
+                                                        disabled
                                                     />
                                                 </div>
                                             </div>
@@ -802,13 +953,13 @@ const EnrollmentFormPage = () => {
                                             <div className="row">
                                                 <label className="col-sm-4 col-form-label text-end">District</label>
                                                 <div className="col-sm-8">
-                                                    <input 
-                                                    type="text" 
-                                                    className="form-control" 
-                                                    name='PerDistrict'
-                                                    value={selectAutoPerUpaVal.PerDistrict}
-                                                    disabled
-                                                     />
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name='PerDistrict'
+                                                        value={selectAutoPerUpaVal.PerDistrict}
+                                                        disabled
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -892,13 +1043,13 @@ const EnrollmentFormPage = () => {
                                 </div>
                                 <div className='dropdown'>
                                     {
-                                        listMosque.filter(item=> item.upazilaNameEn === orgUpazila.OrgUpaSearch)
-                                        .filter(item => {
-                                            const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
-                                            const fullName = item.mosqueNameEn.toLowerCase();
+                                        listMosque.filter(item => item.upazilaNameEn === orgUpazila.OrgUpaSearch)
+                                            .filter(item => {
+                                                const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
+                                                const fullName = item.mosqueNameEn.toLowerCase();
 
-                                            return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                                        }).slice(0, 10)
+                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
+                                            }).slice(0, 10)
                                             .map((item) => (
                                                 <div
                                                     key={item.mosqueId}
@@ -988,7 +1139,7 @@ const EnrollmentFormPage = () => {
                                     Donation Month
                                 </label>
 
-                                <select className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                <select defaultValue="" className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
                                     <option value="">---Select----</option>
                                     {month.map((item) => (
                                         <option key={item.label} value={item.value}>{item.label}</option>
@@ -1003,7 +1154,7 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Year
                                 </label>
-                                <select className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                <select defaultValue="" className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
                                     <option value="">---Select----</option>
                                     {year.map((item) => (
                                         <option key={item.label} value={item.value}>{item.label}</option>
@@ -1019,7 +1170,7 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Enrollment Date
                                 </label>
-                                <input type="date" name="EnrollmentDate" className='form-control' onChange={handleDonationDataChange} />
+                                <input type="date" name="EnrollmentDate" className='form-control' value={donationData.EnrollmentDate} onChange={handleDonationDataChange} />
                             </div>
 
                         </div>
@@ -1028,8 +1179,8 @@ const EnrollmentFormPage = () => {
                                 <label className="form-label">
                                     Life Status
                                 </label>
-                                <select className="form-select" name="LifeStatus" onChange={handleLifeChange}>
-                                    <option selected>---Select----</option>
+                                <select defaultValue="" className="form-select" name="LifeStatus" onChange={handleLifeChange}>
+                                    <option value="" selected>---Select----</option>
                                     <option value="Alive">Alive</option>
                                     <option value="Dead">Dead</option>
                                 </select>
@@ -1045,7 +1196,7 @@ const EnrollmentFormPage = () => {
                                         <label className="form-label">
                                             Dead Date
                                         </label>
-                                        <input type="date" name="DeadDate" className='form-control' onChange={handleLifeChange} />
+                                        <input type="date" name="DeadDate" className='form-control' value={life.DeadDate} onChange={handleLifeChange} />
                                     </div>
 
                                 </div>
@@ -1062,6 +1213,30 @@ const EnrollmentFormPage = () => {
                     <button className="btn btn-warning w-auto">Update</button>
                 </div>
             </form>
+
+            
+            {/* Modal */}
+            {/* React-Bootstrap Modal */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Save Completed</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p> Donar ID :{saveOutput.DonerActualId}</p>
+          <p> Organizaiotn ID :{saveOutput.OrganisationalId}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          {/* Additional buttons or actions */}
+        </Modal.Footer>
+      </Modal>
+
+
+            {/* Modal */}
+
+            
         </div>
 
         // </div>
