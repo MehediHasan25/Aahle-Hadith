@@ -625,7 +625,7 @@ const EnrollmentFormPage = () => {
                 toast.error(err.toString(), { duration: 5000, position: 'top-center' });
             }
         }
-    
+
     }
 
     const handleClose = () => {
@@ -638,7 +638,7 @@ const EnrollmentFormPage = () => {
                 <h3>Enrollment</h3>
             </div>
 
-           
+
             {/* <div className="form card p-3"> */}
             <form action="">
                 <div className="form card shadow p-3">
@@ -899,7 +899,7 @@ const EnrollmentFormPage = () => {
                                 </div>
                             </div> */}
 
-                            <UpazilaDistrict sendData={sendData}  />
+                            <UpazilaDistrict sendData={sendData} />
 
 
                         </div>
@@ -928,7 +928,7 @@ const EnrollmentFormPage = () => {
 
                             {sameAddress ?
                                 (
-                                    <UpazilaDistrict sendData={myData}  />
+                                    <UpazilaDistrict sendData={myData} />
                                 )
                                 :
                                 (
@@ -1214,29 +1214,29 @@ const EnrollmentFormPage = () => {
                 </div>
             </form>
 
-            
+
             {/* Modal */}
             {/* React-Bootstrap Modal */}
-      <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Save Completed</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p> Donar ID :{saveOutput.DonerActualId}</p>
-          <p> Organizaiotn ID :{saveOutput.OrganisationalId}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          {/* Additional buttons or actions */}
-        </Modal.Footer>
-      </Modal>
+            <Modal show={show} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Save Completed</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p style={{textAlign:"center"}}> Donar ID :{saveOutput.DonerActualId}</p>
+                    <p style={{textAlign:"center"}}> Organizaiotn ID :{saveOutput.OrganisationalId}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    {/* Additional buttons or actions */}
+                </Modal.Footer>
+            </Modal>
 
 
             {/* Modal */}
 
-            
+
         </div>
 
         // </div>
