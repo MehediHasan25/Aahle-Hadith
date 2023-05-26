@@ -5,6 +5,7 @@ import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, Get
 import { Modal, Button } from "react-bootstrap";
 import UpazilaDistrict from './UpazilaDistrict';
 import { handleEnrollmentPayload } from '../../../Utils/EnrollmentPayload';
+import toast, { Toaster } from 'react-hot-toast';
 
 const EnrollmentFormPage = () => {
     const [personal, setPersonal] = useState({
@@ -594,6 +595,143 @@ const EnrollmentFormPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        let eduValArr = listEducation.map(item=> item.eduQualification);
+        let occValArr = listOccupation.map(item=> item.occupationName);
+        let upaValArr = listUpazila.map(item => item.upazilaNameEn);
+        let mosqueArr = listMosque.map(item=>item.mosqueNameEn);
+        let donationAmtArr = listDonationAmt.map(item=>item.donationAmt);
+
+        // Validation ////////////
+
+        if(personal.DonerName === ""){
+            toast.error("Please Enter Name (English)",{duration: 5000,position: 'top-center'});
+            return;
+        }
+
+        if(personal.DonerNameBng === ""){
+            toast.error("Please Enter Name (Bangla)",{duration: 5000,position: 'top-center'});
+            return;
+        }
+
+        if(personal.MobileNo === ""){
+            toast.error("Please Enter Mobile No",{duration: 5000,position: 'top-center'});
+            return;
+        }
+        
+        if(new RegExp("^(?:\\+88|88)?(01[3-9]\\d{8})$").test(personal.MobileNo) === false){
+            toast.error("Please Enter Mobile No",{duration: 5000,position: 'top-center'});
+            return;
+        }
+        
+
+        if(personal.FatherName === ""){
+            toast.error("Please Enter Father's Name",{duration: 5000,position: 'top-center'});
+            return;
+        }
+
+        if(personal.MotherName === ""){
+            toast.error("Please Enter Mother's Name ",{duration: 5000,position: 'top-center'});
+            return;
+        }
+
+        if (personal.NIDNo.length < 10) {
+            toast.error("NID No is less than 10 digits",{duration: 5000,position: 'top-center'});
+            return;      
+        } else if (personal.NIDNo.length > 10 && personal.NIDNo.length < 13) {
+            toast.error("NID No is greater than 10 and less than 13 digits",{duration: 5000,position: 'top-center'});
+            return;
+        } else if (personal.NIDNo.length > 13 && personal.NIDNo.length < 17) {
+            toast.error("NID No is greater than 13 and less than 17 digits",{duration: 5000,position: 'top-center'});
+            return;
+        } else if (personal.NIDNo.length > 17) {
+            toast.error("NID No is greater than 17 digits",{duration: 5000,position: 'top-center'});
+            return;
+        }
+        
+
+        if(eduValArr.includes(selectAutoEduVal.eduSearch) === false){
+            toast.error('Invalid Education... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(occValArr.includes(selectAutoOccVal.OccSearch) === false){
+            toast.error('Invalid Occupation... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+
+          if(address.PreAddress === ""){
+            toast.error('Please Enter your Present Address',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(upaValArr.includes(selectAutoPreUpaVal.PreUpaSearch) === false){
+            toast.error('Invalid Present Address Upazila... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+
+          if(address.PerAddress === ""){
+            toast.error('Please Enter your Permanent Address',{duration: 5000,position: 'top-center'});
+            return;
+          }
+        
+
+          if(upaValArr.includes(selectAutoPerUpaVal.PerUpaSearch) === false){
+            toast.error('Invalid Permanent Address Upazila... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+
+          if(upaValArr.includes(orgUpazila.OrgUpaSearch) === false){
+            toast.error('Invalid Org Upazila... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+        
+          if(upaValArr.includes(orgUpazila.OrgUpaSearch) === false){
+            toast.error('Invalid Org Upazila... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+
+          if(mosqueArr.includes(selectAutoMosqueVal.MosqueSearch) === false){
+            toast.error('Invalid Mosque Input... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(donationAmtArr.includes(selectAutoDonationVal.DonationSearch) === false){
+            toast.error('Invalid Donation Amount... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+            return;
+          }
+          
+          if(donationData.DonationMonth === ""){
+            toast.error('Please Select Donation Month',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(donationData.DonationYear === ""){
+            toast.error('Please Select Donation Year',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(donationData.EnrollmentDate === ""){
+            toast.error('Please Select Donation Year',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(life.LifeStatus === ""){
+            toast.error('Please Select Life Status',{duration: 5000,position: 'top-center'});
+            return;
+          }
+
+          if(life.LifeStatus === "Dead" && life.DeadDate === ""){
+            toast.error('Please Provide Dead Date',{duration: 5000,position: 'top-center'});
+            return;
+          }
+          
+        // Validation ////////////
+ 
         let token = localStorage.getItem("AuthToken");
         const headers = { 'Authorization': 'Bearer ' + token };
 
@@ -1180,7 +1318,7 @@ const EnrollmentFormPage = () => {
                                     Life Status
                                 </label>
                                 <select defaultValue="" className="form-select" name="LifeStatus" onChange={handleLifeChange}>
-                                    <option value="" selected>---Select----</option>
+                                    <option value="" >---Select----</option>
                                     <option value="Alive">Alive</option>
                                     <option value="Dead">Dead</option>
                                 </select>

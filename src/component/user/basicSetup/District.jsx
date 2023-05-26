@@ -148,12 +148,12 @@ const District = () => {
 
     let divisionArr = listDivision.map(item=> item.divisionNameEn);
 
-    if(setAsearch === ""){
+    if(asearch === ""){
       toast.error('Please Enter Division',{duration: 5000,position: 'top-center'});
       return;
     }
 
-    if(divisionArr.includes(setAsearch) === false){
+    if(divisionArr.includes(asearch) === false){
       toast.error('Invalid Division Name... Select from Auto Complete',{duration: 5000,position: 'top-center'});
       return;
     }
