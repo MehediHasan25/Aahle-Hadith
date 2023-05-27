@@ -35,13 +35,18 @@ const menu = [
         title: "Education",
         path: "/Education",
       },
-      {
-        title: "Donation Amount",
-        path: "/donation-amount",
-      },
+   
       {
         title: "Donar Enrollment",
         path: "/donar",
+      },
+      {
+        title: "Donar Payment",
+        path: "/donar-payment",
+      },
+      {
+        title: "Donation Amount",
+        path: "/donation-amount",
       },
     ],
   },

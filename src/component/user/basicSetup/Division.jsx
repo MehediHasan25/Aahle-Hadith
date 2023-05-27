@@ -290,7 +290,7 @@ const Division = () => {
               />
             </form>
             <table className="table table-striped table-bordered">
-              <thead>
+              <thead className="bg-success">
                 <tr>
                   <th> Action</th>
                   <th>Division(English)</th>
