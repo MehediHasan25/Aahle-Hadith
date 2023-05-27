@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import EnrollmentFormPage from '../../Enrollment/EnrollmentFormPage';
+import EnrollmentUpdate from '../../Enrollment/EnrollmentUpdate';
 
 const DonarEnrollment = () => {
     const [update,setUpdate] = useState(true);
@@ -45,7 +46,7 @@ const DonarEnrollment = () => {
             :
             (
             <>
-
+            <EnrollmentUpdate/>
             </>
             )
         }

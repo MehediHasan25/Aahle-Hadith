@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/Login.css';
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 import { LoginAPI } from '../URL/ApiList';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -16,6 +16,8 @@ const Login = () => {
     password: ""
   });
   const navigate = useNavigate();
+  
+
 
   const setVal = (e) => {
     //e.preventDefult();
@@ -67,7 +69,9 @@ const Login = () => {
         //alert("Login Successfull");
          toast("Login Successfull");
         // NotificationManager.success("Login Successfull", "Success", 5000);
-        navigate('/dashboard',{ replace: true });
+         navigate('/dashboard',{ replace: true });
+        
+        
       }else{
         alert("Invalid Credentials");
       }

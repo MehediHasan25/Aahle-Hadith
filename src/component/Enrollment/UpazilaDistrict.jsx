@@ -5,13 +5,15 @@ import toast, { Toaster } from 'react-hot-toast';
 
 
 const UpazilaDistrict = ({ sendData }) => {
+    
 
     // console.log("upClean", saveComplete);
     const [listUpazila, setListUpazila] = useState([]);
     const [compData, setCompData] = useState({
-        UpaSearch: "",
+         UpaSearch: "",
         UpaId: "",
         district: ""
+        
     });
 
     useEffect(() => {

@@ -18,6 +18,7 @@ import DonarEnrollment from './component/user/basicSetup/DonarEnrollment';
 import Occupation from './component/user/basicSetup/Occupation';
 import Education from './component/user/basicSetup/Education';
 import DonationAmount from './component/user/basicSetup/DonationAmount';
+import UpdateDataEnrollment from './component/Enrollment/UpdateDataEnrollment';
 import toast, { Toaster } from 'react-hot-toast';
 import DonarPayment from './component/user/basicSetup/DonarPayment';
 
@@ -45,6 +46,7 @@ function App() {
       <Route  path="/upazila" element={ <MainLayout><Upazila/></MainLayout>}/>
       <Route  path="/mosque" element={ <MainLayout><Mosque/></MainLayout>}/>
       <Route  path="/donar" element={ <MainLayout><DonarEnrollment/></MainLayout>}/>
+      <Route  path="/donar-update" element={ <MainLayout><UpdateDataEnrollment/></MainLayout>}/>
       <Route  path="/occupation" element={ <MainLayout><Occupation/></MainLayout>}/>
       <Route  path="/education" element={ <MainLayout><Education/></MainLayout>}/>
       <Route  path="/donation-amount" element={ <MainLayout><DonationAmount/></MainLayout>}/>

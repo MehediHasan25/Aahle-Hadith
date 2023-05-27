@@ -766,6 +766,7 @@ const EnrollmentFormPage = () => {
 
     }
 
+
     const handleClose = () => {
         window.location.reload(true);
         setShow(false);
