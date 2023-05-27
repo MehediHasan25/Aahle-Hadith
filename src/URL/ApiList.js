@@ -54,6 +54,8 @@ export const SaveEnrollmentData = hostIp + `api/v1/DonarEnrollment/donenrol-save
 export const GetEnrollmentData = hostIp +`api/v1/DonarEnrollment/donenrol-list?DonerActualId=&OrganisationalId=`;
 export const DeleteEnrollData = hostIp + `api/v1/DonarEnrollment/donenrol-delete/`;
 export const GetEnrollmentDataBySearch = hostIp+ `api/v1/DonarEnrollment/donenrol-list?`
+export const GetActualIdandOrgId = hostIp + `api/v1/DonarEnrollment/ActOrgId-list`;
+
 
 
 

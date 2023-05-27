@@ -3,7 +3,7 @@ import axios from 'axios';
 import { month, year } from '../../../Utils/EnrollmentData';
 import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList, SaveEnrollmentData } from '../../URL/ApiList';
 import { Modal, Button } from "react-bootstrap";
-import UpazilaDistrict from './UpazilaDistrict';
+import UpazilaDistrictUpdate from './UpazilaDistrictUpdate';
 import { handleEnrollmentPayload } from '../../../Utils/EnrollmentPayload';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -480,111 +480,7 @@ const EnrollmentFormPage = () => {
         }
     }
 
-    /////////////////////////////////Empty handle Input ///////////////////////////////////////
-
-    const handleFieldEmpty = () => {
-        setPersonal({
-            DonerEnrollmentId: "",
-            DonerName: "",
-            DonerNameBng: "",
-            MobileNo: "",
-            Email: "",
-            FatherName: "",
-            MotherName: "",
-            NIDNo: "",
-            BirthCerNo: ""
-        });
-
-        // Education autoComplete////
-
-        setSelectAutoEduVal({
-            eduSearch: "",
-            EduQualificationId: ""
-        });
-        // Education autoComplete////
-
-        //Occupation AutoComplete/////
-        setSelectAutoOccVal({
-            OccSearch: "",
-            OccupationId: ""
-        });
-        //Occupation AutoComplete/////
-
-        //Address
-        //setSameAddress(true);
-
-        SetAddress({
-            PreAddress: "",
-            PerAddress: ""
-        });
-
-
-        //Present Upazila AutoComplete
-        setSelectAutoPreUpaVal({
-            PreUpaSearch: "",
-            PreUpazilaId: "",
-            PreDistrict: ""
-        });
-
-        //Present Upazila AutoComplete
-
-        //Permanent Upazila AutoComplete
-        setSelectAutoPerUpaVal({
-            PerUpaSearch: "",
-            PerUpazilaId: "",
-            PerDistrict: ""
-        });
-
-        //Permanent Upazila AutoComplete
-        setOrgUpazila({
-            OrgUpaSearch: "",
-            OrgUpazilaId: ""
-        });
-
-
-        // Mosque Auto Complete
-
-        setSelectAutoMosqueVal({
-            MosqueSearch: "",
-            OrgMosqueId: ""
-        });
-        // Mosque Auto Complete
-
-
-        // Donation Auto Complete
-        setSelectAutoDonationVal({
-            DonationSearch: "",
-            DonationAmtId: ""
-        });
-        // Donation Auto Complete
-
-
-        // Donation Amount
-        setDonationAmt({
-            DisPerAmt: 20,
-            NetAmount: ""
-        });
-
-        // Donation Amount
-        setDonationData({
-            DonationMonth: "",
-            DonationYear: "",
-            EnrollmentDate: ""
-        });
-
-        setLife({
-            LifeStatus: "",
-            DeadDate: ""
-        });
-
-
-        // setReUpaClean(false);
-        // setReUpaClean(!reUpaClean);
-    }
-
-
-    /////////////////////////////////Empty handle Input ///////////////////////////////////////
-
+    
 
 
 
@@ -1038,7 +934,7 @@ const EnrollmentFormPage = () => {
                                 </div>
                             </div> */}
 
-                            <UpazilaDistrict sendData={sendData} />
+                            <UpazilaDistrictUpdate sendData={sendData} />
 
 
                         </div>
@@ -1067,7 +963,7 @@ const EnrollmentFormPage = () => {
 
                             {sameAddress ?
                                 (
-                                    <UpazilaDistrict sendData={myData} />
+                                    <UpazilaDistrictUpdate sendData={myData} />
                                 )
                                 :
                                 (
