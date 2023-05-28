@@ -58,3 +58,14 @@ export const year =[
             {label:"2053" , value:"2053"},
 
                     ];
+
+
+export const conversionDate = (d) =>{
+let spData = d.split("");
+let year = spData[6]+spData[7]+spData[8]+spData[9];
+let day =spData[3]+ spData[4];
+let month = spData[0]+ spData[1];
+
+let fullConv = year+"-"+month+"-"+day;
+return fullConv;
+}

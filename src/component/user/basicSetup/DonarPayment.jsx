@@ -1,6 +1,54 @@
-import React from 'react'
+import React from 'react';
+import { year, month } from '../../../../Utils/EnrollmentData';
+import { useState } from 'react';
 
 const DonarPayment = () => {
+    const [donationData, setDonationData] = useState({
+        DonationMonth:"",
+        DonationYear:""
+    });
+
+    
+    const [listDonationAmt, setListDonationAmt] = useState([]);
+
+    // Donation Auto Complete
+    const [selectAutoDonationVal, setSelectAutoDonationVal] = useState({
+        DonationSearch: "",
+        DonationAmtId: ""
+    });
+    // Donation Auto Complete
+
+
+    // Donation Amount
+    const [donationAmt, setDonationAmt] = useState({
+        DisPerAmt: 20,
+        NetAmount: ""
+    });
+
+    const [listActualId, setListActualId] = useState([]);
+    const [selectAutoActualVal, setSelectAutoActualVal] = useState({
+      actualIdSearch: "",
+      actualIdVal: ""
+    });
+    const [listOrgId, setListOrgId] = useState([]);
+    const [selectAutoOrgVal, setSelectAutoOrgVal] = useState({
+      OrgIdSearch: "",
+      OrgIdVal: ""
+    });
+
+    const handleMonthYearChange = e =>{
+        const { name, value } = e.target;
+        setDonationData((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+    
+  
+
   return (
     <div className="page-content p-3">
     {/* <div className="pg_title">
@@ -14,12 +62,25 @@ const DonarPayment = () => {
                 <div className="mb-3 row">
                     <label className="col-md-3 col-form-label">Year</label>
                     {/* <div className="col-md-9"> */}
-                    <input className="col-md-9" type="date" placeholder="Enter Division Name (Bangla)"/>
+                    <select value={donationData.DonationYear} className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleMonthYearChange}>
+                                    <option value="">---Select----</option>
+                                    {year.map((item) => (
+                                        <option key={item.label} value={item.value}>{item.label}</option>
+                                    ))}
+
+                                </select>
                     {/* </div> */}
                 </div>
                 <div className="mb-3 row">
                     <label className="col-form-label col-md-3">Month</label>
-                    <input className="col-md-9" type="date" placeholder="Enter Division Name (Bangla)"/>
+                    
+                    <select value={donationData.DonationMonth} className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleMonthYearChange}>
+                                    <option value="">---Select----</option>
+                                    {month.map((item) => (
+                                        <option key={item.label} value={item.value}>{item.label}</option>
+                                    ))}
+
+                                </select>
                 </div>
                 <div className="mb-3 row">
                     <label className="col-form-label">Donation Amount</label>
@@ -57,77 +118,6 @@ const DonarPayment = () => {
         
              </form>
         </div>
-        <div className="col-md-7">
-        <form action="">
-            <div className="form card shadow p-3">
-            <h5 className="text_primary text-capitalize">Donar Payment Entry (Individual)</h5>
-                <div className="mb-3 row">
-                    <label className="col-md-3 col-form-label">Actual ID</label>
-
-                   
-                    <input className="col-md-9" type="text" placeholder="Enter Division Name (Bangla)"/>
-                    {/* </div> */}
-                </div>
-                <div className="mb-3 row">
-                    <label className="col-form-label col-md-3">Organizational ID</label>
-                    <input className="col-md-9" type="text" placeholder="Enter Division Name (Bangla)"/>
-                </div>
-                <div className="mb-3 row">
-                    <label className="col-md-3 col-form-label">Year</label>
-                    <input className="col-md-9" type="date" placeholder="Enter Division Name (Bangla)"/>
-                </div>
-                <div className="mb-3 row">
-                    {/* table will be auto generated */}
-                    <table className="table table-striprd border">
-                        <thead className="bg-info">
-                            <tr>
-                                <th>Month</th>
-                                <th>Donation Amount</th>
-                                <th>Net Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <span className="btn btn-outline-primary">January</span>
-                                </td>
-                                <td>
-                                <select className="form-select text-danger">
-                                        <option className="text-danger">--Select--</option>
-                                        <option >5000.00</option>
-
-                                </select>
-                                </td>
-                                <td>
-                                    <span className="text-success">10000.00</span>
-                                </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                    <span className="btn btn-outline-primary">February</span>
-                                </td>
-                                <td>
-                                <select className="form-select text-danger">
-                                        <option className="text-danger">--Select--</option>
-                                        <option >5000.00</option>
-
-                                </select>
-                                </td>
-                                <td>
-                                    <span className="text-success">10000.00</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className="d-flex gap-2 mt-4">
-                        <button className="btn btn-success w-auto m-0">Save</button>
-                        <button className="btn btn-warning w-auto  m-0">Update</button>
-                </div>
-            </div>
-             </form>
-            </div>
     </div>
 
 

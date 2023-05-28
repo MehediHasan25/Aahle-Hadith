@@ -3,7 +3,7 @@ import axios from 'axios';
 import { month, year } from '../../../Utils/EnrollmentData';
 import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList, SaveEnrollmentData } from '../../URL/ApiList';
 import { Modal, Button } from "react-bootstrap";
-import UpazilaDistrictUpdate from './UpazilaDistrictUpdate';
+import UpazilaDistrict from './UpazilaDistrict';
 import { handleEnrollmentPayload } from '../../../Utils/EnrollmentPayload';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -310,6 +310,8 @@ const EnrollmentFormPage = () => {
             ...orgUpazila,
             OrgUpaSearch: e.target.value
         });
+
+        changeMosqueData();
     }
 
     const handleOrgUpaSearch = (searchTerm, val) => {
@@ -318,6 +320,13 @@ const EnrollmentFormPage = () => {
         setOrgUpazila({
             OrgUpaSearch: searchTerm,
             OrgUpazilaId: val
+        });
+    }
+
+    const changeMosqueData =()=>{
+        setSelectAutoMosqueVal({
+            MosqueSearch: "",
+            OrgMosqueId: ""
         });
     }
 
@@ -667,6 +676,8 @@ const EnrollmentFormPage = () => {
         window.location.reload(true);
         setShow(false);
     };
+
+    console.log("add", sameAddress);
     return (
         <div className="page-content p-3">
             <div className="pg_title">
@@ -934,7 +945,7 @@ const EnrollmentFormPage = () => {
                                 </div>
                             </div> */}
 
-                            <UpazilaDistrictUpdate sendData={sendData} />
+                            <UpazilaDistrict sendData={sendData} />
 
 
                         </div>
@@ -963,7 +974,7 @@ const EnrollmentFormPage = () => {
 
                             {sameAddress ?
                                 (
-                                    <UpazilaDistrictUpdate sendData={myData} />
+                                    <UpazilaDistrict sendData={myData} />
                                 )
                                 :
                                 (
@@ -1245,7 +1256,7 @@ const EnrollmentFormPage = () => {
                 </div>
                 <div className="d-flex gap-3 justify-content-center mt-4">
                     <button className="btn btn-success w-auto" onClick={handleSubmit}>Save</button>
-                    <button className="btn btn-warning w-auto">Update</button>
+                    {/* <button className="btn btn-warning w-auto">Update</button> */}
                 </div>
             </form>
 

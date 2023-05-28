@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { month, year } from '../../../Utils/EnrollmentData';
-import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList, SaveEnrollmentData, GetDistrictfromUpazila } from '../../URL/ApiList';
+import { month, year,conversionDate } from '../../../Utils/EnrollmentData';
+import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList, SaveEnrollmentData, GetDistrictfromUpazila,GetDonarAllData } from '../../URL/ApiList';
 import { Modal, Button } from "react-bootstrap";
-import UpazilaDistrict from './UpazilaDistrict';
 import { handleEnrollmentPayload } from '../../../Utils/EnrollmentPayload';
 import toast, { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 
 
+
 const UpdateDataEnrollment = () => {
     const { state } = useLocation();
-
+    
+    const [getAllData, setGetAllData] = useState([]);
     const [personal, setPersonal] = useState({
-        DonerEnrollmentId: "",
+        DonerEnrollmentId: state.donarId,
         DonerName: "",
         DonerNameBng: "",
         MobileNo: "",
@@ -124,14 +125,143 @@ const UpdateDataEnrollment = () => {
 
 
 
+
+
     useEffect(() => {
+        getDonarData();
         getEduList();
         getOccupation();
         getUpazila();
         getMosque();
         getDonationAmt();
+        
     }, []);
 
+// //////////////////////////////////Get Donar Data //////////////////////////////////
+    const getDonarData = async() =>{
+        let {donarId} = state;
+        let token = localStorage.getItem("AuthToken");
+        const headers = { 'Authorization': 'Bearer ' + token };
+        
+        try{
+            let getDonar = await axios.get(GetDonarAllData+donarId,{headers});
+            // console.log("DonarData", getDonar.data.donarEnrollData);
+            let allData = getDonar.data;
+            if(allData.success === true){
+                let allDonarData = allData.donarEnrollData;
+                setGetAllData(allDonarData);
+                // console.log("AllData", allDonarData);
+                setPersonal({
+                    DonerEnrollmentId:allDonarData.donerEnrollmentId,
+                    DonerName: allDonarData.donerName,
+                    DonerNameBng: allDonarData.donerNameBng,
+                    MobileNo: allDonarData.mobileNo,
+                    Email: allDonarData.email,
+                    FatherName: allDonarData.fatherName,
+                    MotherName: allDonarData.motherName,
+                    NIDNo: allDonarData.nidNo,
+                    BirthCerNo: allDonarData.birthCerNo
+                });
+
+                 setSelectAutoEduVal({
+                    eduSearch: allDonarData.eduQualification,
+                    EduQualificationId: allDonarData.eduQualificationId
+                });
+
+                setSelectAutoOccVal({
+                    OccSearch: allDonarData.occupationName,
+                    OccupationId: allDonarData.occupationId
+                });
+
+                if(allDonarData.preAddress === allDonarData.perAddress && allDonarData.preUpazilaId === allDonarData.perUpazilaId){
+                    setSameAddress(false);
+                }else{
+                    setSameAddress(true);
+                }
+
+                SetAddress({
+                    PreAddress: allDonarData.preAddress,
+                    PerAddress: allDonarData.perAddress
+                });
+            
+                setSelectAutoPreUpaVal({
+                    PreUpaSearch: allDonarData.preUpazilaName,
+                    PreUpazilaId: allDonarData.preUpazilaId,
+                    PreDistrict: allDonarData.preDistrict
+                });
+            
+                setSelectAutoPerUpaVal({
+                    PerUpaSearch: allDonarData.perUpazilaName,
+                    PerUpazilaId: allDonarData.perUpazilaId,
+                    PerDistrict: allDonarData.perDistrict
+                });
+
+                setOrgUpazila({
+                    OrgUpaSearch: allDonarData.orgUpazilaName,
+                    OrgUpazilaId: allDonarData.orgUpazilaId
+                });
+            
+                setSelectAutoMosqueVal({
+                    MosqueSearch: allDonarData.mosqueNameEn,
+                    OrgMosqueId: allDonarData.orgMosqueId
+                });
+            
+                setSelectAutoDonationVal({
+                    DonationSearch: allDonarData.donationAmt,
+                    DonationAmtId: allDonarData.donationAmtId
+                });
+                 setDonationAmt({
+                    DisPerAmt: allDonarData.disPerAmt,
+                    NetAmount: allDonarData.netAmount
+                });
+
+                if(allDonarData.enrollmentDate === ""){
+                    let myDate = allDonarData.enrollmentDate.split("");
+                    console.log("datechange", myDate);
+                }
+
+                
+                setDonationData({
+                    DonationMonth: allDonarData.donationMonth,
+                    DonationYear: allDonarData.donationYear,
+                    EnrollmentDate: conversionDate(allDonarData.enrollmentDate)
+                });
+
+                 setLife({
+                    LifeStatus: allDonarData.lifeStatus,
+                    DeadDate: allDonarData.deadDate === null ? "" : conversionDate(allDonarData.deadDate)
+                });
+
+                 setSaveOutput({
+                    DonerActualId: allDonarData.donerActualId,
+                    OrganisationalId: allDonarData.organisationalId
+                });
+
+
+
+
+
+            }else{
+                toast.error('No Data Found', { duration: 5000, position: 'top-center' });
+            }
+        }catch(err){
+            console.log("error", err);
+            if (err.response) {
+                let message = err.response.data.message;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
+        }
+        
+    }
+
+
+// //////////////////////////////////Get Donar Data //////////////////////////////////
 
     const handlePersonalChange = (e) => {
         const { name, value } = e.target;
@@ -315,6 +445,7 @@ const UpdateDataEnrollment = () => {
             ...orgUpazila,
             OrgUpaSearch: e.target.value
         });
+        changeMosqueData();
     }
 
     const handleOrgUpaSearch = (searchTerm, val) => {
@@ -323,6 +454,13 @@ const UpdateDataEnrollment = () => {
         setOrgUpazila({
             OrgUpaSearch: searchTerm,
             OrgUpazilaId: val
+        });
+    }
+
+    const changeMosqueData =()=>{
+        setSelectAutoMosqueVal({
+            MosqueSearch: "",
+            OrgMosqueId: ""
         });
     }
 
@@ -432,23 +570,23 @@ const UpdateDataEnrollment = () => {
         })
     }
 
-    const sendData = (searchTerm, val, districtName) => {
-        // console.log("data", searchTerm, val, districtName);
-        setSelectAutoPreUpaVal({
-            PreUpaSearch: searchTerm,
-            PreUpazilaId: val,
-            PreDistrict: districtName
-        });
-    }
+    // const sendData = (searchTerm, val, districtName) => {
+    //     // console.log("data", searchTerm, val, districtName);
+    //     setSelectAutoPreUpaVal({
+    //         PreUpaSearch: searchTerm,
+    //         PreUpazilaId: val,
+    //         PreDistrict: districtName
+    //     });
+    // }
 
-    const myData = (searchTerm, val, districtName) => {
-        // console.log("data2", searchTerm, val, districtName);
-        setSelectAutoPerUpaVal({
-            PerUpaSearch: searchTerm,
-            PerUpazilaId: val,
-            PerDistrict: districtName
-        });
-    }
+    // const myData = (searchTerm, val, districtName) => {
+    //     // console.log("data2", searchTerm, val, districtName);
+    //     setSelectAutoPerUpaVal({
+    //         PerUpaSearch: searchTerm,
+    //         PerUpazilaId: val,
+    //         PerDistrict: districtName
+    //     });
+    // }
 
 
     const handleSame = () => {
@@ -631,32 +769,32 @@ const UpdateDataEnrollment = () => {
 
         let payload = handleEnrollmentPayload(personal, selectAutoEduVal, selectAutoOccVal, address, selectAutoPreUpaVal, selectAutoPerUpaVal, orgUpazila, selectAutoMosqueVal, selectAutoDonationVal, donationAmt, donationData, life);
         console.log("EnPayload", payload);
-        // try {
-        //     let saveEnroll = await axios.post(SaveEnrollmentData, payload, { headers });
-        //     let enrollSave = saveEnroll.data;
-        //     console.log("sAVE", enrollSave);
-        //     if (enrollSave.success === true) {
-        //         setSaveOutput({
-        //             DonerActualId: enrollSave.donerActualId,
-        //             OrganisationalId: enrollSave.organisationalId
-        //         });
+        try {
+            let saveEnroll = await axios.post(SaveEnrollmentData, payload, { headers });
+            let enrollSave = saveEnroll.data;
+            console.log("sAVE", enrollSave);
+            if (enrollSave.success === true) {
+                setSaveOutput({
+                    DonerActualId: enrollSave.donerActualId,
+                    OrganisationalId: enrollSave.organisationalId
+                });
 
-        //         setShow(true);
-        //     }
+                setShow(true);
+            }
 
-        // } catch (err) {
-        //     console.log("error", err);
-        //     if (err.response) {
-        //         let message = err.response.data.message;
-        //         toast.error(message, { duration: 5000, position: 'top-center' });
-        //     } else if (err.request) {
-        //         console.log('Error Connecting ...', err.request);
-        //         toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-        //     } else if (err) {
-        //         console.log(err.toString());
-        //         toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-        //     }
-        // }
+        } catch (err) {
+            console.log("error", err);
+            if (err.response) {
+                let message = err.response.data.message;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
+        }
         
 
     }
@@ -756,7 +894,7 @@ const UpdateDataEnrollment = () => {
     return (
         <div className="page-content p-3">
             <div className="pg_title">
-                <h3>Enrollment</h3>
+                <h3>Enrollment Update</h3>
             </div>
 
 
@@ -1096,7 +1234,7 @@ const UpdateDataEnrollment = () => {
                                 <label className=" form-label d-flex w-100 justify-content-between">
                                     <div className="">Permanent Address</div>
                                     <div className="form-check d-flex gap-2 align-item-center">
-                                        <input className="w-auto mb-0" onChange={handleSame} type="checkbox" value="" id="flexCheckDefault" />
+                                        <input className="w-auto mb-0" onChange={handleSame} type="checkbox" value={sameAddress} id="flexCheckDefault" checked={sameAddress === false}/>
                                         <label className="form-check-label">
                                             As Same
                                         </label>
@@ -1393,7 +1531,7 @@ const UpdateDataEnrollment = () => {
                                     Donation Month
                                 </label>
 
-                                <select defaultValue="" className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                <select value={donationData.DonationMonth} className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleDonationDataChange}>
                                     <option value="">---Select----</option>
                                     {month.map((item) => (
                                         <option key={item.label} value={item.value}>{item.label}</option>
@@ -1408,7 +1546,7 @@ const UpdateDataEnrollment = () => {
                                 <label className="form-label">
                                     Year
                                 </label>
-                                <select defaultValue="" className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
+                                <select value={donationData.DonationYear} className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleDonationDataChange}>
                                     <option value="">---Select----</option>
                                     {year.map((item) => (
                                         <option key={item.label} value={item.value}>{item.label}</option>
@@ -1433,7 +1571,7 @@ const UpdateDataEnrollment = () => {
                                 <label className="form-label">
                                     Life Status
                                 </label>
-                                <select defaultValue="" className="form-select" name="LifeStatus" onChange={handleLifeChange}>
+                                <select value={life.LifeStatus} className="form-select" name="LifeStatus" onChange={handleLifeChange}>
                                     <option value="" >---Select----</option>
                                     <option value="Alive">Alive</option>
                                     <option value="Dead">Dead</option>
@@ -1463,8 +1601,8 @@ const UpdateDataEnrollment = () => {
                     }
                 </div>
                 <div className="d-flex gap-3 justify-content-center mt-4">
-                    <button className="btn btn-success w-auto" onClick={handleSubmit}>Save</button>
-                    <button className="btn btn-warning w-auto">Update</button>
+                    {/* <button className="btn btn-success w-auto" onClick={handleSubmit}>Save</button> */}
+                    <button className="btn btn-warning w-auto" onClick={handleSubmit}>Update</button>
                 </div>
             </form>
 

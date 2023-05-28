@@ -21,6 +21,7 @@ import DonationAmount from './component/user/basicSetup/DonationAmount';
 import UpdateDataEnrollment from './component/Enrollment/UpdateDataEnrollment';
 import toast, { Toaster } from 'react-hot-toast';
 import DonarPayment from './component/user/basicSetup/DonarPayment';
+import DonarPaymentList from './component/user/basicSetup/DonarPaymentList';
 
 ///import UpazilaDistrict from './component/Enrollment/UpazilaDistrict';
 // import { ToastContainer, toast } from 'react-toastify';
@@ -51,6 +52,7 @@ function App() {
       <Route  path="/education" element={ <MainLayout><Education/></MainLayout>}/>
       <Route  path="/donation-amount" element={ <MainLayout><DonationAmount/></MainLayout>}/>
       <Route  path="/donar-payment" element={ <MainLayout><DonarPayment/></MainLayout>}/>
+      <Route  path="/donar-payment-list" element={ <MainLayout><DonarPaymentList/></MainLayout>}/>
     </Routes>
     {/* <ToastContainer  closeButton={false}/> */}
     <Toaster />
