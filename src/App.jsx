@@ -21,7 +21,7 @@ import DonationAmount from './component/user/basicSetup/DonationAmount';
 import UpdateDataEnrollment from './component/Enrollment/UpdateDataEnrollment';
 import toast, { Toaster } from 'react-hot-toast';
 import DonarPayment from './component/user/basicSetup/DonarPayment';
-import DonarPaymentList from './component/user/basicSetup/DonarPaymentList';
+import DonarPaymentList from './component/user/basicSetup/MonthlyDonarPaymentList';
 
 ///import UpazilaDistrict from './component/Enrollment/UpazilaDistrict';
 // import { ToastContainer, toast } from 'react-toastify';

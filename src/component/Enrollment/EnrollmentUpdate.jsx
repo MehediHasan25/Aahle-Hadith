@@ -250,7 +250,7 @@ const EnrollmentUpdate = () => {
                     <div className='search-inner'>
                       <input
                         type="text"
-                        placeholder="Type Education (English)"
+                        placeholder="Type Actual ID"
                         name="actualIdSearch"
                         onChange={handleActIdSearchChange}
                         value={selectAutoActualVal.actualIdSearch}

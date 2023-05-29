@@ -35,7 +35,12 @@ const menu = [
         title: "Education",
         path: "/Education",
       },
-   
+
+      {
+        title: "Donation Amount",
+        path: "/donation-amount",
+      },
+         
       {
         title: "Donar Enrollment",
         path: "/donar",
@@ -45,9 +50,10 @@ const menu = [
         path: "/donar-payment",
       },
       {
-        title: "Donation Amount",
-        path: "/donation-amount",
-      },
+        title: "Monthly Donar Payment",
+        path: "/donar-payment-list",
+      }
+      
     ],
   },
   {

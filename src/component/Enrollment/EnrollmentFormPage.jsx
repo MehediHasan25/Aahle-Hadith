@@ -109,6 +109,7 @@ const EnrollmentFormPage = () => {
     });
 
     const [show, setShow] = useState(false);
+    const [donationFlag, setDonationFlag] = useState(true);
 
 
     const [saveOutput, setSaveOutput] = useState({
@@ -409,6 +410,7 @@ const EnrollmentFormPage = () => {
             ...selectAutoDonationVal,
             DonationSearch: e.target.value
         });
+        setDonationFlag(true);
     }
 
     const handleDonaAmtSearch = (searchTerm, val) => {
@@ -433,7 +435,9 @@ const EnrollmentFormPage = () => {
         setDonationAmt({
             ...donationAmt,
             NetAmount: netData
-        })
+        });
+
+        setDonationFlag(false);
     }
 
     const sendData = (searchTerm, val, districtName) => {
@@ -653,6 +657,7 @@ const EnrollmentFormPage = () => {
                 });
 
                 setShow(true);
+               // toast.success('Successfully Saved!',{duration: 4000,position: 'top-center'});
             }
 
         } catch (err) {
@@ -677,7 +682,7 @@ const EnrollmentFormPage = () => {
         setShow(false);
     };
 
-    console.log("add", sameAddress);
+    // console.log("add", sameAddress);
     return (
         <div className="page-content p-3">
             <div className="pg_title">
@@ -1135,7 +1140,9 @@ const EnrollmentFormPage = () => {
                                             style={{ width: "2000px" }}
                                         />
                                     </div>
-                                    <div className='dropdown'>
+                                    {
+                                        donationFlag === true ?
+                                        <div className='dropdown'>
                                         {
                                             listDonationAmt.filter(item => {
                                                 const searchTerm = selectAutoDonationVal.DonationSearch;
@@ -1153,6 +1160,11 @@ const EnrollmentFormPage = () => {
                                                 ))
                                         }
                                     </div>
+                                    :
+                                    ""
+
+                                    }
+                                    
                                 </div>
                                 {/*  */}
 
