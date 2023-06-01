@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 
 
+
 const Login = () => {
   const [inputState, setInputState] = useState({
     userName: '',
@@ -45,14 +46,13 @@ const Login = () => {
 
 
     if (userName === "") {
-      alert("Please Enter userName");
-      // NotificationManager.warning("Enter Email", "Click to Remove", 5000);
+      toast.error('Please Enter Valid User Name',{duration: 5000,position: 'top-center'});
       return;
     }
 
 
     if (password === "") {
-      alert("Please Enter the Password...!");
+      toast.error('Please Enter the Password',{duration: 5000,position: 'top-center'});
       return;
     }
 
@@ -66,24 +66,22 @@ const Login = () => {
       localStorage.setItem("AuthToken", loginData.token);
       localStorage.setItem("userName",inputState.userName );
       if(loginData.response === 1){
-        //alert("Login Successfull");
-         toast("Login Successfull");
-        // NotificationManager.success("Login Successfull", "Success", 5000);
+        toast.success('Login Successfull',{duration: 4000,position: 'top-center'});   
          navigate('/dashboard',{ replace: true });
-        
-        
       }else{
-        alert("Invalid Credentials");
+        toast.error('Invalid Credentials',{duration: 5000,position: 'top-center'});
       }
 
     }catch(err){
       if (err.response) {
         let message = err.response.data.message;
-        alert(message);
+        toast.error(message,{duration: 5000,position: 'top-center'});
       } else if (err.request) {
-        alert('Error Connecting ...', err.request);
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
       } else if (err) {
-        alert(err.toString());
+        console.log(err.toString());
+        toast.error(err.toString(),{duration: 5000,position: 'top-center'});
       }
 
     }

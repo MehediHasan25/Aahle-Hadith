@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { RegisterAPI } from '../URL/ApiList';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Register = () => {
@@ -45,35 +46,35 @@ const Register = () => {
     }
 
     if (email === "") {
-      alert("Please Enter Email");
+      toast.error("Please Enter Your Email",{duration: 5000,position: 'top-center'});
       return;
     }
 
-
-    if (phoneNumber === "") {
-      alert("Please Enter your Phone Number");
+    
+    if(phoneNumber === ""){
+      toast.error("Please Enter Phone Number",{duration: 5000,position: 'top-center'});
       return;
-    }
-
-    if(phoneNumber.length <11 || phoneNumber.length >=12 ){
-      alert("Please Provide Correct Phone Number");
+  }
+  
+  if(new RegExp("^(?:\\+88|88)?(01[3-9]\\d{8})$").test(phoneNumber) === false){
+      toast.error("Please Enter Valid Phone Number",{duration: 5000,position: 'top-center'});
       return;
-    }
+  }
 
     if (address === "") {
-      alert("Please Enter the Address");
+      toast.error("Please Enter the Address",{duration: 5000,position: 'top-center'});
       return;
     }
 
     if (password === "") {
-      alert("Please Enter Password");
+      toast.error("Please Enter Password",{duration: 5000,position: 'top-center'});
       return;
     }
 
 
 
     if (password !== conPass) {
-      alert('Password and Confirm Password are not same');
+      toast.error('Password and Confirm Password are not same',{duration: 5000,position: 'top-center'});
       return;
     }
 
@@ -85,19 +86,22 @@ const Register = () => {
       // console.log("RegisterAPIcall", registerCall.data);
       let registerData = registerCall.data;
       if(registerData.success){
-        alert("Registration Completed");
+        toast.success('Registration Successfully Completed',{duration: 4000,position: 'top-center'});   
         navigate('/');
       }
 
     } catch (err) {
-      if (err.response) {
-        let message = err.response.data.message;
-        alert(message);
-      } else if (err.request) {
-        alert('Error Connecting ...', err.request);
-      } else if (err) {
-        alert(err.toString());
-      }
+      console.log("error",err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message,{duration: 5000,position: 'top-center'});
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        }
 
     }
 

@@ -529,7 +529,7 @@ const EnrollmentFormPage = () => {
         }
         
         if(new RegExp("^(?:\\+88|88)?(01[3-9]\\d{8})$").test(personal.MobileNo) === false){
-            toast.error("Please Enter Mobile No",{duration: 5000,position: 'top-center'});
+            toast.error("Not a valid Mobile Number",{duration: 5000,position: 'top-center'});
             return;
         }
         

@@ -5,6 +5,8 @@ import axios from 'axios';
 import { GetDivisionList, GetDistrictList, GetDistrictCode,SaveDistrict,DeleteDistrict } from '../../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
+import Select from 'react-select';
+
 
 const District = () => {
   // Division autoComplete////
@@ -265,8 +267,6 @@ const District = () => {
   
 
 
-
-
   return (
     <div className="page-content p-4">
       <div className="pg_title">
@@ -313,8 +313,7 @@ const District = () => {
                     </div>
                   </div>
 
-                </div>
-
+                </div> 
               </div>
 
               < div className="mb-3 row">

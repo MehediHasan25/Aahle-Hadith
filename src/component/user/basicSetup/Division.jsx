@@ -5,6 +5,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { GetDivisionCode, GetDivisionList, SaveDivision,DeleteDivision } from "../../../URL/ApiList";
 
+
 const Division = () => {
   const [division, setDivision] = useState({
     DivisionId:"",
@@ -154,8 +155,9 @@ const Division = () => {
 
     } catch (error) {
       console.log("error",err);
+      console.log("error",err.message);
         if (err.response) {
-          let message = err.response.data.message;
+          let message = "Authentication Error!";
           toast.error(message,{duration: 5000,position: 'top-center'});
         } else if (err.request) {
           console.log('Error Connecting ...', err.request);
