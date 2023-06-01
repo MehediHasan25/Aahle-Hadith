@@ -8,7 +8,7 @@ import { ValueSetToDataList,ProcessSaveOutput } from '../../../../Utils/MonthlyP
 
 const MonthlyDonarPaymentList = () => {
     const [listAllId, setListAllId] = useState([]);
-    const [monthlyData, setMonthlyData] = useState({
+    const [monthlyData, setMonthlyData] = useState(false,{
         actualIdSearch: "",
         actualIdVal: "",
         orgIdSearch:"",
@@ -124,14 +124,24 @@ const MonthlyDonarPaymentList = () => {
 
       
       // Actual Id Handle change all function for AutoComplete
-
+      
+      const [show, setshow] = useState(false)
   const handleActIdSearchChange = (e) => {
+    if(e.target.value === ""){
+      setshow(false);
+    }else{
+
+      setshow(true);
+    }
     setMonthlyData({
       ...monthlyData,
       actualIdSearch: e.target.value
     });
-    
   }
+
+// const handleChange = () => {
+// setshow(true)
+// }
 
   const handleActIdSearch = (searchTerm, orgVal, donarId) => {
     setMonthlyData({
@@ -143,7 +153,7 @@ const MonthlyDonarPaymentList = () => {
       donarEnrollmentId: donarId
       
     });
-
+    setshow(false);
     handleSearchAll(searchTerm, orgVal, donarId);
     
   }
@@ -327,7 +337,6 @@ const MonthlyDonarPaymentList = () => {
 
     }
 
-
   //  console.log("Hello",dataList);
 
   return (
@@ -353,7 +362,7 @@ const MonthlyDonarPaymentList = () => {
                         style={{ width: "2000px" }}
                       />
                     </div>
-                    <div className='dropdown'>
+                    <div className={show? "dropdown":"d-none"}>
                       {
                         listAllId.filter(item => {
                           const searchTerm = monthlyData.actualIdSearch;

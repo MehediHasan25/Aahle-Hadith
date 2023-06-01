@@ -312,35 +312,41 @@ const DonarPayment = () => {
             {/* <div className="pg_title">
         <h3>Donar Payment Entry</h3>
     </div> */}
-            <div className="row">
-                <div className="col-md-4">
+            {/* <div className="row">
+                <div className="col-md-4"> */}
                     <form action="">
                         <div className="form card shadow p-3">
                             <h5 className="text_primary text-capitalize">Donar Payment Entry</h5>
-                            <div className="mb-3 row">
-                                <label className="col-md-3 col-form-label">Year</label>
-                                {/* <div className="col-md-9"> */}
-                                <select value={donationData.DonationYear} className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleMonthYearChange}>
-                                    <option value="">---Select----</option>
-                                    {year.map((item) => (
-                                        <option key={item.label} value={item.value}>{item.label}</option>
-                                    ))}
+                        <div className="row">
+                            <div className="col-md-4">
+                                <div className="mb-3">
+                                    <label className="col-md-3 col-form-label">Year</label>
+                                    {/* <div className="col-md-9"> */}
+                                    <select value={donationData.DonationYear} className="form-select" name="DonationYear" aria-label="Default select example" onChange={handleMonthYearChange}>
+                                        <option value="">---Select----</option>
+                                        {year.map((item) => (
+                                            <option key={item.label} value={item.value}>{item.label}</option>
+                                        ))}
 
-                                </select>
-                                {/* </div> */}
+                                    </select>
+                                    {/* </div> */}
+                                </div>
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-form-label col-md-3">Month</label>
+                            <div className="col-md-4">
+                                <div className="mb-3">
+                                    <label className="col-form-label col-md-3">Month</label>
 
-                                <select value={donationData.DonationMonth} className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleMonthYearChange}>
-                                    <option value="">---Select----</option>
-                                    {month.map((item) => (
-                                        <option key={item.label} value={item.value}>{item.label}</option>
-                                    ))}
+                                    <select value={donationData.DonationMonth} className="form-select" name="DonationMonth" aria-label="Default select example" onChange={handleMonthYearChange}>
+                                        <option value="">---Select----</option>
+                                        {month.map((item) => (
+                                            <option key={item.label} value={item.value}>{item.label}</option>
+                                        ))}
 
-                                </select>
+                                    </select>
+                                </div>
                             </div>
-                            <div className="mb-3 row">
+                            <div className="col-md-4">
+                            <div className="mb-3">
                                 <label className="col-form-label">Donation Amount</label>
                                 {/*  */}
 
@@ -383,19 +389,25 @@ const DonarPayment = () => {
                                 {/*  */}
 
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-form-label">Net Amount</label>
-                                <input
-                                    className="form-control"
-                                    name="NetAmount"
-                                    value={donationAmt.NetAmount}
-                                    onChange={handledonationNetChange}
-                                    placeholder="Donation Net Amount"
-                                    autoComplete='off'
-                                    disabled
-                                />
                             </div>
-                            <div className="mb-3 row">
+                        </div>
+                        <div className="row">
+                            <div className="col-md-4">
+                                <div className="mb-3">
+                                    <label className="col-form-label">Net Amount</label>
+                                    <input
+                                        className="form-control"
+                                        name="NetAmount"
+                                        value={donationAmt.NetAmount}
+                                        onChange={handledonationNetChange}
+                                        placeholder="Donation Net Amount"
+                                        autoComplete='off'
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                            <div className="mb-3">
                                 <label className="col-form-label">Actual Id</label>
                                 {/*  */}
 
@@ -433,18 +445,28 @@ const DonarPayment = () => {
                                 </div>
                                 {/*  */}
                             </div>
-                            <div className="mb-3 row">
-                                <label className="col-form-label">Organizational Id</label>
-                                <input
-                                    className="form-control"
-                                    name="orgIdSearch"
-                                    value={selectAutoActOrgVal.orgIdSearch}
-                                    onChange={handledonationOrgIdChange}
-                                    placeholder="Organization ID"
-                                    autoComplete='off'
-                                    disabled
-                                />
                             </div>
+                            <div className="col-md-4">
+                                <div className="mb-3">
+                                    <label className="col-form-label">Organizational Id</label>
+                                    <input
+                                        className="form-control"
+                                        name="orgIdSearch"
+                                        value={selectAutoActOrgVal.orgIdSearch}
+                                        onChange={handledonationOrgIdChange}
+                                        placeholder="Organization ID"
+                                        autoComplete='off'
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                            
+                            
+                            
+                            
+                           
+                          
                             <div className="d-flex gap-2 mt-4">
                                 <button className="btn btn-success w-auto m-0" onClick={handleSubmit}>Save</button>
                                 {/* <button className="btn btn-warning w-auto  m-0">Update</button> */}
@@ -452,8 +474,8 @@ const DonarPayment = () => {
                         </div>
 
                     </form>
-                </div>
-            </div>
+                {/* </div>
+            </div> */}
 
 
         </div>
