@@ -233,9 +233,6 @@ const DonarPayment = () => {
             });
     }
 
-
-    //   address.ip();   // '192.168.0.2'
-    //   address.ipv6(); // 'fe80::7aca:39ff:feb0:e67d'
     const handleSubmit = async (e) => {
         e.preventDefault();
         let token = localStorage.getItem("AuthToken");
@@ -248,14 +245,15 @@ const DonarPayment = () => {
             paymentMonth: donationData.DonationMonth,
             donationAmtId: selectAutoDonationVal.DonationAmtId,
             netAmount: donationAmt.NetAmount,
+            DisCountPer:donationAmt.DisPerAmt,
             userPcIP: userAddress.ipAddress
         }
 
-        // console.log("PaymentPayload", payload);
+         //console.log("PaymentPayload", payload);
 
         try {
             let savData = await axios.post(DonarPaymentSave, payload, { headers });
-            // console.log("SaveData", savData.data);
+            //  console.log("SaveData", savData.data);
             if (savData.data.success === true) {
                 toast.success('Successfully Saved!', { duration: 4000, position: 'top-center' });
                 emptyState();
@@ -304,10 +302,6 @@ const DonarPayment = () => {
             donarEnrollmentId: ""
         });
 
-        // setUserAddress({
-        //     macAddress: "",
-        //     ipAddress: ""
-        // });
     }
 
 

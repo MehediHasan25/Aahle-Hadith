@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { GetDonationAmtList,DonarPaymentActualID } from '../../../URL/ApiList';
+import { GetDonationAmtList,DonarPaymentActualID,getMonthlyDonarPaymentList,SaveMonthlyDonarPaymentList } from '../../../URL/ApiList';
 import { year } from '../../../../Utils/EnrollmentData';
+import { ValueSetToDataList,ProcessSaveOutput } from '../../../../Utils/MonthlyPayment';
 
 const MonthlyDonarPaymentList = () => {
     const [listAllId, setListAllId] = useState([]);
@@ -13,42 +14,87 @@ const MonthlyDonarPaymentList = () => {
         orgIdSearch:"",
         orgIdVal:"",
         donarEnrollmentId: "",
-        yearData:""
+        
     });
 
+    const [yearData, setYearData] = useState("");
+
     const [listDonationAmt, setListDonationAmt] = useState([]); 
-    // const [donationSearch, setDonationSearch] = useState("");
+    const [userAddress, setUserAddress] = useState("");
     const [disPerAmt, setDisPerAmt] = useState(20);
 
     const [dataList, setDataList]  = useState([
-        { month:"January",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"February",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"March",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"April",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"May",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"June",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"July",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"August",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"September",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"October",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"November",  DonationSearch: "",DonationAmtId: "", netAmount:""},
-        { month:"December",  DonationSearch: "",DonationAmtId: "", netAmount:""},
+        {donerPaymentId:0, paymentMonth:"January",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0, paymentMonth:"February",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0, paymentMonth:"March",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0, paymentMonth:"April",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"May",  donationAmt:"",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"June",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"July",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"August",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"September",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"October",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"November",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+        {donerPaymentId:0,paymentMonth:"December",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""}
     ]);
 
+
+    const [listArray, setListArray]  = useState([
+      {donerPaymentId:0, paymentMonth:"January",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0, paymentMonth:"February",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0, paymentMonth:"March",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0, paymentMonth:"April",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"May",  donationAmt:"",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"June",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"July",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"August",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"September",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"October",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"November",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""},
+      {donerPaymentId:0,paymentMonth:"December",  donationAmt: "",donationAmtId: "", netAmount:"",DisCountPer:disPerAmt,userPcIP:""}
+  ]);
+
     useEffect(()=>{
+        ipData();
         getDonationAmt();
         getActOrg();
     },[]);
 
+
+    
+
     const handlemonthlyDataChange = (e) => {
-        const { name, value } = e.target;
-        setMonthlyData((prev) => {
-            return {
-                ...prev,
-                [name]: value
-            }
-        })
+    setYearData(e.target.value);
+    handleGetInfo(e.target.value);        
     }
+
+
+
+    
+
+
+    const ipData = () => {
+      fetch('https://api.ipify.org/?format=json')
+          .then(response => response.json())
+          .then(data => {
+              const ipAddress = data.ip;
+                 //console.log('IP Address:', ipAddress);
+                 setUserAddress(ipAddress);
+          })
+          .catch(err => {
+              console.log("error", err);
+              if (err.response) {
+                  let message = err.response.data.message;
+                  toast.error(message, { duration: 5000, position: 'top-center' });
+              } else if (err.request) {
+                  console.log('Error Connecting ...', err.request);
+                  toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+              } else if (err) {
+                  console.log(err.toString());
+                  toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+              }
+          });
+  }
 
 
     const getActOrg = async () => {
@@ -84,11 +130,10 @@ const MonthlyDonarPaymentList = () => {
       ...monthlyData,
       actualIdSearch: e.target.value
     });
+    
   }
 
   const handleActIdSearch = (searchTerm, orgVal, donarId) => {
-    //  console.log("edusearch", searchTerm);
-    //  console.log("eduId", val);
     setMonthlyData({
         ...monthlyData,
       actualIdSearch: searchTerm,
@@ -96,11 +141,73 @@ const MonthlyDonarPaymentList = () => {
       orgIdSearch:orgVal,
       orgIdVal:orgVal,
       donarEnrollmentId: donarId
+      
     });
+
+    handleSearchAll(searchTerm, orgVal, donarId);
     
   }
   // Actual Id Handle change all function for AutoComplete
 
+  const handleGetInfo = async(yearVal)=>{
+    if(monthlyData.actualIdVal === "" && monthlyData.orgIdVal ==="" && monthlyData.donarEnrollmentId===""){
+      toast.error('Please Select Actual ID and Organization ID', { duration: 5000, position: 'top-center' });
+      return;
+    }
+    const apiParams = `id=${monthlyData.donarEnrollmentId}&year=${yearVal}`
+   // console.log("parameters from year", apiParams);
+    apiCall(apiParams);
+  }
+
+
+
+  const handleSearchAll =async(act, org,donarId) =>{
+    const apiParams = `id=${donarId}&year=${yearData}`
+  //  console.log("parameters from donarId", apiParams);
+
+    if(yearData !== ""){
+      apiCall(apiParams);
+    }
+
+  }
+
+
+  const apiCall = async(params) =>{
+    let token = localStorage.getItem("AuthToken");
+    const headers = { 'Authorization': 'Bearer ' + token };
+        try{
+      let getdataAll = await axios.get(getMonthlyDonarPaymentList+params,{headers});
+      //console.log("getdataAll", getdataAll.data);
+      let listData = getdataAll.data._listData;
+      let resData=[];
+      if(listData !== null){
+       const newDataList =JSON.parse(JSON.stringify(listArray));
+        resData = ValueSetToDataList(listData,newDataList,userAddress);
+        //console.log("response", resData);
+        setDataList(resData);
+      }else{
+        resData=[];
+        const newDataList1 =JSON.parse(JSON.stringify(listArray));
+        setDataList(newDataList1);
+        toast.error('No Data Found', { duration: 5000, position: 'top-center' });
+      }
+    }catch(err){
+      console.log("error", err);
+        if (err.response) {
+          let message = err.response.data.message;
+          toast.error(message, { duration: 5000, position: 'top-center' });
+        } else if (err.request) {
+          console.log('Error Connecting ...', err.request);
+          toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+        } else if (err) {
+          console.log(err.toString());
+          toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+        }
+    }
+
+  }
+
+  
 
   const handledonationOrgIdChange = (e) =>{
     const {name,value} = e.target;
@@ -119,10 +226,15 @@ const MonthlyDonarPaymentList = () => {
         // console.log("val", e.target[e.target.selectedIndex].label);
         let labelVal =  e.target[e.target.selectedIndex].label;
         let netAmountData = NetAmount(labelVal);
+        let donaAmtId;
+        if(name === "donationAmtId"){
+            donaAmtId = parseInt(e.target.value);
+            //console.log("donaAmt", donaAmtId);
+        }
         setDataList(prevDataList => {
          const updatedDataList = prevDataList.map((item) => {
-            if (item.month === month) {
-                return { ...item, [name]: value, netAmount:netAmountData, DonationSearch:labelVal };
+            if (item.paymentMonth === month) {
+                return { ...item, [name]: value, donationAmtId:donaAmtId, netAmount:netAmountData, donationAmt:parseInt(labelVal),userPcIP:userAddress };
              }
             return item;
             });
@@ -169,8 +281,54 @@ const MonthlyDonarPaymentList = () => {
     }
 
 
+    const handleSubmit =async(e) =>{
+      e.preventDefault();
 
-    console.log("data",monthlyData);
+      let processList = JSON.parse(JSON.stringify(dataList));
+      const converPayload =  ProcessSaveOutput(processList,yearData,monthlyData.donarEnrollmentId);
+      //console.log("payment", converPayload);
+      let token = localStorage.getItem("AuthToken");
+      const headers = { 'Authorization': 'Bearer ' + token };
+
+
+      const payload = {
+        listDonarPay:converPayload
+      };
+
+      try{
+        let savSubmit = await axios.post(SaveMonthlyDonarPaymentList,payload,{headers});
+        //console.log("save",savSubmit.data);
+        let savSuccess = savSubmit.data;
+        if(savSubmit.success = true){
+          toast.success("Request Successfull", { duration: 5000, position: 'top-center' });
+          setMonthlyData({
+            actualIdSearch: "",
+            actualIdVal: "",
+            orgIdSearch:"",
+            orgIdVal:"",
+            donarEnrollmentId: ""
+          });
+          setYearData("");
+          setDataList(listArray);
+        }
+      }catch(err){
+        console.log("error", err);
+            if (err.response) {
+                let message = err.response.data.message;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
+      }
+
+    }
+
+
+  //  console.log("Hello",dataList);
 
   return (
     <div className="page-content p-3">
@@ -236,7 +394,7 @@ const MonthlyDonarPaymentList = () => {
                 <div className="mb-3 row">
                     <label className="col-md-3 col-form-label">Year</label>
                     <div className='col-md-9'>
-                    <select defaultValue="" className="form-select " name="yearData" aria-label="Default select example" onChange={handlemonthlyDataChange}>
+                    <select  className="form-select " name="yearData" value= {yearData} aria-label="Default select example" onChange={handlemonthlyDataChange}>
                                     <option value="">---Select----</option>
                                     {year.map((item) => (
                                         <option key={item.label} value={item.value}>{item.label}</option>
@@ -258,19 +416,21 @@ const MonthlyDonarPaymentList = () => {
                         <tbody>
                         
                             {dataList.map((item1 =>(
-                                <tr key={item1.month}>
+                                <tr key={item1.paymentMonth}>
                                 <td>
-                                <span className="btn btn-outline-primary">{item1.month}</span>
+                                <span className="btn btn-outline-primary">{item1.paymentMonth}</span>
                             </td>
                             <td>
-                            <select className="form-select text-danger" name="DonationAmtId" value={dataList.DonationAmtId} onChange={(e)=>handleDonationSearch(e,item1.month)}>
+                             
+                            <select className="form-select text-danger" name="donationAmtId" value={item1.donationAmtId} onChange={(e)=>handleDonationSearch(e,item1.paymentMonth)}>
                                         <option className="text-danger">--Select--</option>
                                         {listDonationAmt.map((item) => (
                                         <option key={item.donationAmtId} value={item.donationAmtId}>{item.donationAmt}</option>
-                                    ))}
-                                       
-
+                                        
+                                ))}
                                 </select>
+                                    
+                                
                             </td>
                             <td>
                                 
@@ -303,8 +463,8 @@ const MonthlyDonarPaymentList = () => {
                 </div>
 
                 <div className="d-flex gap-2 mt-4">
-                        <button className="btn btn-success w-auto m-0">Save</button>
-                        <button className="btn btn-warning w-auto  m-0">Update</button>
+                        <button className="btn btn-success w-auto m-0" onClick={handleSubmit}>Save</button>
+                        {/* <button className="btn btn-warning w-auto  m-0">Update</button> */}
                 </div>
             </div>
              </form>
