@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import { BiEditAlt } from 'react-icons/bi'
 import { BsTrash } from 'react-icons/bs';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
 import { GetDivisionList,GetDistrictList,GetUpazilaList,GetUpazilaCode,SaveUpazila,DeleteUpazila } from '../../../URL/ApiList';
+import withAuthentication from '../../Protected/withAuthentication';
 
 
 const Upazila = () => {
@@ -33,6 +34,17 @@ const Upazila = () => {
  const [search,setSearch] = useState("");
  const [track,setTrack] = useState(false);
 
+//  Division AutoComplete state
+const [showSuggDivision, setShowSuggDivision] = useState(false);
+const divisionSugg = listDivision.filter(option => option.divisionNameEn.toLowerCase().includes(divSearch.toLowerCase()))
+
+//  Division AutoComplete state
+// District Auto Complete State
+const [showSuggDistrict, setShowSuggDistrict] = useState(false);
+const districtSugg = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(disSearch.toLowerCase()) && option.divisionNameEn === divSearch);
+//console.log("dis", districtSugg);
+// District Auto Complete State
+
  useEffect(()=>{
   getDivisionData();
   getDistrictData();
@@ -54,31 +66,82 @@ const Upazila = () => {
 
 
 //  Division dropdown
- const handleDivSearchChange = (e) => {
+//  const handleDivSearchChange = (e) => {
+//   setDivSearch(e.target.value);
+// }  
+
+// const handleDivSearch = (searchTerm, val) => {
+//   setDivSearch(searchTerm);
+//   setSelectDivVal(val);
+//   //console.log("divsearch", searchTerm);
+//   //console.log("divId", val);
+
+// }
+
+const autocompleteDivRef = useRef();
+useEffect(() => {
+  const handleDivClick = (event) => {
+    if (autocompleteDivRef.current && !autocompleteDivRef.current.contains(event.target)) {
+      setShowSuggDivision(false)
+    }
+  };
+  document.addEventListener("click", handleDivClick);
+  return () => {
+    document.removeEventListener("click", handleDivClick)
+  }
+}, [])
+
+const handleDivChange = e => {
   setDivSearch(e.target.value);
-}  
-
-const handleDivSearch = (searchTerm, val) => {
-  setDivSearch(searchTerm);
-  setSelectDivVal(val);
-  //console.log("divsearch", searchTerm);
-  //console.log("divId", val);
-
 }
+
+const handleSuggestionDivClick = (suggetion) => {
+  console.log("suggestion", suggetion.divisionNameEn);
+  setDivSearch(suggetion.divisionNameEn);
+  setSelectDivVal(suggetion.divisionId);
+  setShowSuggDivision(false);
+}
+
+
 // Division dropdown
 
 // District Dropdown
-const handleDistSearchChange = (e) => {
+// const handleDistSearchChange = (e) => {
+//   setDisSearch(e.target.value);
+// }  
+
+// const handleDistSearch = (searchTerm, val) => {
+//   setDisSearch(searchTerm);
+//   setSelectDisVal(val);
+//   //console.log("diSsearch", searchTerm);
+//   //console.log("disId", val);
+
+// }
+
+const autocompleteDisRef = useRef();
+useEffect(() => {
+  const handleDisClick = (event) => {
+    if (autocompleteDisRef.current && !autocompleteDisRef.current.contains(event.target)) {
+      setShowSuggDistrict(false)
+    }
+  };
+  document.addEventListener("click", handleDisClick);
+  return () => {
+    document.removeEventListener("click", handleDisClick)
+  }
+}, [])
+
+const handleDisChange = e => {
   setDisSearch(e.target.value);
-}  
-
-const handleDistSearch = (searchTerm, val) => {
-  setDisSearch(searchTerm);
-  setSelectDisVal(val);
-  //console.log("diSsearch", searchTerm);
-  //console.log("disId", val);
-
 }
+
+const handleSuggestionDisClick = (suggetion) => {
+  //console.log("suggestion", suggetion.divisionNameEn);
+  setDisSearch(suggetion.districtNameEn);
+  setSelectDisVal(suggetion.districtId);
+  setShowSuggDistrict(false);
+}
+
 
 // District dropdown
 
@@ -111,17 +174,17 @@ const getDivisionData = async () => {
     //console.log("division", getDivList);
     setListDivision(getDivList);
   } catch (err) {
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+    console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
   }
 }
 
@@ -132,17 +195,17 @@ const getDistrictData = async () => {
     let getDistrictData = distData.data._districtList;
     setListDistrict(getDistrictData);
   } catch (err) {
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+    console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
 
   }
 }
@@ -154,17 +217,17 @@ const getUpazila = async(e) =>{
     let getUpaData = upaData.data._upazilaList;
     setListUpazila(getUpaData);
   }catch(err){
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+    console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
   }
 }
 
@@ -175,17 +238,17 @@ const upazilaCode = async() =>{
     let getCodeUpazila = codeUpazila.data.upaGenCode;
     setCodeUpazila(getCodeUpazila);
   }catch(err){
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+    console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
   }
 }
 
@@ -240,7 +303,7 @@ const handleSubmit =async(e) =>{
     UpazilaCode:codeUpazila,
     AddedBy: AddedBy
   }
-  //console.log("submitPayload", payload);
+  console.log("submitPayload", payload);
   try{
     let submitData = await axios.post(SaveUpazila,payload,{headers});
     let subSuccess = submitData.data.success;
@@ -266,17 +329,17 @@ const handleSubmit =async(e) =>{
     }
   
   }catch(err){
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+    console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
   }
 }
 
@@ -309,17 +372,17 @@ const handleDelete = async(id) =>{
      }
 
   }catch(err){
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+           console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
   }
 }
 
@@ -342,7 +405,7 @@ const handleDelete = async(id) =>{
                 <div className="col-md-8">
 
 
-                  <div className='search-container'>
+                  {/* <div className='search-container'>
                     <div className='search-inner'>
                       <input
                         type="text"
@@ -372,7 +435,28 @@ const handleDelete = async(id) =>{
                           ))
                       }
                     </div>
+                  </div> */}
+
+                  {/*  */}
+                  <div className="autocomplete" ref={autocompleteDivRef}>
+                    <input
+                      value={divSearch}
+                      onChange={handleDivChange}
+                      placeholder="Search Division"
+                      onFocus={() => setShowSuggDivision(true)}
+                    />
+                    {showSuggDivision && (
+                      <ul className="suggestions">
+                        {divisionSugg.map(suggestion => (
+                          <li onClick={() => handleSuggestionDivClick(suggestion)} key={suggestion.divisionId}>
+                            {suggestion.divisionNameEn}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                   </div>
+                  {/*  */}
 
                   
 
@@ -386,7 +470,7 @@ const handleDelete = async(id) =>{
                   Name of District
                 </label>
                 <div className="col-md-8">
-                  <div className='search-container'>
+                  {/* <div className='search-container'>
                     <div className='search-inner'>
                       <input
                         type="text"
@@ -416,7 +500,28 @@ const handleDelete = async(id) =>{
                           ))
                       }
                     </div>
+                  </div> */}
+
+                  {/*  */}
+                  <div className="autocomplete" ref={autocompleteDisRef}>
+                    <input
+                      value={disSearch}
+                      onChange={handleDisChange}
+                      placeholder="Search District"
+                      onFocus={() => setShowSuggDistrict(true)}
+                    />
+                    {showSuggDistrict && (
+                      <ul className="suggestions">
+                        {districtSugg.map(suggestion => (
+                          <li onClick={() => handleSuggestionDisClick(suggestion)} key={suggestion.districtId}>
+                            {suggestion.districtNameEn  }
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                   </div>
+                  {/*  */}
 
                 </div>
                       {/* End */}
@@ -536,4 +641,4 @@ const handleDelete = async(id) =>{
   )
 }
 
-export default Upazila
+export default withAuthentication(Upazila);

@@ -1,4 +1,5 @@
 import React from 'react'
+import withAuthentication from './Protected/withAuthentication'
 // import BG from '../assets/bg.png'
 
 const Dashboard = () => {
@@ -10,4 +11,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withAuthentication(Dashboard);

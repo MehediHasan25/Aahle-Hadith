@@ -23,11 +23,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import DonarPayment from './component/user/basicSetup/DonarPayment';
 import DonarPaymentList from './component/user/basicSetup/MonthlyDonarPaymentList';
 import PrivateRoute from './component/Protected/PrivateRoute';
-
-///import UpazilaDistrict from './component/Enrollment/UpazilaDistrict';
-// import { ToastContainer, toast } from 'react-toastify';
-//   import 'react-toastify/dist/ReactToastify.css';
-
+import Hello from './component/hello';
 
 function App() {
 
@@ -37,8 +33,9 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
+        <Route exact path="/hello" element={<Hello />} />
 
-        {/* <Route element={<PrivateRoute/>}> */}
+        <Route element={<PrivateRoute/>}>
           <Route exact path="/details" element={<Details />} />
           <Route exact path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
           <Route exact path="/division" element={<MainLayout><Division /></MainLayout>} />
@@ -52,7 +49,7 @@ function App() {
           <Route exact path="/donation-amount" element={<MainLayout><DonationAmount /></MainLayout>} />
           <Route exact path="/donar-payment" element={<MainLayout><DonarPayment /></MainLayout>} />
           <Route exact path="/donar-payment-list" element={<MainLayout><DonarPaymentList /></MainLayout>} />
-        {/* </Route> */}
+        </Route>
 
       </Routes>
       {/* <ToastContainer  closeButton={false}/> */}

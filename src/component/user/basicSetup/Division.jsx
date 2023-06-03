@@ -4,6 +4,7 @@ import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { GetDivisionCode, GetDivisionList, SaveDivision,DeleteDivision } from "../../../URL/ApiList";
+import withAuthentication from "../../Protected/withAuthentication";
 
 
 const Division = () => {
@@ -330,4 +331,4 @@ const Division = () => {
   );
 };
 
-export default Division;
+export default withAuthentication(Division);

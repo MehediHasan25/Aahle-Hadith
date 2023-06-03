@@ -3,6 +3,7 @@ import { year, month } from '../../../../Utils/EnrollmentData';
 import axios from 'axios';
 import { GetDonationAmtList, GetActualIdandOrgId, DonarPaymentActualID, DonarPaymentSave } from '../../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
+import withAuthentication from '../../Protected/withAuthentication';
 
 const DonarPayment = () => {
     const [donationData, setDonationData] = useState({
@@ -264,7 +265,7 @@ const DonarPayment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -482,4 +483,4 @@ const DonarPayment = () => {
     )
 }
 
-export default DonarPayment
+export default withAuthentication(DonarPayment);

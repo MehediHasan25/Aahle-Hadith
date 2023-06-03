@@ -5,6 +5,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { GetEnrollmentData, DeleteEnrollData, GetEnrollmentDataBySearch, GetActualIdandOrgId } from "../../URL/ApiList";
+import withAuthentication from "../Protected/withAuthentication";
 
 const EnrollmentUpdate = () => {
   const [listEnrollData, setListEnrollData] = useState([]);
@@ -69,16 +70,16 @@ const EnrollmentUpdate = () => {
 
     } catch (err) {
       console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        toast.error(message, { duration: 5000, position: 'top-center' });
-      } else if (err.request) {
-        console.log('Error Connecting ...', err.request);
-        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-      } else if (err) {
-        console.log(err.toString());
-        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-      }
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -104,16 +105,16 @@ const EnrollmentUpdate = () => {
       }
     } catch (err) {
       console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        toast.error(message, { duration: 5000, position: 'top-center' });
-      } else if (err.request) {
-        console.log('Error Connecting ...', err.request);
-        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-      } else if (err) {
-        console.log(err.toString());
-        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-      }
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -144,16 +145,16 @@ const EnrollmentUpdate = () => {
 
     } catch (err) {
       console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        toast.error(message, { duration: 5000, position: 'top-center' });
-      } else if (err.request) {
-        console.log('Error Connecting ...', err.request);
-        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-      } else if (err) {
-        console.log(err.toString());
-        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-      }
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -177,16 +178,16 @@ const EnrollmentUpdate = () => {
 
     } catch (err) {
       console.log("error", err);
-      if (err.response) {
-        let message = err.response.data.message;
-        toast.error(message, { duration: 5000, position: 'top-center' });
-      } else if (err.request) {
-        console.log('Error Connecting ...', err.request);
-        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-      } else if (err) {
-        console.log(err.toString());
-        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-      }
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
   // Actual Id Handle change all function for AutoComplete
@@ -390,4 +391,4 @@ const EnrollmentUpdate = () => {
   )
 }
 
-export default EnrollmentUpdate
+export default withAuthentication(EnrollmentUpdate);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import EnrollmentFormPage from '../../Enrollment/EnrollmentFormPage';
 import EnrollmentUpdate from '../../Enrollment/EnrollmentUpdate';
+import withAuthentication from '../../Protected/withAuthentication';
 
 const DonarEnrollment = () => {
     const [update,setUpdate] = useState(true);
@@ -55,4 +56,4 @@ const DonarEnrollment = () => {
     )
 }
 
-export default DonarEnrollment
+export default withAuthentication(DonarEnrollment);

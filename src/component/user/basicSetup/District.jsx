@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { BiEditAlt } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import { GetDivisionList, GetDistrictList, GetDistrictCode,SaveDistrict,DeleteDistrict } from '../../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
-import Select from 'react-select';
+//import Select from 'react-select';
+import withAuthentication from '../../Protected/withAuthentication';
 
 
 const District = () => {
@@ -29,6 +30,12 @@ const District = () => {
   const [track, setTrack] = useState(false);
   const [search, setSearch] = useState("");
 
+  //AutoComplete Division //////////
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestions = listDivision.filter(option => option.divisionNameEn.toLowerCase().includes(asearch.toLowerCase()))
+
+  //AutoComplete Division //////////
+
   useEffect(() => {
     getDivisionData();
     getDistrictData();
@@ -46,6 +53,11 @@ const District = () => {
    
   }, [track]);
 
+
+  
+
+
+
   const getDivisionData = async () => {
     try {
       let divGet = await axios.get(GetDivisionList);
@@ -53,17 +65,17 @@ const District = () => {
 
       setListDivision(getDivList);
     } catch (err) {
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -74,17 +86,17 @@ const District = () => {
       //console.log("disCode", codeDis.data.disGenCode);
       setCodeDistrict(disCode);
     } catch (err) {
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
+      console.log("error", err);
+      if (err.response) {
+          let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+          toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
           console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
+          toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
           console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+          toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   };
 
@@ -95,33 +107,51 @@ const District = () => {
       let getDistrictData = distData.data._districtList;
       setListDistrict(getDistrictData);
     } catch (err) {
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
 
     }
   }
 
+  // AutoComplete ///////////
 
-  const onChange = (e) => {
-    setAsearch(e.target.value);
+// DIVISION AUTOSEARCH
+const autocompleteRef = useRef();
+useEffect(() => {
+  const handleClick = (event) => {
+    if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
+      setShowSuggestions(false)
+    }
+  };
+  document.addEventListener("click", handleClick);
+  return () => {
+    document.removeEventListener("click", handleClick)
   }
+}, [])
 
-  const onSearch = (searchTerm, val) => {
-    setAsearch(searchTerm);
-    setSelectVal(val);
-    // console.log("search", searchTerm);
-    // console.log("idvAL", val);
+const handleChange = e => {
+  setAsearch(e.target.value);
+}
 
-  }
+const handleSuggestionClick = (suggetion) => {
+  //console.log("suggestion", suggetion.divisionNameEn);
+  setAsearch(suggetion.divisionNameEn);
+  setSelectVal(suggetion.divisionId);
+  setShowSuggestions(false);
+}
+
+////////////////division AutoSearch
+
+  /// AutoComplete /////////////
 
   const handleDistrictChange = (e) => {
     const { name, value } = e.target;
@@ -205,17 +235,17 @@ const District = () => {
       }
 
     }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -251,17 +281,17 @@ const District = () => {
       setTrack(true);
      }
     }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
    }
   
@@ -281,7 +311,7 @@ const District = () => {
                   Name of Division
                 </label>
                 <div className="col-md-8">
-                  <div className='search-container'>
+                  {/* <div className='search-container'>
                     <div className='search-inner'>
                       <input
                         type="text"
@@ -311,7 +341,29 @@ const District = () => {
                           ))
                       }
                     </div>
+                  </div> */}
+
+
+                                {/*  */}
+                                <div className="autocomplete" ref={autocompleteRef}>
+                    <input
+                      value={asearch}
+                      onChange={handleChange}
+                      placeholder="Division Search"
+                      onFocus={() => setShowSuggestions(true)}
+                    />
+                    {showSuggestions && (
+                      <ul className="suggestions">
+                        {suggestions.map(suggestion => (
+                          <li onClick={() => handleSuggestionClick(suggestion)} key={suggestion.divisionId}>
+                            {suggestion.divisionNameEn}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                   </div>
+                  {/*  */}
 
                 </div> 
               </div>
@@ -442,4 +494,4 @@ const District = () => {
   )
 }
 
-export default District
+export default withAuthentication(District);

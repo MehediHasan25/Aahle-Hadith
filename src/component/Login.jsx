@@ -61,7 +61,7 @@ const Login = () => {
 
     try{
       let loginCall = await axios.post(LoginAPI, inputState);
-      console.log("loginCall", loginCall.data);
+      // console.log("loginCall", loginCall.data);
       let loginData = loginCall.data;
       localStorage.setItem("AuthToken", loginData.token);
       localStorage.setItem("userName",inputState.userName );

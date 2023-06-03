@@ -4,6 +4,7 @@ import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { SaveEducation,GetEducationList,DeleteEducaiton } from '../../../URL/ApiList';
+import withAuthentication from '../../Protected/withAuthentication';
 
 const Education = () => {
     const [education, setEducation] = useState({
@@ -62,7 +63,7 @@ const Education = () => {
         }catch(err){
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -128,7 +129,7 @@ const Education = () => {
         }catch(err){
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -167,17 +168,17 @@ const Education = () => {
           setTrack(true);
          }
         }catch(err){
-          console.log("error",err);
-              if (err.response) {
-                let message = err.response.data.message;
-                toast.error(message,{duration: 5000,position: 'top-center'});
-              } else if (err.request) {
+            console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-              } else if (err) {
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
                 console.log(err.toString());
-                toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-              }
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
         }
        }
     
@@ -283,4 +284,4 @@ const Education = () => {
     )
 }
 
-export default Education;
+export default withAuthentication(Education);

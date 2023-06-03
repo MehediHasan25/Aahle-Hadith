@@ -5,6 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { GetDonationAmtList,DonarPaymentActualID,getMonthlyDonarPaymentList,SaveMonthlyDonarPaymentList } from '../../../URL/ApiList';
 import { year } from '../../../../Utils/EnrollmentData';
 import { ValueSetToDataList,ProcessSaveOutput } from '../../../../Utils/MonthlyPayment';
+import withAuthentication from '../../Protected/withAuthentication';
 
 const MonthlyDonarPaymentList = () => {
     const [listAllId, setListAllId] = useState([]);
@@ -109,16 +110,16 @@ const MonthlyDonarPaymentList = () => {
     
         } catch (err) {
           console.log("error", err);
-          if (err.response) {
-            let message = err.response.data.message;
-            toast.error(message, { duration: 5000, position: 'top-center' });
-          } else if (err.request) {
-            console.log('Error Connecting ...', err.request);
-            toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-          } else if (err) {
-            console.log(err.toString());
-            toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-          }
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
         }
       }
 
@@ -203,16 +204,16 @@ const MonthlyDonarPaymentList = () => {
       }
     }catch(err){
       console.log("error", err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message, { duration: 5000, position: 'top-center' });
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-        }
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
 
   }
@@ -275,17 +276,17 @@ const MonthlyDonarPaymentList = () => {
             setListDonationAmt(getAmtList);
 
         } catch (err) {
-            console.log("error", err);
-            if (err.response) {
-                let message = err.response.data.message;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+          console.log("error", err);
+          if (err.response) {
+              let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+              toast.error(message, { duration: 5000, position: 'top-center' });
+          } else if (err.request) {
+              console.log('Error Connecting ...', err.request);
+              toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+          } else if (err) {
+              console.log(err.toString());
+              toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+          }
         }
 
     }
@@ -324,7 +325,7 @@ const MonthlyDonarPaymentList = () => {
       }catch(err){
         console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -483,4 +484,4 @@ const MonthlyDonarPaymentList = () => {
   )
 }
 
-export default MonthlyDonarPaymentList;
+export default withAuthentication(MonthlyDonarPaymentList);

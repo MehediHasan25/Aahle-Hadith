@@ -257,3 +257,45 @@ a {
   /* border-bottom: 1px solid black; */
 }
 
+
+
+/* New Auto Complete */
+
+.autocomplete {
+  width: 500px;
+  border: 1px solid #d4d4d4;
+  border-radius: 10px;
+}
+
+.autocomplete input {
+  width: 100%;
+  border: none;
+  margin: 10px 0;
+  font-size: 16px;
+  padding: 10px 10px 0 10px;
+}
+
+input:focus {
+  outline: none;
+}
+
+.suggestions {
+  height: 150px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #d4d4d4;
+  background-color: #f7f7f7;
+  border-radius: 0 0 10px 10px;
+}
+
+.suggestions li {
+  list-style: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.autocomplete li:hover {
+  background-color: #d4d4d4;
+}

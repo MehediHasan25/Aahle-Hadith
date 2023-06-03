@@ -6,6 +6,7 @@ import { Modal, Button } from "react-bootstrap";
 import { handleEnrollmentPayload } from '../../../Utils/EnrollmentPayload';
 import toast, { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
+import withAuthentication from '../Protected/withAuthentication';
 
 
 
@@ -249,7 +250,7 @@ const UpdateDataEnrollment = () => {
         }catch(err){
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -342,7 +343,7 @@ const UpdateDataEnrollment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -385,7 +386,7 @@ const UpdateDataEnrollment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -427,7 +428,7 @@ const UpdateDataEnrollment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -480,7 +481,7 @@ const UpdateDataEnrollment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -526,7 +527,7 @@ const UpdateDataEnrollment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -790,7 +791,7 @@ const UpdateDataEnrollment = () => {
         } catch (err) {
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -1645,4 +1646,4 @@ const UpdateDataEnrollment = () => {
     )
 }
 
-export default UpdateDataEnrollment
+export default withAuthentication(UpdateDataEnrollment);

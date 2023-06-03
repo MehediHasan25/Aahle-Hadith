@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { BiEditAlt } from 'react-icons/bi';
 import { BsTrash } from 'react-icons/bs';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
 import { GetUpazilaList,GetMosqueList,GetMosqueCode,SaveMosque,DeleteMosque } from '../../../URL/ApiList';
+import withAuthentication from '../../Protected/withAuthentication';
 
 
 const Mosque = () => {
@@ -25,6 +26,12 @@ const Mosque = () => {
   const [track, setTrack] = useState(false);
   const [search, setSearch] = useState("");
 
+  // Mosque Upazila AutoComplete state
+  const [showUpaSugg, setShowUpaSugg] = useState(false);
+  const suggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(upazilaSearch.toLowerCase()))
+
+  // Mosque Upazila AutoComplete state
+
   useEffect(()=>{
     getUpazila();
     getMosque();
@@ -42,18 +49,47 @@ const Mosque = () => {
    
   }, [track]);
 
+
+
+
+
   // Upazila ................
-  const handleUpaSearchChange = (e) => {
+  // const handleUpaSearchChange = (e) => {
+  //   setUpazilaSearch(e.target.value);
+  // }  
+  
+  // const handleUpaSearch = (searchTerm, val) => {
+  //   setUpazilaSearch(searchTerm);
+  //   setSelectUpaVal(val);
+  //   // console.log("Upasearch", searchTerm);
+  //   // console.log("UpaId", val);
+  
+  // }
+
+  const autocompleteRef = useRef();
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
+        setShowUpaSugg(false)
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick)
+    }
+  }, [])
+
+  const handleChange = e => {
     setUpazilaSearch(e.target.value);
-  }  
-  
-  const handleUpaSearch = (searchTerm, val) => {
-    setUpazilaSearch(searchTerm);
-    setSelectUpaVal(val);
-    // console.log("Upasearch", searchTerm);
-    // console.log("UpaId", val);
-  
   }
+
+  const handleSuggestionClick = (suggetion) => {
+   // console.log("suggestion", suggetion.divisionNameEn);
+    setUpazilaSearch(suggetion.upazilaNameEn);
+    setSelectUpaVal(suggetion.upazilaId)
+    setShowUpaSugg(false);
+  }
+
 
   // Upazila ................
 
@@ -80,21 +116,21 @@ const Mosque = () => {
   const getUpazila = async(e) =>{
     try{
       let upaData = await axios.get(GetUpazilaList);
-      // console.log("upaDataList", upaData.data._upazilaList);
+      //  console.log("upaDataList", upaData.data._upazilaList);
       let getUpaData = upaData.data._upazilaList;
       setListUpazila(getUpaData);
     }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -107,17 +143,17 @@ const Mosque = () => {
       setListMosque(getDataMosque);
 
     }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -129,17 +165,17 @@ const Mosque = () => {
       // console.log("mosque", codeMos.data.mosqueCode);
       setCodeMosque(mosqueCode);
     } catch (err) {
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   };
 
@@ -213,17 +249,17 @@ const Mosque = () => {
     }
 
     }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -258,17 +294,17 @@ const Mosque = () => {
        }
   
     }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
+                console.log('Error Connecting ...', err.request);
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
+                console.log(err.toString());
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
     }
   }
 
@@ -289,7 +325,7 @@ const Mosque = () => {
                   Name of Upazila
                 </label>
                 <div className="col-md-8">
-                  <div className='search-container'>
+                  {/* <div className='search-container'>
                     <div className='search-inner'>
                       <input
                         type="text"
@@ -319,7 +355,28 @@ const Mosque = () => {
                           ))
                       }
                     </div>
+                  </div> */}
+
+                  {/*  */}
+                  <div className="autocomplete" ref={autocompleteRef}>
+                    <input
+                      value={upazilaSearch}
+                      onChange={handleChange}
+                      placeholder="Search Upazila"
+                      onFocus={() => setShowUpaSugg(true)}
+                    />
+                    {showUpaSugg && (
+                      <ul className="suggestions">
+                        {suggestions.map(suggestion => (
+                          <li onClick={() => handleSuggestionClick(suggestion)} key={suggestion.upazilaId}>
+                            {suggestion.upazilaNameEn}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                   </div>
+                  {/*  */}
 
                 </div>
             {/* End */}
@@ -447,4 +504,4 @@ const Mosque = () => {
   )
 }
 
-export default Mosque
+export default withAuthentication(Mosque);

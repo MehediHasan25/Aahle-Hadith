@@ -4,6 +4,7 @@ import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { SaveDonationAmt,GetDonationAmtList,DeleteDonationAmt } from '../../../URL/ApiList';
+import withAuthentication from '../../Protected/withAuthentication';
 
 const DonationAmount = () => {
     const [donationAmount, setDonationAmount] = useState({
@@ -65,7 +66,7 @@ const DonationAmount = () => {
         }catch(err){
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -136,7 +137,7 @@ const DonationAmount = () => {
         }catch(err){
             console.log("error", err);
             if (err.response) {
-                let message = err.response.data.message;
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
                 toast.error(message, { duration: 5000, position: 'top-center' });
             } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
@@ -177,17 +178,17 @@ const DonationAmount = () => {
           setTrack(true);
          }
         }catch(err){
-          console.log("error",err);
-              if (err.response) {
-                let message = err.response.data.message;
-                toast.error(message,{duration: 5000,position: 'top-center'});
-              } else if (err.request) {
+            console.log("error", err);
+            if (err.response) {
+                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+                toast.error(message, { duration: 5000, position: 'top-center' });
+            } else if (err.request) {
                 console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-              } else if (err) {
+                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+            } else if (err) {
                 console.log(err.toString());
-                toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-              }
+                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+            }
         }
        }
      
@@ -300,4 +301,4 @@ const DonationAmount = () => {
   )
 }
 
-export default DonationAmount
+export default withAuthentication(DonationAmount);

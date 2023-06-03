@@ -7,7 +7,9 @@ const PrivateRoute = () => {
     const token = localStorage.getItem('AuthToken'); // Assuming the token is stored in local storage
     if (token) {
       const expirationTime = jwtDecode(token).exp;
-      const currentTime = new Date().getTime();
+      //console.log("expired",expirationTime);
+      const currentTime = Date.now() / 1000;
+      //console.log("curr", currentTime);
       return currentTime < expirationTime;
     }
     return false;
