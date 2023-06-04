@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { year, month } from '../../../../Utils/EnrollmentData';
 import axios from 'axios';
 import { GetDonationAmtList, GetActualIdandOrgId, DonarPaymentActualID, DonarPaymentSave } from '../../../URL/ApiList';
@@ -20,6 +20,10 @@ const DonarPayment = () => {
         DonationSearch: "",
         DonationAmtId: "",
     });
+
+    const [showDonationSuggestions, setShowDonationSuggestions] = useState(false);
+    const donationSuggestions = listDonationAmt.filter(option => option.donationAmt.toString().includes(selectAutoDonationVal.DonationSearch));
+
     // Donation Auto Complete
 
 
@@ -37,6 +41,12 @@ const DonarPayment = () => {
         orgIdVal: "",
         donarEnrollmentId: ""
     });
+
+    const [showActIdSuggestions, setShowActIdSuggestions] = useState(false);
+    const actIdSuggestions = listAllId.filter(option => option.donerActualId.toString().toLowerCase().includes(selectAutoActOrgVal.actualIdSearch.toLowerCase()))
+  
+  
+
 
     const [userAddress, setUserAddress] = useState({
         macAddress: "",
@@ -113,23 +123,34 @@ const DonarPayment = () => {
 
     }
 
-    const handleDonaAmtSearchChange = (e) => {
-        setSelectAutoDonationVal({
-            ...selectAutoDonationVal,
-            DonationSearch: e.target.value
-        });
-        setFlag(true);
+    const autocompleteDonaRef = useRef();
+    useEffect(() => {
+      const handleDonaClick = (event) => {
+        if (autocompleteDonaRef.current && !autocompleteDonaRef.current.contains(event.target)) {
+          setShowDonationSuggestions(false)
+        }
+      };
+      document.addEventListener("click", handleDonaClick);
+      return () => {
+        document.removeEventListener("click", handleDonaClick)
+      }
+    }, [])
+  
+    const handleDonaChange = e => {
+      setSelectAutoDonationVal({
+          ...selectAutoDonationVal,
+          DonationSearch: e.target.value
+      });
     }
-
-    const handleDonaAmtSearch = (searchTerm, val) => {
-        setSelectAutoDonationVal({
-            DonationSearch: searchTerm,
-            DonationAmtId: val
-        });
-
-
-        NetAmount(searchTerm);
-    }
+  
+      const handleDonaSuggestionClick = (suggetion) => {
+          setSelectAutoDonationVal({
+              DonationSearch: suggetion.donationAmt,
+              DonationAmtId: suggetion.donationAmtId
+          });
+          setShowDonationSuggestions(false);
+          NetAmount(suggetion.donationAmt);
+        }
 
     const NetAmount = (data) => {
         // console.log("net val",data+2);
@@ -187,25 +208,36 @@ const DonarPayment = () => {
 
     // Actual Id Handle change all function for AutoComplete
 
-    const handleActIdSearchChange = (e) => {
-        setSelectAutoActOrgVal({
-            ...selectAutoActOrgVal,
-            actualIdSearch: e.target.value
-        });
-    }
+    const autocompleteActIdRef = useRef();
+        useEffect(() => {
+            const handleActIdClick = (event) => {
+            if (autocompleteActIdRef.current && !autocompleteActIdRef.current.contains(event.target)) {
+                setShowActIdSuggestions(false)
+            }
+            };
+            document.addEventListener("click", handleActIdClick);
+            return () => {
+            document.removeEventListener("click", handleActIdClick)
+            }
+        }, [])
 
-    const handleActIdSearch = (searchTerm, orgVal, donarId) => {
-        //  console.log("edusearch", searchTerm);
-        //  console.log("eduId", val);
-        setSelectAutoActOrgVal({
-            actualIdSearch: searchTerm,
-            actualIdVal: searchTerm,
-            orgIdSearch: orgVal,
-            orgIdVal: orgVal,
-            donarEnrollmentId: donarId
-        });
+        const handleActIdChange = e => {
+            setSelectAutoActOrgVal({
+                ...selectAutoActOrgVal,
+                actualIdSearch: e.target.value
+            });
+        }
 
-    }
+  const handleSuggestionActIdClick = (suggetion) => {
+            setSelectAutoActOrgVal({
+            actualIdSearch: suggetion.donerActualId,
+            actualIdVal: suggetion.donerActualId,
+            orgIdSearch: suggetion.organisationalId,
+            orgIdVal: suggetion.organisationalId,
+            donarEnrollmentId: suggetion.donerEnrollmentId
+        });
+        setShowActIdSuggestions(false);
+  }
     // Actual Id Handle change all function for AutoComplete
 
     const ipData = () => {
@@ -351,41 +383,23 @@ const DonarPayment = () => {
                                 <label className="col-form-label">Donation Amount</label>
                                 {/*  */}
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Donation (English)"
-                                            name="DonationSearch"
-                                            onChange={handleDonaAmtSearchChange}
-                                            value={selectAutoDonationVal.DonationSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
-                                    </div>
-                                    {flag === true ?
-                                        <div className='dropdown'>
-                                            {
-                                                listDonationAmt.filter(item => {
-                                                    const searchTerm = selectAutoDonationVal.DonationSearch;
-                                                    const fullName = item.donationAmt;
+                                <div className="autocomplete" ref={autocompleteDonaRef}>
+                                    <input
+                                    value={selectAutoDonationVal.DonationSearch}
+                                    onChange={handleDonaChange}
+                                    placeholder="Select Donation Amount"
+                                    onFocus={() => setShowDonationSuggestions(true)}
+                                    />
+                                    {showDonationSuggestions && (
+                                    <ul className="suggestions">
+                                        {donationSuggestions.map(suggestion => (
+                                        <li onClick={() => handleDonaSuggestionClick(suggestion)} key={suggestion.donationAmtId}>
+                                            {suggestion.donationAmt}
+                                        </li>
+                                        ))}
+                                    </ul>
+                                    )}
 
-                                                    return searchTerm && fullName.toString().includes(searchTerm) && fullName !== searchTerm;
-                                                }).slice(0, 10)
-                                                    .map((item) => (
-                                                        <div
-                                                            key={item.donationAmtId}
-                                                            onClick={() => handleDonaAmtSearch(item.donationAmt, item.donationAmtId)}
-                                                            className='dropdown-row'
-                                                        >
-                                                            {item.donationAmt}
-                                                        </div>
-                                                    ))
-                                            }
-                                        </div>
-                                        :
-                                        ""
-                                    }
                                 </div>
                                 {/*  */}
 
@@ -411,38 +425,23 @@ const DonarPayment = () => {
                             <div className="mb-3">
                                 <label className="col-form-label">Actual Id</label>
                                 {/*  */}
+                                <div className="autocomplete" ref={autocompleteActIdRef}>
+                                    <input
+                                    value={selectAutoActOrgVal.actualIdSearch}
+                                    onChange={handleActIdChange}
+                                    placeholder="Select Actual Id"
+                                    onFocus={() => setShowActIdSuggestions(true)}
+                                    />
+                                    {showActIdSuggestions && (
+                                    <ul className="suggestions">
+                                        {actIdSuggestions.map(suggestion => (
+                                        <li onClick={() => handleSuggestionActIdClick(suggestion)} key={suggestion.donerEnrollmentId}>
+                                            {suggestion.donerActualId}
+                                        </li>
+                                        ))}
+                                    </ul>
+                                    )}
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Actual ID"
-                                            name="actualIdSearch"
-                                            onChange={handleActIdSearchChange}
-                                            value={selectAutoActOrgVal.actualIdSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
-                                    </div>
-                                    <div className='dropdown'>
-                                        {
-                                            listAllId.filter(item => {
-                                                const searchTerm = selectAutoActOrgVal.actualIdSearch;
-                                                const fullName = item.donerActualId;
-
-                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.donerEnrollmentId}
-                                                        onClick={() => handleActIdSearch(item.donerActualId, item.organisationalId, item.donerEnrollmentId)}
-                                                        className='dropdown-row'
-                                                    >
-                                                        {item.donerActualId}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
                                 </div>
                                 {/*  */}
                             </div>

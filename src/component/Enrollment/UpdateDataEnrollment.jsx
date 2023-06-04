@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import axios from 'axios';
 import { month, year,conversionDate } from '../../../Utils/EnrollmentData';
 import { GetEducationList, GetOccupationList, GetUpazilaList, GetMosqueList, GetDonationAmtList, SaveEnrollmentData, GetDistrictfromUpazila,GetDonarAllData } from '../../URL/ApiList';
@@ -33,6 +33,9 @@ const UpdateDataEnrollment = () => {
         eduSearch: "",
         EduQualificationId: ""
     });
+    const [showEduSuggestions, setShowEduSuggestions] = useState(false);
+    const eduSuggestion = listEducation.filter(option => option.eduQualification.toLowerCase().includes(selectAutoEduVal.eduSearch.toLowerCase()));
+
     // Education autoComplete////
 
     //Occupation AutoComplete/////
@@ -41,6 +44,10 @@ const UpdateDataEnrollment = () => {
         OccSearch: "",
         OccupationId: ""
     });
+
+    const [showOccSuggestions, setShowOccSuggestions] = useState(false);
+    const OccSuggestion = listOccupation.filter(option => option.occupationName.toLowerCase().includes(selectAutoOccVal.OccSearch.toLowerCase()));
+
     //Occupation AutoComplete/////
 
     //Address
@@ -61,6 +68,11 @@ const UpdateDataEnrollment = () => {
 
     });
 
+    const [showPreUpaSuggestions, setShowPreUpaSuggestions] = useState(false);
+    const preUpaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(selectAutoPreUpaVal.PreUpaSearch.toLowerCase()));
+  
+
+
     //Present Upazila AutoComplete
 
     //Permanent Upazila AutoComplete
@@ -70,12 +82,22 @@ const UpdateDataEnrollment = () => {
         PerDistrict: ""
     });
 
+    const [showPerUpaSuggestions, setShowPerUpaSuggestions] = useState(false);
+    const perUpaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(selectAutoPerUpaVal.PerUpaSearch.toLowerCase()))
+
+
+
     //Permanent Upazila AutoComplete
 
     const [orgUpazila, setOrgUpazila] = useState({
         OrgUpaSearch: "",
         OrgUpazilaId: ""
     });
+
+    
+    const [showOrgUpaSuggestions, setShowOrgUpaSuggestions] = useState(false);
+    const orgUpaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(orgUpazila.OrgUpaSearch.toLowerCase()))
+
 
 
     // Mosque Auto Complete
@@ -84,6 +106,10 @@ const UpdateDataEnrollment = () => {
         MosqueSearch: "",
         OrgMosqueId: ""
     });
+
+    const [showMosSuggestions, setShowMosSuggestions] = useState(false);
+    const mosqueSuggestions = listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(selectAutoMosqueVal.MosqueSearch.toLowerCase()) && option.upazilaId ===orgUpazila.OrgUpazilaId);
+  
     // Mosque Auto Complete
 
 
@@ -94,6 +120,10 @@ const UpdateDataEnrollment = () => {
         DonationSearch: "",
         DonationAmtId: ""
     });
+
+    const [showDonationSuggestions, setShowDonationSuggestions] = useState(false);
+    const donationSuggestions = listDonationAmt.filter(option => option.donationAmt.toString().includes(selectAutoDonationVal.DonationSearch));
+
     // Donation Auto Complete
 
 
@@ -124,9 +154,6 @@ const UpdateDataEnrollment = () => {
         DonerActualId: "",
         OrganisationalId: ""
     });
-
-
-
 
 
 
@@ -356,21 +383,35 @@ const UpdateDataEnrollment = () => {
 
     }
 
-    const handleEduSearchChange = (e) => {
+
+    const autocompleteEduRef = useRef();
+    useEffect(() => {
+        const handleEduClick = (event) => {
+            if (autocompleteEduRef.current && !autocompleteEduRef.current.contains(event.target)) {
+                setShowEduSuggestions(false)
+            }
+        };
+        document.addEventListener("click", handleEduClick);
+        return () => {
+            document.removeEventListener("click", handleEduClick)
+        }
+    }, [])
+
+    const handleEduChange = e => {
         setSelectAutoEduVal({
             ...selectAutoEduVal,
             eduSearch: e.target.value
         });
     }
 
-    const handleEduSearch = (searchTerm, val) => {
-        // console.log("edusearch", searchTerm);
-        // console.log("eduId", val);
+    const handleEduSuggestionClick = (suggetion) => {
         setSelectAutoEduVal({
-            eduSearch: searchTerm,
-            EduQualificationId: val
+            eduSearch: suggetion.eduQualification,
+            EduQualificationId: suggetion.eduQualificationId
         });
+        setShowEduSuggestions(false);
     }
+
     // Education dropdown
 
 
@@ -400,22 +441,33 @@ const UpdateDataEnrollment = () => {
     }
 
 
-    const handleOccSearchChange = (e) => {
+    const autocompleteOccRef = useRef();
+    useEffect(() => {
+        const handleOccClick = (event) => {
+            if (autocompleteOccRef.current && !autocompleteOccRef.current.contains(event.target)) {
+                setShowOccSuggestions(false);
+            }
+        };
+        document.addEventListener("click", handleOccClick);
+        return () => {
+            document.removeEventListener("click", handleOccClick)
+        }
+    }, [])
+
+    const handleOccChange = e => {
         setSelectAutoOccVal({
             ...selectAutoOccVal,
             OccSearch: e.target.value
         });
     }
 
-    const handleOccSearch = (searchTerm, val) => {
-        // console.log("occsearch", searchTerm);
-        // console.log("occId", val);
+    const handleOccSuggestionClick = (suggetion) => {
         setSelectAutoOccVal({
-            OccSearch: searchTerm,
-            OccupationId: val
+            OccSearch: suggetion.occupationName,
+            OccupationId: suggetion.occupationId
         });
+        setShowOccSuggestions(false);
     }
-
     ////////Occupation dropdown 
 
     // Get Upazila List ////////
@@ -443,21 +495,36 @@ const UpdateDataEnrollment = () => {
 
 
     // Org Upazila Search //////////
-    const handleOrgUpaSearchChange = (e) => {
+    const autocompleteOrgUpaRef = useRef();
+    useEffect(() => {
+        const handleOrgUpaClick = (event) => {
+            if (autocompleteOrgUpaRef.current && !autocompleteOrgUpaRef.current.contains(event.target)) {
+                setShowOrgUpaSuggestions(false)
+            }
+        };
+        document.addEventListener("click", handleOrgUpaClick);
+        return () => {
+            document.removeEventListener("click", handleOrgUpaClick)
+        }
+    }, []);
+
+    const handleOrgUpaChange = e => {
         setOrgUpazila({
             ...orgUpazila,
             OrgUpaSearch: e.target.value
         });
+
         changeMosqueData();
     }
 
-    const handleOrgUpaSearch = (searchTerm, val) => {
-        // console.log("Upasearch", searchTerm);
-        // console.log("UpaId", val);
+
+    const handleSuggestionOrgUpaClick = (suggetion) => {
+        //console.log("suggestion", suggetion.divisionNameEn);
         setOrgUpazila({
-            OrgUpaSearch: searchTerm,
-            OrgUpazilaId: val
+            OrgUpaSearch: suggetion.upazilaNameEn,
+            OrgUpazilaId: suggetion.upazilaId
         });
+        setShowOrgUpaSuggestions(false);
     }
 
     const changeMosqueData =()=>{
@@ -494,21 +561,36 @@ const UpdateDataEnrollment = () => {
     }
 
 
-    const handleMosqueSearchChange = (e) => {
-        setSelectAutoMosqueVal({
-            ...selectAutoMosqueVal,
-            MosqueSearch: e.target.value
-        });
+    const autocompleteMosRef = useRef();
+  useEffect(() => {
+    const handleMosClick = (event) => {
+      if (autocompleteMosRef.current && !autocompleteMosRef.current.contains(event.target)) {
+        setShowMosSuggestions(false)
+      }
+    };
+    document.addEventListener("click", handleMosClick);
+    return () => {
+      document.removeEventListener("click", handleMosClick)
     }
+  }, [])
 
-    const handleMosqueSearch = (searchTerm, val) => {
-        //console.log("mossearch", searchTerm);
-        //console.log("mosId", val);
+  const handleMosqueChange = e => {
+    setSelectAutoMosqueVal({
+        ...selectAutoMosqueVal,
+        MosqueSearch: e.target.value
+    });
+  }
+
+   
+
+    const handleSuggestionMosqueClick = (suggetion) => {
+        //console.log("suggestion", suggetion.divisionNameEn);
         setSelectAutoMosqueVal({
-            MosqueSearch: searchTerm,
-            OrgMosqueId: val
+            MosqueSearch: suggetion.mosqueNameEn,
+            OrgMosqueId: suggetion.mosqueId
         });
-    }
+        setShowMosSuggestions(false);
+      }
 
     // List Mosque AutoComplete
 
@@ -541,25 +623,34 @@ const UpdateDataEnrollment = () => {
     }
 
 
-    const handleDonaAmtSearchChange = (e) => {
-        setSelectAutoDonationVal({
-            ...selectAutoDonationVal,
-            DonationSearch: e.target.value
-        });
-        setDonationFlag(true);
+    const autocompleteDonaRef = useRef();
+  useEffect(() => {
+    const handleDonaClick = (event) => {
+      if (autocompleteDonaRef.current && !autocompleteDonaRef.current.contains(event.target)) {
+        setShowDonationSuggestions(false)
+      }
+    };
+    document.addEventListener("click", handleDonaClick);
+    return () => {
+      document.removeEventListener("click", handleDonaClick)
     }
+  }, [])
 
-    const handleDonaAmtSearch = (searchTerm, val) => {
-        //console.log("mossearch", searchTerm);
-        //console.log("mosId", val);
+  const handleDonaChange = e => {
+    setSelectAutoDonationVal({
+        ...selectAutoDonationVal,
+        DonationSearch: e.target.value
+    });
+  }
+
+    const handleDonaSuggestionClick = (suggetion) => {
         setSelectAutoDonationVal({
-            DonationSearch: searchTerm,
-            DonationAmtId: val
+            DonationSearch: suggetion.donationAmt,
+            DonationAmtId: suggetion.donationAmtId
         });
-
-        NetAmount(searchTerm);
-    }
-
+        setShowDonationSuggestions(false);
+        NetAmount(suggetion.donationAmt);
+      }
 
     // Donation Amount AutoComplete/////////
 
@@ -572,26 +663,9 @@ const UpdateDataEnrollment = () => {
             ...donationAmt,
             NetAmount: netData
         });
-        setDonationFlag(false);
     }
 
-    // const sendData = (searchTerm, val, districtName) => {
-    //     // console.log("data", searchTerm, val, districtName);
-    //     setSelectAutoPreUpaVal({
-    //         PreUpaSearch: searchTerm,
-    //         PreUpazilaId: val,
-    //         PreDistrict: districtName
-    //     });
-    // }
 
-    // const myData = (searchTerm, val, districtName) => {
-    //     // console.log("data2", searchTerm, val, districtName);
-    //     setSelectAutoPerUpaVal({
-    //         PerUpaSearch: searchTerm,
-    //         PerUpazilaId: val,
-    //         PerDistrict: districtName
-    //     });
-    // }
 
 
     const handleSame = () => {
@@ -823,34 +897,47 @@ const UpdateDataEnrollment = () => {
     }
 
 
-    const handlePreUpaSearchChange = (e) => {
+    const autocompletePreRef = useRef();
+    useEffect(() => {
+        const handlePreUpaClick = (event) => {
+        if (autocompletePreRef.current && !autocompletePreRef.current.contains(event.target)) {
+            setShowPreUpaSuggestions(false)
+        }
+        };
+        document.addEventListener("click", handlePreUpaClick);
+        return () => {
+        document.removeEventListener("click", handlePreUpaClick);
+        }
+    }, [])
+
+    const handlePreUpaChange = e => {
         setSelectAutoPreUpaVal({
             ...selectAutoPreUpaVal,
             PreUpaSearch: e.target.value
-        });
+            });
     }
 
 
-    const handlePreUpaSearch = async (searchTerm, val) => {
-        // console.log("edusearch", searchTerm);
-        //console.log("eduId", val);
+    const handlePreUpaSuggestionClick = async(suggetion) => {
         try {
-            let getDistrict = await axios.get(GetDistrictfromUpazila + val);
+            let getDistrict = await axios.get(GetDistrictfromUpazila + suggetion.upazilaId);
             console.log("District", getDistrict.data.districtobj.districtNameEn);
             let districtName = getDistrict.data.districtobj.districtNameEn;
 
             setSelectAutoPreUpaVal({
-                PreUpaSearch: searchTerm,
-                PreUpazilaId: val,
+                PreUpaSearch: suggetion.upazilaNameEn,
+                PreUpazilaId: suggetion.upazilaId,
                 PreDistrict: districtName
             });
+            setShowPreUpaSuggestions(false);
 
 
         } catch (err) {
             console.log(err);
         }
 
-    }
+       
+      }
 
 
     ////////////////////////////////////////////////////////
@@ -860,13 +947,34 @@ const UpdateDataEnrollment = () => {
 
     const handlePerDistrictChange = (e) => {
         setSelectAutoPerUpaVal({
-            ...compData,
-            PreDistrict: e.target.name
+            ...selectAutoPerUpaVal,
+            PerDistrict: e.target.name
         })
     }
 
 
-    const handlePerUpaSearchChange = (e) => {
+
+    // const handlePerUpaSearchChange = (e) => {
+    //     setSelectAutoPerUpaVal({
+    //         ...selectAutoPerUpaVal,
+    //         PerUpaSearch: e.target.value
+    //     });
+    // }
+
+    const autocompletePerUpaRef = useRef();
+    useEffect(() => {
+        const handlePerUpaClick = (event) => {
+        if (autocompletePerUpaRef.current && !autocompletePerUpaRef.current.contains(event.target)) {
+            setShowPerUpaSuggestions(false)
+        }
+        };
+        document.addEventListener("click", handlePerUpaClick);
+        return () => {
+        document.removeEventListener("click", handlePerUpaClick)
+        }
+    }, [])
+
+     const handlePerUpaChange = e => {
         setSelectAutoPerUpaVal({
             ...selectAutoPerUpaVal,
             PerUpaSearch: e.target.value
@@ -874,25 +982,48 @@ const UpdateDataEnrollment = () => {
     }
 
 
-    const handlePerUpaSearch = async (searchTerm, val) => {
+    // const handlePerUpaSearch = async (searchTerm, val) => {
 
+    //     try {
+    //         let getDistrict = await axios.get(GetDistrictfromUpazila + val);
+    //         console.log("District", getDistrict.data.districtobj.districtNameEn);
+    //         let districtName = getDistrict.data.districtobj.districtNameEn;
+
+    //         setSelectAutoPerUpaVal({
+    //             PerUpaSearch: searchTerm,
+    //             PerUpazilaId: val,
+    //             PerDistrict: districtName
+    //         });
+
+
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+
+    // }
+
+    const handlePerUpaSuggestionClick = async(suggetion) => {
         try {
-            let getDistrict = await axios.get(GetDistrictfromUpazila + val);
-            console.log("District", getDistrict.data.districtobj.districtNameEn);
-            let districtName = getDistrict.data.districtobj.districtNameEn;
+                    let getDistrict = await axios.get(GetDistrictfromUpazila + suggetion.upazilaId);
+                    console.log("District", getDistrict.data.districtobj.districtNameEn);
+                    let districtName = getDistrict.data.districtobj.districtNameEn;
+        
+                    setSelectAutoPerUpaVal({
+                        PerUpaSearch: suggetion.upazilaNameEn,
+                        PerUpazilaId: suggetion.upazilaId,
+                        PerDistrict: districtName
+                    });
+                     setShowPerUpaSuggestions(false);
+        
+        
+                } catch (err) {
+                    console.log(err);
+                }
+        
+       
+      }
+    
 
-            setSelectAutoPerUpaVal({
-                PerUpaSearch: searchTerm,
-                PerUpazilaId: val,
-                PerDistrict: districtName
-            });
-
-
-        } catch (err) {
-            console.log(err);
-        }
-
-    }
 
 
     ////////////////////////////////////////////////////////
@@ -1045,36 +1176,23 @@ const UpdateDataEnrollment = () => {
                                 </label>
                                 {/*  */}
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Education (English)"
-                                            name="eduSearch"
-                                            onChange={handleEduSearchChange}
-                                            value={selectAutoEduVal.eduSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
-                                    </div>
-                                    <div className='dropdown'>
-                                        {
-                                            listEducation.filter(item => {
-                                                const searchTerm = selectAutoEduVal.eduSearch.toLowerCase();
-                                                const fullName = item.eduQualification.toLowerCase();
+                                <div className="autocomplete" ref={autocompleteEduRef}>
+                                    <input
+                                        value={selectAutoEduVal.eduSearch}
+                                        onChange={handleEduChange}
+                                        placeholder="Select Education"
+                                        onFocus={() => setShowEduSuggestions(true)}
+                                    />
+                                    {showEduSuggestions && (
+                                        <ul className="suggestions">
+                                            {eduSuggestion.map(suggestion => (
+                                                <li onClick={() => handleEduSuggestionClick(suggestion)} key={suggestion.eduQualificationId}>
+                                                    {suggestion.eduQualification}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
 
-                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.eduQualificationId}
-                                                        onClick={() => handleEduSearch(item.eduQualification, item.eduQualificationId)}
-                                                        className='dropdown-row'>
-                                                        {item.eduQualification}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
                                 </div>
                                 {/*  */}
                             </div>
@@ -1090,38 +1208,25 @@ const UpdateDataEnrollment = () => {
 
 
                                 {/*  */}
+                                <div className="autocomplete" ref={autocompleteOccRef}>
+                                    <input
+                                        value={selectAutoOccVal.OccSearch}
+                                        onChange={handleOccChange}
+                                        placeholder="Select Occupation"
+                                        onFocus={() => setShowOccSuggestions(true)}
+                                    />
+                                    {showOccSuggestions && (
+                                        <ul className="suggestions">
+                                            {OccSuggestion.map(suggestion => (
+                                                <li onClick={() => handleOccSuggestionClick(suggestion)} key={suggestion.occupationId}>
+                                                    {suggestion.occupationName}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Occupation Name (English)"
-                                            name="OccSearch"
-                                            onChange={handleOccSearchChange}
-                                            value={selectAutoOccVal.OccSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
-                                    </div>
-                                    <div className='dropdown'>
-                                        {
-                                            listOccupation.filter(item => {
-                                                const searchTerm = selectAutoOccVal.OccSearch.toLowerCase();
-                                                const fullName = item.occupationName.toLowerCase();
-
-                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.occupationId}
-                                                        onClick={() => handleOccSearch(item.occupationName, item.occupationId)}
-                                                        className='dropdown-row'>
-                                                        {item.occupationName}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
                                 </div>
+                                
                                 {/*  */}
                             </div>
                         </div>
@@ -1173,7 +1278,7 @@ const UpdateDataEnrollment = () => {
                                         <label className="col-sm-4 col-form-label text-end">Upazila</label>
                                         <div className="col-sm-8">
                                             {/*  */}
-
+{/* 
                                             <div className='search-container'>
                                                 <div className='search-inner'>
                                                     <input
@@ -1204,7 +1309,26 @@ const UpdateDataEnrollment = () => {
                                                             ))
                                                     }
                                                 </div>
-                                            </div>
+                                            </div> */}
+
+                             <div className="autocomplete" ref={autocompletePreRef}>
+                                    <input
+                                    value={selectAutoPreUpaVal.PreUpaSearch}
+                                    onChange={handlePreUpaChange}
+                                    placeholder="Select Present Upazila Search"
+                                    onFocus={() => setShowPreUpaSuggestions(true)}
+                                    />
+                                    {showPreUpaSuggestions && (
+                                    <ul className="suggestions">
+                                        {preUpaSuggestions.map(suggestion => (
+                                        <li onClick={() => handlePreUpaSuggestionClick(suggestion)} key={suggestion.upazilaId}>
+                                            {suggestion.upazilaNameEn}
+                                        </li>
+                                        ))}
+                                    </ul>
+                                    )}
+
+                                </div>
 
 
                                             {/*  */}
@@ -1267,38 +1391,25 @@ const UpdateDataEnrollment = () => {
                                                 <label className="col-sm-4 col-form-label text-end">Upazila</label>
                                                 <div className="col-sm-8">
                                                     {/*  */}
+                                                    <div className="autocomplete" ref={autocompletePerUpaRef}>
+                                                        <input
+                                                        value={selectAutoPerUpaVal.PerUpaSearch}
+                                                        onChange={handlePerUpaChange}
+                                                        placeholder="Select Permanent Upazila"
+                                                        onFocus={() => setShowPerUpaSuggestions(true)}
+                                                        />
+                                                        {showPerUpaSuggestions && (
+                                                        <ul className="suggestions">
+                                                            {perUpaSuggestions.map(suggestion => (
+                                                            <li onClick={() => handlePerUpaSuggestionClick(suggestion)} key={suggestion.upazilaId}>
+                                                                {suggestion.upazilaNameEn}
+                                                            </li>
+                                                            ))}
+                                                        </ul>
+                                                        )}
 
-                                                    <div className='search-container'>
-                                                        <div className='search-inner'>
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Type Upazila Name & Select (English)"
-                                                                name="PerUpaSearch"
-                                                                onChange={handlePerUpaSearchChange}
-                                                                value={selectAutoPerUpaVal.PerUpaSearch}
-                                                                autoComplete='off'
-                                                                style={{ width: "2000px" }}
-                                                            />
-                                                        </div>
-                                                        <div className='dropdown'>
-                                                            {
-                                                                listUpazila.filter(item => {
-                                                                    const searchTerm = selectAutoPerUpaVal.PerUpaSearch.toLowerCase();
-                                                                    const fullName = item.upazilaNameEn.toLowerCase();
-
-                                                                    return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                                                }).slice(0, 10)
-                                                                    .map((item) => (
-                                                                        <div
-                                                                            key={item.upazilaId}
-                                                                            onClick={() => handlePerUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                                                                            className='dropdown-row'>
-                                                                            {item.upazilaNameEn}
-                                                                        </div>
-                                                                    ))
-                                                            }
-                                                        </div>
                                                     </div>
+                                                 
 
 
                                                     {/*  */}
@@ -1381,36 +1492,23 @@ const UpdateDataEnrollment = () => {
 
                                 {/*  */}
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Org Upazila Name (English)"
-                                            name="OrgUpaSearch"
-                                            onChange={handleOrgUpaSearchChange}
-                                            value={orgUpazila.OrgUpaSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
-                                    </div>
-                                    <div className='dropdown'>
-                                        {
-                                            listUpazila.filter(item => {
-                                                const searchTerm = orgUpazila.OrgUpaSearch.toLowerCase();
-                                                const fullName = item.upazilaNameEn.toLowerCase();
+                                <div className="autocomplete" ref={autocompleteOrgUpaRef}>
+                                    <input
+                                        value={orgUpazila.OrgUpaSearch}
+                                        onChange={handleOrgUpaChange}
+                                        placeholder="Select Org Upazila Search"
+                                        onFocus={() => setShowOrgUpaSuggestions(true)}
+                                    />
+                                    {showOrgUpaSuggestions && (
+                                        <ul className="suggestions">
+                                            {orgUpaSuggestions.map(suggestion => (
+                                                <li onClick={() => handleSuggestionOrgUpaClick(suggestion)} key={suggestion.upazilaId}>
+                                                    {suggestion.upazilaNameEn}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
 
-                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.upazilaId}
-                                                        onClick={() => handleOrgUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                                                        className='dropdown-row'>
-                                                        {item.upazilaNameEn}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
                                 </div>
                                 {/*  */}
 
@@ -1426,40 +1524,26 @@ const UpdateDataEnrollment = () => {
                                 Org Mosque
                             </label>
                             {/*  */}
+                            <div className="autocomplete" ref={autocompleteMosRef}>
+                    <input
+                      value={selectAutoMosqueVal.MosqueSearch}
+                      onChange={handleMosqueChange}
+                      placeholder="Select Mosque"
+                      onFocus={() => setShowMosSuggestions(true)}
+                    />
+                    {showMosSuggestions && (
+                      <ul className="suggestions">
+                        {mosqueSuggestions.map(suggestion => (
+                          <li onClick={() => handleSuggestionMosqueClick(suggestion)} key={suggestion.mosqueId}>
+                            {suggestion.mosqueNameEn}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
 
-                            <div className='search-container'>
-                                <div className='search-inner'>
-                                    <input
-                                        type="text"
-                                        placeholder="Type Mosque Name (English)"
-                                        name="MosqueSearch"
-                                        onChange={handleMosqueSearchChange}
-                                        value={selectAutoMosqueVal.MosqueSearch}
-                                        autoComplete='off'
-                                        style={{ width: "2000px" }}
-                                    />
-                                </div>
-                                <div className='dropdown'>
-                                    {
-                                        listMosque.filter(item => item.upazilaNameEn === orgUpazila.OrgUpaSearch)
-                                            .filter(item => {
-                                                const searchTerm = selectAutoMosqueVal.MosqueSearch.toLowerCase();
-                                                const fullName = item.mosqueNameEn.toLowerCase();
+                  </div>
 
-                                                return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                            .map((item) => (
-                                                <div
-                                                    key={item.mosqueId}
-                                                    onClick={() => handleMosqueSearch(item.mosqueNameEn, item.mosqueId)}
-                                                    className='dropdown-row'>
-                                                    {item.mosqueNameEn}
-                                                </div>
-                                            ))
-                                    }
-                                </div>
-                                {/*  */}
-                            </div>
+                        {/*  */}
                         </div>
                     </div>
                 </div>
@@ -1474,44 +1558,24 @@ const UpdateDataEnrollment = () => {
                                 </label>
 
                                 {/*  */}
+                                <div className="autocomplete" ref={autocompleteDonaRef}>
+                    <input
+                      value={selectAutoDonationVal.DonationSearch}
+                      onChange={handleDonaChange}
+                      placeholder="Select Donation Amount"
+                      onFocus={() => setShowDonationSuggestions(true)}
+                    />
+                    {showDonationSuggestions && (
+                      <ul className="suggestions">
+                        {donationSuggestions.map(suggestion => (
+                          <li onClick={() => handleDonaSuggestionClick(suggestion)} key={suggestion.donationAmtId}>
+                            {suggestion.donationAmt}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
 
-                                <div className='search-container'>
-                                    <div className='search-inner'>
-                                        <input
-                                            type="text"
-                                            placeholder="Type Donation (English)"
-                                            name="DonationSearch"
-                                            onChange={handleDonaAmtSearchChange}
-                                            value={selectAutoDonationVal.DonationSearch}
-                                            autoComplete='off'
-                                            style={{ width: "2000px" }}
-                                        />
-                                    </div>
-                                    {
-                                        donationFlag === true ?
-                                        <div className='dropdown'>
-                                        {
-                                            listDonationAmt.filter(item => {
-                                                const searchTerm = selectAutoDonationVal.DonationSearch;
-                                                const fullName = item.donationAmt;
-
-                                                return searchTerm && fullName.toString().includes(searchTerm) && fullName != searchTerm;
-                                            }).slice(0, 10)
-                                                .map((item) => (
-                                                    <div
-                                                        key={item.donationAmtId}
-                                                        onClick={() => handleDonaAmtSearch(item.donationAmt, item.donationAmtId)}
-                                                        className='dropdown-row'>
-                                                        {item.donationAmt}
-                                                    </div>
-                                                ))
-                                        }
-                                    </div>
-                                        :
-                                        ""  
-                                    }
-                                    
-                                </div>
+                  </div>
                                 {/*  */}
 
                             </div>

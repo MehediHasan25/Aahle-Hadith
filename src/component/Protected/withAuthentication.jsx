@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 
 const withAuthentication = (WrappedComponent) => {
   const EnhancedComponent = (props) => {
@@ -14,9 +15,8 @@ const withAuthentication = (WrappedComponent) => {
     const token = localStorage.getItem('AuthToken');
     // console.log("tokencall1",token);
 
-
-    if (!token) {
-        // console.log("tokenCall2");
+    if (!token ) {
+         console.log("tokenCall2", token);
       // No token found, initiate logout
       // Clear any user data and redirect to logout or login page
       localStorage.removeItem('AuthToken');

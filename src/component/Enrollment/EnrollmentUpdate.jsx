@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { BiEditAlt } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { GetEnrollmentData, DeleteEnrollData, GetEnrollmentDataBySearch, GetActualIdandOrgId } from "../../URL/ApiList";
+import { GetEnrollmentData, DeleteEnrollData, GetEnrollmentDataBySearch, GetActualIdandOrgId,DonarPaymentActualID } from "../../URL/ApiList";
 import withAuthentication from "../Protected/withAuthentication";
 
 const EnrollmentUpdate = () => {
@@ -21,6 +21,21 @@ const EnrollmentUpdate = () => {
     OrgIdSearch: "",
     OrgIdVal: ""
   });
+
+  // ACT ID state
+  const [showAccIdSuggestions, setShowAccIdSuggestions] = useState(false);
+  const accIdSuggestions = listActualId.filter(option => option.display.toLowerCase().includes(selectAutoActualVal.actualIdSearch.toLowerCase()))
+// ACT ID state
+
+
+//Org Id State 
+const [showOrgIdSuggestions, setShowOrgIdSuggestions] = useState(false);
+const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase().includes(selectAutoOrgVal.OrgIdSearch.toLowerCase()))
+
+//Org Id State
+
+
+
 
 
   const navigate = useNavigate();
@@ -173,6 +188,7 @@ const EnrollmentUpdate = () => {
     try {
       let getActOrgData = await axios.get(GetActualIdandOrgId, { headers });
       let actOrgGet = getActOrgData.data;
+      //console.log("actId", actOrgGet._actualList);
       setListActualId(actOrgGet._actualList);
       setListOrgId(actOrgGet._orgList);
 
@@ -192,41 +208,99 @@ const EnrollmentUpdate = () => {
   }
   // Actual Id Handle change all function for AutoComplete
 
-  const handleActIdSearchChange = (e) => {
+  // const handleActIdSearchChange = (e) => {
+  //   setSelectAutoActualVal({
+  //     ...selectAutoActualVal,
+  //     actualIdSearch: e.target.value
+  //   });
+  // }
+
+  const autocompleteActIdRef = useRef();
+  useEffect(() => {
+    const handleActIdClick = (event) => {
+      if (autocompleteActIdRef.current && !autocompleteActIdRef.current.contains(event.target)) {
+        setShowAccIdSuggestions(false)
+      }
+    };
+    document.addEventListener("click", handleActIdClick);
+    return () => {
+      document.removeEventListener("click", handleActIdClick)
+    }
+  }, [])
+
+  const handleActIdChange = e => {
     setSelectAutoActualVal({
-      ...selectAutoActualVal,
-      actualIdSearch: e.target.value
-    });
+        ...selectAutoActualVal,
+        actualIdSearch: e.target.value
+      });
   }
 
-  const handleActIdSearch = (searchTerm, val) => {
-    //  console.log("edusearch", searchTerm);
-    //  console.log("eduId", val);
+  // const handleActIdSearch = (searchTerm, val) => {
+  //   //  console.log("edusearch", searchTerm);
+  //   //  console.log("eduId", val);
+  //   setSelectAutoActualVal({
+  //     actualIdSearch: searchTerm,
+  //     actualIdVal: val
+  //   });
+  // }
+
+  const handleActIdSuggestionClick = (suggetion) => {
     setSelectAutoActualVal({
-      actualIdSearch: searchTerm,
-      actualIdVal: val
-    });
+         actualIdSearch: suggetion.display,
+           actualIdVal: suggetion.id
+        });
+        setShowAccIdSuggestions(false);
   }
+
   // Actual Id Handle change all function for AutoComplete
 
 
   // Organization Id Handle change all function for AutoComplete
 
-  const handleOrgIdSearchChange = (e) => {
+  // const handleOrgIdSearchChange = (e) => {
+  //   setSelectAutoOrgVal({
+  //     ...selectAutoOrgVal,
+  //     OrgIdSearch: e.target.value
+  //   });
+  // }
+
+  const autocompleteOrdIdRef = useRef();
+  useEffect(() => {
+    const handleOrgIdClick = (event) => {
+      if (autocompleteOrdIdRef.current && !autocompleteOrdIdRef.current.contains(event.target)) {
+        setShowOrgIdSuggestions(false)
+      }
+    };
+    document.addEventListener("click", handleOrgIdClick);
+    return () => {
+      document.removeEventListener("click", handleOrgIdClick)
+    }
+  }, [])
+
+  const handleOrgIdChange = e => {
     setSelectAutoOrgVal({
       ...selectAutoOrgVal,
       OrgIdSearch: e.target.value
     });
   }
 
-  const handleOrdIdSearch = (searchTerm, val) => {
-    //  console.log("edusearch", searchTerm);
-    //  console.log("eduId", val);
-    setSelectAutoOrgVal({
-      OrgIdSearch: searchTerm,
-      OrgIdVal: val
+  // const handleOrdIdSearch = (searchTerm, val) => {
+  //   //  console.log("edusearch", searchTerm);
+  //   //  console.log("eduId", val);
+  //   setSelectAutoOrgVal({
+  //     OrgIdSearch: searchTerm,
+  //     OrgIdVal: val
+  //   });
+  // }
+
+  const handleOrgIdSuggestionClick = (suggetion) => {
+      setSelectAutoOrgVal({
+      OrgIdSearch: suggetion.display,
+      OrgIdVal: suggetion.id
     });
+    setShowOrgIdSuggestions(false);
   }
+
   // Organization Id Handle change all function for AutoComplete
 
 
@@ -247,7 +321,7 @@ const EnrollmentUpdate = () => {
                 <div className="col-md-8">
                   {/*  */}
 
-                  <div className='search-container'>
+                  {/* <div className='search-container'>
                     <div className='search-inner'>
                       <input
                         type="text"
@@ -277,7 +351,27 @@ const EnrollmentUpdate = () => {
                           ))
                       }
                     </div>
+                  </div> */}
+
+              <div className="autocomplete" ref={autocompleteActIdRef}>
+                    <input
+                      value={selectAutoActualVal.actualIdSearch}
+                      onChange={handleActIdChange}
+                      placeholder="Select Actual ID"
+                      onFocus={() => setShowAccIdSuggestions(true)}
+                    />
+                    {showAccIdSuggestions && (
+                      <ul className="suggestions">
+                        {accIdSuggestions.map(suggestion => (
+                          <li onClick={() => handleActIdSuggestionClick(suggestion)} key={suggestion.id}>
+                            {suggestion.display}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                   </div>
+
                   {/*  */}
 
                 </div>
@@ -287,7 +381,7 @@ const EnrollmentUpdate = () => {
                   Oraganizational ID
                 </label>
                 <div className="col-md-8">
-                  <div className='search-container'>
+                  {/* <div className='search-container'>
                     <div className='search-inner'>
                       <input
                         type="text"
@@ -317,7 +411,28 @@ const EnrollmentUpdate = () => {
                           ))
                       }
                     </div>
+                  </div> */}
+
+          <div className="autocomplete" ref={autocompleteOrdIdRef}>
+                    <input
+                      value={selectAutoOrgVal.OrgIdSearch}
+                      onChange={handleOrgIdChange}
+                      placeholder="Select Organization Id"
+                      onFocus={() => setShowOrgIdSuggestions(true)}
+                    />
+                    {showOrgIdSuggestions && (
+                      <ul className="suggestions">
+                        {orgIdSuggestions.map(suggestion => (
+                          <li onClick={() => handleOrgIdSuggestionClick(suggestion)} key={suggestion.id}>
+                            {suggestion.display}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                   </div>
+
+
                   {/*  */}
                 </div>
               </div>

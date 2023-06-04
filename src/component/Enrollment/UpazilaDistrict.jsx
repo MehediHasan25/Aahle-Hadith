@@ -37,7 +37,7 @@ const UpazilaDistrict = ({ sendData }) => {
     const getUpazila = async (e) => {
         try {
             let upaData = await axios.get(GetUpazilaList);
-            console.log("upaDataList", upaData.data._upazilaList);
+            // console.log("upaDataList", upaData.data._upazilaList);
             let getUpaData = upaData.data._upazilaList;
             setListUpazila(getUpaData);
         } catch (err) {

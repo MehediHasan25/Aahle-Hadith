@@ -105,6 +105,10 @@ const EnrollmentFormPage = () => {
         DonationSearch: "",
         DonationAmtId: ""
     });
+
+    const [showDonationSuggestions, setShowDonationSuggestions] = useState(false);
+    const donationSuggestions = listDonationAmt.filter(option => option.donationAmt.toString().includes(selectAutoDonationVal.DonationSearch));
+
     // Donation Auto Complete
 
 
@@ -273,9 +277,6 @@ const EnrollmentFormPage = () => {
     }
 
     const handleEduSuggestionClick = (suggetion) => {
-        //console.log("suggestion", suggetion.divisionNameEn);
-        // setAsearch(suggetion.divisionNameEn);
-        //console.log("id", suggetion.divisionId);
         setSelectAutoEduVal({
             eduSearch: suggetion.eduQualification,
             EduQualificationId: suggetion.eduQualificationId
@@ -450,7 +451,7 @@ const EnrollmentFormPage = () => {
         try {
             let getMosqueData = await axios.get(GetMosqueList);
             let getDataMosque = getMosqueData.data._mosqueList;
-            console.log("mosqueList", getDataMosque);
+            //console.log("mosqueList", getDataMosque);
             setListMosque(getDataMosque);
 
         } catch (err) {
@@ -496,14 +497,7 @@ const EnrollmentFormPage = () => {
     });
   }
 
-    // const handleMosqueSearch = (searchTerm, val) => {
-    //     //console.log("mossearch", searchTerm);
-    //     //console.log("mosId", val);
-    //     setSelectAutoMosqueVal({
-    //         MosqueSearch: searchTerm,
-    //         OrgMosqueId: val
-    //     });
-    // }
+   
 
     const handleSuggestionMosqueClick = (suggetion) => {
         //console.log("suggestion", suggetion.divisionNameEn);
@@ -545,24 +539,42 @@ const EnrollmentFormPage = () => {
     }
 
 
-    const handleDonaAmtSearchChange = (e) => {
-        setSelectAutoDonationVal({
-            ...selectAutoDonationVal,
-            DonationSearch: e.target.value
-        });
-        setDonationFlag(true);
-    }
+    // const handleDonaAmtSearchChange = (e) => {
+    //     setSelectAutoDonationVal({
+    //         ...selectAutoDonationVal,
+    //         DonationSearch: e.target.value
+    //     });
+    //     setDonationFlag(true);
+    // }
 
-    const handleDonaAmtSearch = (searchTerm, val) => {
-        //console.log("mossearch", searchTerm);
-        //console.log("mosId", val);
-        setSelectAutoDonationVal({
-            DonationSearch: searchTerm,
-            DonationAmtId: val
-        });
-
-        NetAmount(searchTerm);
+    const autocompleteDonaRef = useRef();
+  useEffect(() => {
+    const handleDonaClick = (event) => {
+      if (autocompleteDonaRef.current && !autocompleteDonaRef.current.contains(event.target)) {
+        setShowDonationSuggestions(false)
+      }
+    };
+    document.addEventListener("click", handleDonaClick);
+    return () => {
+      document.removeEventListener("click", handleDonaClick)
     }
+  }, [])
+
+  const handleDonaChange = e => {
+    setSelectAutoDonationVal({
+        ...selectAutoDonationVal,
+        DonationSearch: e.target.value
+    });
+  }
+
+    const handleDonaSuggestionClick = (suggetion) => {
+        setSelectAutoDonationVal({
+            DonationSearch: suggetion.donationAmt,
+            DonationAmtId: suggetion.donationAmtId
+        });
+        setShowDonationSuggestions(false);
+        NetAmount(suggetion.donationAmt);
+      }
 
 
     // Donation Amount AutoComplete/////////
@@ -576,8 +588,6 @@ const EnrollmentFormPage = () => {
             ...donationAmt,
             NetAmount: netData
         });
-
-        setDonationFlag(false);
     }
 
     const sendData = (searchTerm, val, districtName) => {
@@ -1357,7 +1367,7 @@ const EnrollmentFormPage = () => {
                                 </label>
 
                                 {/*  */}
-
+{/* 
                                 <div className='search-container'>
                                     <div className='search-inner'>
                                         <input
@@ -1395,7 +1405,27 @@ const EnrollmentFormPage = () => {
 
                                     }
 
-                                </div>
+                                </div> */}
+
+<div className="autocomplete" ref={autocompleteDonaRef}>
+                    <input
+                      value={selectAutoDonationVal.DonationSearch}
+                      onChange={handleDonaChange}
+                      placeholder="Select Donation Amount"
+                      onFocus={() => setShowDonationSuggestions(true)}
+                    />
+                    {showDonationSuggestions && (
+                      <ul className="suggestions">
+                        {donationSuggestions.map(suggestion => (
+                          <li onClick={() => handleDonaSuggestionClick(suggestion)} key={suggestion.donationAmtId}>
+                            {suggestion.donationAmt}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                  </div>
+
                                 {/*  */}
 
                             </div>

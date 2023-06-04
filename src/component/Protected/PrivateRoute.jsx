@@ -8,10 +8,15 @@ const PrivateRoute = () => {
     if (token) {
       const expirationTime = jwtDecode(token).exp;
       //console.log("expired",expirationTime);
+      //console.log("token timer", token)
       const currentTime = Date.now() / 1000;
       //console.log("curr", currentTime);
+       if(currentTime > expirationTime){
+        localStorage.removeItem('AuthToken');
+       }
       return currentTime < expirationTime;
     }
+
     return false;
   };
 

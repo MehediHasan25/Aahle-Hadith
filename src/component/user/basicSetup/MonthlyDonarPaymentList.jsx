@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
@@ -9,7 +9,7 @@ import withAuthentication from '../../Protected/withAuthentication';
 
 const MonthlyDonarPaymentList = () => {
     const [listAllId, setListAllId] = useState([]);
-    const [monthlyData, setMonthlyData] = useState(false,{
+    const [monthlyData, setMonthlyData] = useState({
         actualIdSearch: "",
         actualIdVal: "",
         orgIdSearch:"",
@@ -17,6 +17,11 @@ const MonthlyDonarPaymentList = () => {
         donarEnrollmentId: "",
         
     });
+
+    const [showActIdSuggestions, setShowActIdSuggestions] = useState(false);
+    const actIdSuggestions = listAllId.filter(option => option.donerActualId.toString().toLowerCase().includes(monthlyData.actualIdSearch.toLowerCase()))
+  
+  
 
     const [yearData, setYearData] = useState("");
 
@@ -105,6 +110,7 @@ const MonthlyDonarPaymentList = () => {
         try {
           let getActOrgData = await axios.get(DonarPaymentActualID, { headers });
           let actOrgGet = getActOrgData.data;
+         // console.log("dataact", actOrgGet._listData);
           setListAllId(actOrgGet._listData);
           //setListOrgId(actOrgGet._orgList);
     
@@ -127,37 +133,70 @@ const MonthlyDonarPaymentList = () => {
       // Actual Id Handle change all function for AutoComplete
       
       const [show, setshow] = useState(false)
-  const handleActIdSearchChange = (e) => {
-    if(e.target.value === ""){
-      setshow(false);
-    }else{
+  // const handleActIdSearchChange = (e) => {
+  //   if(e.target.value === ""){
+  //     setshow(false);
+  //   }else{
 
-      setshow(true);
-    }
-    setMonthlyData({
-      ...monthlyData,
-      actualIdSearch: e.target.value
-    });
+  //     setshow(true);
+  //   }
+  //   setMonthlyData({
+  //     ...monthlyData,
+  //     actualIdSearch: e.target.value
+  //   });
+  // }
+  const autocompleteActIdRef = useRef();
+  useEffect(() => {
+      const handleActIdClick = (event) => {
+      if (autocompleteActIdRef.current && !autocompleteActIdRef.current.contains(event.target)) {
+          setShowActIdSuggestions(false)
+      }
+      };
+      document.addEventListener("click", handleActIdClick);
+      return () => {
+      document.removeEventListener("click", handleActIdClick)
+      }
+  }, [])
+
+  const handleActIdChange = e => {
+        setMonthlyData({
+          ...monthlyData,
+          actualIdSearch: e.target.value
+        });
   }
 
 // const handleChange = () => {
 // setshow(true)
 // }
 
-  const handleActIdSearch = (searchTerm, orgVal, donarId) => {
+  // const handleActIdSearch = (searchTerm, orgVal, donarId) => {
+  //   setMonthlyData({
+  //       ...monthlyData,
+  //     actualIdSearch: searchTerm,
+  //     actualIdVal: searchTerm,
+  //     orgIdSearch:orgVal,
+  //     orgIdVal:orgVal,
+  //     donarEnrollmentId: donarId
+      
+  //   });
+  //   setshow(false);
+  //   handleSearchAll(searchTerm, orgVal, donarId);
+    
+  // }
+
+  const handleSuggestionActIdClick = (suggetion) => {
     setMonthlyData({
         ...monthlyData,
-      actualIdSearch: searchTerm,
-      actualIdVal: searchTerm,
-      orgIdSearch:orgVal,
-      orgIdVal:orgVal,
-      donarEnrollmentId: donarId
+      actualIdSearch: suggetion.donerActualId,
+      actualIdVal:suggetion.donerActualId,
+      orgIdSearch:suggetion.organisationalId,
+      orgIdVal:suggetion.organisationalId,
+      donarEnrollmentId:  suggetion.donerEnrollmentId
       
     });
-    setshow(false);
-    handleSearchAll(searchTerm, orgVal, donarId);
-    
-  }
+    handleSearchAll(suggetion.donerActualId, suggetion.donerActualId, suggetion.donerEnrollmentId);
+    setShowActIdSuggestions(false);
+}
   // Actual Id Handle change all function for AutoComplete
 
   const handleGetInfo = async(yearVal)=>{
@@ -349,42 +388,33 @@ const MonthlyDonarPaymentList = () => {
             <h5 className="text_primary text-capitalize">Donar Payment Entry (Individual)</h5>
                 <div className="mb-3 row">
                     <label className="col-md-3 col-form-label">Actual ID</label>
-{/*  */}
-                    <div className='col-md-9'>
-                    <div className='search-container'>
-                    <div className='search-inner'>
-                      <input
-                        type="text"
-                        placeholder="Type Actual ID"
-                        name="actualIdSearch"
-                        onChange={handleActIdSearchChange}
-                        value={monthlyData.actualIdSearch}
-                        autoComplete='off'
-                        style={{ width: "2000px" }}
-                      />
-                    </div>
-                    <div className={show? "dropdown":"d-none"}>
-                      {
-                        listAllId.filter(item => {
-                          const searchTerm = monthlyData.actualIdSearch;
-                          const fullName = item.donerActualId;
-
-                          return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                        }).slice(0, 10)
-                          .map((item) => (
-                            <div
-                              key={item.donerEnrollmentId}
-                              onClick={() => handleActIdSearch(item.donerActualId, item.organisationalId, item.donerEnrollmentId)}
-                              className='dropdown-row'
-                               >
-                              {item.donerActualId}
-                            </div>
-                          ))
-                      }
-                    </div>
-                  </div>
-                  </div>
+                
+                  <div className='col-md-9'>
                   {/*  */}
+                  <div className="autocomplete" ref={autocompleteActIdRef}>
+                                    <input
+                                    value={monthlyData.actualIdSearch}
+                                    onChange={handleActIdChange}
+                                    placeholder="Select Actual Id"
+                                    onFocus={() => setShowActIdSuggestions(true)}
+                                    />
+                                    {showActIdSuggestions && (
+                                    <ul className="suggestions">
+                                        {actIdSuggestions.map(suggestion => (
+                                        <li onClick={() => handleSuggestionActIdClick(suggestion)} key={suggestion.donerEnrollmentId}>
+                                            {suggestion.donerActualId}
+                                        </li>
+                                        ))}
+                                    </ul>
+                                    )}
+
+                                </div>
+                   {/*  */}
+                  </div>
+                              
+                 
+                 
+                   
                     {/* </div> */}
                 </div>
                 <div className="mb-3 row">
