@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
 import { GetUpazilaList,GetMosqueList,GetMosqueCode,SaveMosque,DeleteMosque } from '../../../URL/ApiList';
 import withAuthentication from '../../Protected/withAuthentication';
+import { useNavigate } from 'react-router-dom';
 
 
 const Mosque = () => {
@@ -13,6 +14,7 @@ const Mosque = () => {
   const [upazilaSearch, setUpazilaSearch] = useState("");
   const [listUpazila, setListUpazila] = useState([]);
   const [selectUpaVal, setSelectUpaVal] = useState("");
+  const navigate = useNavigate();
   // upazila autoComplete//// 
 
   const [mosque,setMosque] =useState({
@@ -315,7 +317,7 @@ const Mosque = () => {
         <h3>Mosque</h3>
       </div>
       <div className="row pt-2">
-        <div className="col-md-6">
+        <div className="col-md-12">
           <div className="form card p-3">
             <form action="" className="form-horizontal">
               <div className="mb-3 row">
@@ -428,9 +430,14 @@ const Mosque = () => {
                   />
                 </div>
               </div>
-              <div className="text-end">
+              <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
+              </div>
+              {/* <div className="text-end">
          <button type="button" className="btn btn-sm btn-primary" onClick={(e)=>handleSubmit(e)}>Submit</button>
-         </div>
+         </div> */}
             </form>
           </div>
         </div>
@@ -451,7 +458,7 @@ const Mosque = () => {
               />
             </form>
             <table className="table table-striped table-bordered">
-              <thead>
+              <thead className='bg-success'>
                 <tr>
                 <th> Action</th>
                   <th>Division</th>

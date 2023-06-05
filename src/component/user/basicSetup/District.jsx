@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
 //import Select from 'react-select';
 import withAuthentication from '../../Protected/withAuthentication';
+import { useNavigate } from 'react-router-dom';
 
 
 const District = () => {
@@ -14,6 +15,7 @@ const District = () => {
   const [asearch, setAsearch] = useState("");
   const [listDivision, setListDivision] = useState([]);
   const [selectVal, setSelectVal] = useState("");
+  const navigate = useNavigate();
   // Division autoComplete////
 
   const [listDistrict, setListDistrict] = useState([]);
@@ -423,10 +425,14 @@ const handleSuggestionClick = (suggetion) => {
                 </div>
               </div>
 
-
-              <div className="text-end">
-                <button type="button" className="btn btn-sm btn-primary" onClick={(e)=> handleSubmit(e)}>Submit</button>
+              <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
               </div>
+              {/* <div className="text-end">
+                <button type="button" className="btn btn-sm btn-primary" onClick={(e)=> handleSubmit(e)}>Submit</button>
+              </div> */}
 
             </form>
           </div>
@@ -435,7 +441,7 @@ const handleSuggestionClick = (suggetion) => {
       </div>
 
       <div className="row pt-4">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
@@ -449,7 +455,7 @@ const handleSuggestionClick = (suggetion) => {
               />
             </form>
             <table className="table table-striped table-bordered">
-              <thead>
+              <thead className="bg-success">
                 <tr>
                   <th> Action</th>
                   <th>Division</th>

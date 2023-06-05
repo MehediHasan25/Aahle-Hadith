@@ -12,7 +12,8 @@ html{
   font-size: 14px;
 }
 body{
-  background: #f1f3f6 !important;
+  /* background: #f1f1f1 !important; */
+  background: #dfe9f5 !important;
 }
 a{
   text-decoration: none !important;
@@ -122,10 +123,16 @@ height: 100%;
 padding-top: 69px;
 /* position: relative; */
 }
+.pg_title{
+  text-align: center;
+}
 .form.card {
   border-top: 4px solid #2196F3;
-  max-width: 700px;
+  max-width: 900px;
   margin: auto;
+}
+.form-tbl{
+margin: 0 auto;
 }
 .search-container {
   width: initial;
@@ -160,8 +167,8 @@ padding-top: 69px;
   /* background: #555; */
 }
 .form button{
-width: 150px;
-margin: 0 auto;
+width:auto;
+margin:5px;
 }
 table  .act_icon{
   display: flex;
@@ -292,6 +299,7 @@ input:focus {
   background-color: #f7f7f7;
   border-radius:10px;
   position: absolute;
+  z-index: 999;
   width: -webkit-fill-available;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;

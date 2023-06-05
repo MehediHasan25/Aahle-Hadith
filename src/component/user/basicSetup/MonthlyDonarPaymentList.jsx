@@ -6,8 +6,10 @@ import { GetDonationAmtList,DonarPaymentActualID,getMonthlyDonarPaymentList,Save
 import { year } from '../../../../Utils/EnrollmentData';
 import { ValueSetToDataList,ProcessSaveOutput } from '../../../../Utils/MonthlyPayment';
 import withAuthentication from '../../Protected/withAuthentication';
+import { useNavigate } from 'react-router-dom';
 
 const MonthlyDonarPaymentList = () => {
+  const navigate = useNavigate();
     const [listAllId, setListAllId] = useState([]);
     const [monthlyData, setMonthlyData] = useState({
         actualIdSearch: "",
@@ -382,7 +384,7 @@ const MonthlyDonarPaymentList = () => {
   return (
     <div className="page-content p-3">
         <div className="row">
-        <div className="col-md-7">
+        <div className="col-md-12">
         <form action="">
             <div className="form card shadow p-3">
             <h5 className="text_primary text-capitalize">Donar Payment Entry (Individual)</h5>
@@ -501,11 +503,15 @@ const MonthlyDonarPaymentList = () => {
                         </tbody>
                     </table>
                 </div>
+                <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={handleSubmit}>Save</button>
+              </div>
 
-                <div className="d-flex gap-2 mt-4">
+                {/* <div className="d-flex gap-2 mt-4">
                         <button className="btn btn-success w-auto m-0" onClick={handleSubmit}>Save</button>
-                        {/* <button className="btn btn-warning w-auto  m-0">Update</button> */}
-                </div>
+                </div> */}
             </div>
              </form>
             </div>

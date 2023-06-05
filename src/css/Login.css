@@ -20,10 +20,13 @@ box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 h1{
 font-size: 2rem;
-color: #07001f;
+color: #303778;
 }
 p{
 margin-bottom: 1.2rem;
+}
+.form {
+  padding: 10px 20px;
 }
 .login{
   animation: slide-up 0.5s ease;
@@ -78,7 +81,7 @@ color: #fff;
 cursor: pointer;
 }
 button:hover{
-background: rgba(122, 30, 30, 0.767);
+background: #646a9f;
 }
 .or{
 font-size: 0.8rem;

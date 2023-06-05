@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
 import { GetDivisionList,GetDistrictList,GetUpazilaList,GetUpazilaCode,SaveUpazila,DeleteUpazila } from '../../../URL/ApiList';
 import withAuthentication from '../../Protected/withAuthentication';
+import { useNavigate } from 'react-router-dom';
 
 
 const Upazila = () => {
@@ -13,6 +14,7 @@ const Upazila = () => {
    const [divSearch, setDivSearch] = useState("");
    const [listDivision, setListDivision] = useState([]);
    const [selectDivVal, setSelectDivVal] = useState("");
+   const navigate = useNavigate();
    // Division autoComplete////
  
    // District autoComplete////
@@ -394,7 +396,7 @@ const handleDelete = async(id) =>{
       <h3>Upazila</h3>
     </div>
     <div className="row pt-2">
-      <div className="col-md-6">
+      <div className="col-md-12">
         <div className="form card p-3">
           <form action="" className="form-horizontal">
           <div className="mb-3 row">
@@ -571,15 +573,20 @@ const handleDelete = async(id) =>{
                 />
               </div>
             </div>
-            <div className="text-end">
+            <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
+              </div>
+            {/* <div className="text-end">
          <button type="button" className="btn btn-sm btn-primary" onClick={(e)=>handleSubmit(e)}>Submit</button>
-         </div>
+         </div> */}
           </form>
         </div>
       </div>
     </div>
     <div className="row pt-4">
-    <div className="col-md-8">
+    <div className="col-md-12">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
@@ -593,7 +600,7 @@ const handleDelete = async(id) =>{
               />
             </form>
             <table className="table table-striped table-bordered">
-              <thead>
+              <thead className="bg-success">
                 <tr>
                   <th> Action</th>
                   <th>Division</th>

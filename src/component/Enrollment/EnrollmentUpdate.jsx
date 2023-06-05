@@ -22,6 +22,7 @@ const EnrollmentUpdate = () => {
     OrgIdVal: ""
   });
 
+
   // ACT ID state
   const [showAccIdSuggestions, setShowAccIdSuggestions] = useState(false);
   const accIdSuggestions = listActualId.filter(option => option.display.toLowerCase().includes(selectAutoActualVal.actualIdSearch.toLowerCase()))
@@ -311,7 +312,7 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
       </div>
 
       <div className="row pt-2">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="form card p-3">
             <form action="" className="form-horizontal">
               <div className="mb-3 row">
@@ -436,9 +437,15 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
                   {/*  */}
                 </div>
               </div>
-              <div className="text-end">
-                <button type="button" className="btn btn-sm btn-primary" onClick={handleSearchSubmit}>Search</button>
+
+              <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={handleSearchSubmit}>Search</button>
               </div>
+              {/* <div className="text-end">
+                <button type="button" className="btn btn-sm btn-primary" onClick={handleSearchSubmit}>Search</button>
+              </div> */}
             </form>
           </div>
         </div>
@@ -446,7 +453,7 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
       </div>
 
       <div className="row pt-4">
-        <div className="col-md-8">
+        <div className="col-md-12">
 
           <div className="table form-tbl">
             <form className="d-flex w-50">
@@ -463,7 +470,7 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
 
 
             <table className="table table-striped table-bordered">
-              <thead>
+              <thead  className="bg-success">
                 <tr>
                   <th> Action</th>
                   <th>Donar Enrollemnt Id</th>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { GetDivisionCode, GetDivisionList, SaveDivision,DeleteDivision } from "../../../URL/ApiList";
 import withAuthentication from "../../Protected/withAuthentication";
-
+import { useNavigate } from "react-router-dom";
 
 const Division = () => {
   const [division, setDivision] = useState({
@@ -20,6 +20,7 @@ const Division = () => {
   const [search, setSearch] = useState("");
   const [track, setTrack] = useState(false);
   const [codeDivision, setCodeDivision]= useState("");
+  const navigate = useNavigate();
   //const [divTrack, setDivTrack]= useState(false);
 
   useEffect(() => {
@@ -222,7 +223,7 @@ const Division = () => {
       </div>
 
       <div className="row pt-2">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="form card p-3">
             <form action="" className="form-horizontal">
               <div className="mb-3 row">
@@ -269,8 +270,10 @@ const Division = () => {
                   />
                 </div>
               </div>
-              <div className="text-end">
-                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
+              <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
               </div>
             </form>
           </div>
@@ -279,7 +282,7 @@ const Division = () => {
       </div>
 
       <div className="row pt-4">
-        <div className="col-md-8">
+        <div className="col-md-12">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input

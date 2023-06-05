@@ -4,8 +4,10 @@ import axios from 'axios';
 import { GetDonationAmtList, GetActualIdandOrgId, DonarPaymentActualID, DonarPaymentSave } from '../../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
 import withAuthentication from '../../Protected/withAuthentication';
+import { useNavigate } from 'react-router-dom';
 
 const DonarPayment = () => {
+    const navigate = useNavigate();
     const [donationData, setDonationData] = useState({
         DonarPaymentId: "",
         DonationMonth: "",
@@ -460,17 +462,21 @@ const DonarPayment = () => {
                                     />
                                 </div>
                             </div>
+                            <div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={handleSubmit}>Save</button>
+              </div>
                         </div>
                             
                             
                             
                             
                            
-                          
+{/*                           
                             <div className="d-flex gap-2 mt-4">
                                 <button className="btn btn-success w-auto m-0" onClick={handleSubmit}>Save</button>
-                                {/* <button className="btn btn-warning w-auto  m-0">Update</button> */}
-                            </div>
+                            </div> */}
                         </div>
 
                     </form>

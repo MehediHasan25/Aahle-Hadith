@@ -842,7 +842,7 @@ const EnrollmentFormPage = () => {
 
             {/* <div className="form card p-3"> */}
             <form action="">
-                <div className="form card shadow p-3">
+                <div className="form card shadow p-3 col-md-12">
                     <h5 className="text_primary text-uppercase">Personal Information</h5>
                     <div className="row pt-3">
                         <div className="col-md-4">
@@ -1289,7 +1289,6 @@ const EnrollmentFormPage = () => {
 
                         </div>
 
-                    </div>
                     <div className="col-md-6">
                         <div className="">
                             <label className="form-label">
@@ -1354,6 +1353,7 @@ const EnrollmentFormPage = () => {
 
 
                         </div>
+                    </div>
                     </div>
                 </div>
 
@@ -1525,11 +1525,17 @@ const EnrollmentFormPage = () => {
 
 
                     }
+
+<div className="text-center">
+                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
+              </div>
                 </div>
-                <div className="d-flex gap-3 justify-content-center mt-4">
+
+                {/* <div className="d-flex gap-3 justify-content-center mt-4">
                     <button className="btn btn-success w-auto" onClick={handleSubmit}>Save</button>
-                    {/* <button className="btn btn-warning w-auto">Update</button> */}
-                </div>
+                </div> */}
             </form>
 
 

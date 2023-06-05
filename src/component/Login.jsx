@@ -93,7 +93,7 @@ const Login = () => {
       <div className="wrapper login">
         <h1>Sign In</h1>
         <p>Welcome back you've <br /> been missed!</p>
-        <form>
+        <form className="form">
 
           <input
             type="text"

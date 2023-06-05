@@ -1,6 +1,8 @@
 import { FaTh, FaRegChartBar, FaCommentAlt, FaUser } from "react-icons/fa";
 import { BiImageAdd,BiHomeAlt } from "react-icons/bi";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { AiOutlineFileText,AiOutlineUser } from "react-icons/ai";
+
 
 const menu = [
   {
@@ -10,7 +12,7 @@ const menu = [
   },
   {
     title: "Basic Setup",
-    icon: <FaUser />,
+    icon: <AiOutlineUser />,
     childrens: [
       {
         title: "Division",
@@ -67,7 +69,7 @@ const menu = [
   },
   {
     title: "Reports ",
-    icon: <RiMoneyDollarCircleLine />,
+    icon: <AiOutlineFileText />,
     childrens: [      
       {
         title: "Upazila Name Report",
@@ -115,11 +117,11 @@ const menu = [
   //     },
   //   ],
   // },
-  {
-    title: "Report Bug",
-    icon: <FaCommentAlt />,
-    path: "/contact-us",
-  },
+  // {
+  //   title: "Report Bug",
+  //   icon: <FaCommentAlt />,
+  //   path: "/contact-us",
+  // },
 ];
 
 export default menu;
