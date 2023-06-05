@@ -25,8 +25,29 @@ color: #07001f;
 p{
 margin-bottom: 1.2rem;
 }
+.login{
+  animation: slide-up 0.5s ease;
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(-5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes slide-down {
+  0% {
+    transform: translateY(5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 form input{
-width: 85%;
+/* width: 85%; */
 outline: none;
 border: none;
 background: #dfe9f5;
@@ -51,7 +72,8 @@ border-radius: 5px;
 outline: none;
 border: none;
 width: 85%;
-background: tomato;
+/* background: tomato; */
+background-color: #303778;
 color: #fff;
 cursor: pointer;
 }

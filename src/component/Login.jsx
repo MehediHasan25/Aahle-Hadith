@@ -90,7 +90,7 @@ const Login = () => {
 
   return (
     <div id='Login'>
-      <div className="wrapper">
+      <div className="wrapper login">
         <h1>Sign In</h1>
         <p>Welcome back you've <br /> been missed!</p>
         <form>

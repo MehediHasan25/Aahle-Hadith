@@ -122,8 +122,10 @@ height: 100%;
 padding-top: 69px;
 /* position: relative; */
 }
-.form.card{
+.form.card {
   border-top: 4px solid #2196F3;
+  max-width: 700px;
+  margin: auto;
 }
 .search-container {
   width: initial;
@@ -262,9 +264,10 @@ a {
 /* New Auto Complete */
 
 .autocomplete {
-  width: 500px;
-  border: 1px solid #d4d4d4;
+  /* width: 500px; */
+  /* border: 1px solid #d4d4d4; */
   border-radius: 10px;
+  position: relative;
 }
 
 .autocomplete input {
@@ -272,7 +275,7 @@ a {
   border: none;
   margin: 10px 0;
   font-size: 16px;
-  padding: 10px 10px 0 10px;
+  /* padding: 10px 10px 0 10px; */
 }
 
 input:focus {
@@ -285,9 +288,15 @@ input:focus {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid #d4d4d4;
+  border: 1px solid #d4d4d4;
   background-color: #f7f7f7;
-  border-radius: 0 0 10px 10px;
+  border-radius:10px;
+  position: absolute;
+  width: -webkit-fill-available;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  -ms-border-radius:10px;
+  -o-border-radius:10px;
 }
 
 .suggestions li {

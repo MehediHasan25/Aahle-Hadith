@@ -24,7 +24,7 @@ p{
   margin-bottom: 1.7rem;
 }
 form input{
-  width: 85%;
+  /* width: 85%; */
   outline: none;
   border: none;
   background: #dfe9f5;
@@ -41,7 +41,7 @@ form input{
   text-decoration: none;
   color: #07001f;
 }
-button{
+/* button{
   font-size: 1.1rem;
   margin-top: 1rem;
   padding: 8px 0;
@@ -55,7 +55,7 @@ button{
 }
 button:hover{
   background: rgba(122, 30, 30, 0.767);
-}
+} */
 .or{
   font-size: 0.8rem;
   margin-top: 1.5rem;
