@@ -23,9 +23,16 @@ import toast, { Toaster } from 'react-hot-toast';
 import DonarPayment from './component/user/basicSetup/DonarPayment';
 import DonarPaymentList from './component/user/basicSetup/MonthlyDonarPaymentList';
 import PrivateRoute from './component/Protected/PrivateRoute';
+import UpazilaNameReport from './component/ReportComponent/UpazilaNameReport';
+import MosqueNameReport from './component/ReportComponent/MosqueNameReport';
+
+
 import Hello from './component/hello';
+
+//import PDdown from './component/TestFolder/PDdown';
 //import PDFConverter from './component/TestFolder/PDFConverter';
 //import PDF2 from './component/TestFolder/PDF2';
+
 
 function App() {
 
@@ -51,6 +58,8 @@ function App() {
           <Route exact path="/donation-amount" element={<MainLayout><DonationAmount /></MainLayout>} />
           <Route exact path="/donar-payment" element={<MainLayout><DonarPayment /></MainLayout>} />
           <Route exact path="/donar-payment-list" element={<MainLayout><DonarPaymentList /></MainLayout>} />
+          <Route exact path="/upazila-name-rpt" element={<MainLayout><UpazilaNameReport /></MainLayout>} />
+          <Route exact path="/mosque-name-rpt" element={<MainLayout><MosqueNameReport /></MainLayout>} />
         </Route>
 
       </Routes>

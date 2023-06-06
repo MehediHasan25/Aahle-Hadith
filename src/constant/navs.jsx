@@ -81,7 +81,7 @@ const menu = [
       },
       {
         title: "Mosque Name Report",
-        path: "/upazila-payment-rpt",
+        path: "/mosque-name-rpt",
       },
       {
         title: "Month Wise Payment Details",

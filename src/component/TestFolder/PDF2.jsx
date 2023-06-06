@@ -32,7 +32,7 @@ const  PDF2 =()=>{
     ];
 
     // Table columns
-    const tableColumns = ['Name', 'Age'];
+    const tableColumns = ["SL",'Name', 'Age'];
 
     // Table options
     const tableOptions = {
@@ -40,7 +40,7 @@ const  PDF2 =()=>{
     };
 
     // Generate table data
-    const tableRows = tableData.map((row) => [row.name, row.age]);
+    const tableRows = tableData.map((row,index) => [index+1,row.name, row.age]);
 
     // Generate table
     doc.autoTable({

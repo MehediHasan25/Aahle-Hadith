@@ -65,6 +65,12 @@ export const DonarPaymentSave = hostIp + `api/v1/DonarPaymentEntry/donarpayment-
 export const getMonthlyDonarPaymentList = hostIp + `api/v1/DonarPaymentEntry/donAmtPayEntry-list/?`;
 export const SaveMonthlyDonarPaymentList = hostIp + `api/v1/DonarPaymentEntry/donpayEntry-Listsave`;
 
+// Upazila Name List Report
+export const GetReportUpazilaNameList = hostIp + `api/v1/Report/upazila-list?`;
+
+// Mosque Name List Report 
+export const GetReportMosqueNameList = hostIp + `api/v1/Report/mosque-list?`;
+
 
 
 
