@@ -71,6 +71,9 @@ export const GetReportUpazilaNameList = hostIp + `api/v1/Report/upazila-list?`;
 // Mosque Name List Report 
 export const GetReportMosqueNameList = hostIp + `api/v1/Report/mosque-list?`;
 
+// Donar Enrollment List Report 
+export const GetDonarEnrollmentList = hostIp + `api/v1/Report/enroll-list?`;
+
 
 
 

@@ -25,11 +25,13 @@ import DonarPaymentList from './component/user/basicSetup/MonthlyDonarPaymentLis
 import PrivateRoute from './component/Protected/PrivateRoute';
 import UpazilaNameReport from './component/ReportComponent/UpazilaNameReport';
 import MosqueNameReport from './component/ReportComponent/MosqueNameReport';
+import DonarEnrollmentListReport from './component/ReportComponent/DonarEnrollmentListReport';
+import UpazilaWisePaymentReport from './component/ReportComponent/UpazilaWisePaymentReport';
 
 
 import Hello from './component/hello';
 
-//import PDdown from './component/TestFolder/PDdown';
+//import PDFdown from './component/TestFolder/PDFdown';
 //import PDFConverter from './component/TestFolder/PDFConverter';
 //import PDF2 from './component/TestFolder/PDF2';
 
@@ -60,6 +62,8 @@ function App() {
           <Route exact path="/donar-payment-list" element={<MainLayout><DonarPaymentList /></MainLayout>} />
           <Route exact path="/upazila-name-rpt" element={<MainLayout><UpazilaNameReport /></MainLayout>} />
           <Route exact path="/mosque-name-rpt" element={<MainLayout><MosqueNameReport /></MainLayout>} />
+          <Route exact path="/donar-enroll-rpt" element={<MainLayout><DonarEnrollmentListReport /></MainLayout>} />
+          <Route exact path="/upazila-payment-rpt" element={<MainLayout><UpazilaWisePaymentReport /></MainLayout>} />
         </Route>
 
       </Routes>

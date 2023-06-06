@@ -89,7 +89,7 @@ const menu = [
       },
       {
         title: "Donar Enrollment List Report",
-        path: "/donar-rpt",
+        path: "/donar-enroll-rpt",
       }
       
     ],

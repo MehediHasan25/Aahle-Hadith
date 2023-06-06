@@ -1,37 +1,36 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
-const withAuthentication = (WrappedComponent) => {
-  const EnhancedComponent = (props) => {
+
+export function isTokenExpired(token) {
+  if (!token) {
+    return true; // Token is not provided
+  }
+
+  const decodedToken = jwtDecode(token); // Decode the token (implementation depends on your token format)
+  const currentTime = Date.now() / 1000; // Get the current time in seconds
+
+  return decodedToken.exp < currentTime; // Compare expiration time with current time
+}
+
+const withAuthentication = (Component) => {
+  const WrappedComponent = (props) => {
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        navFunc();
-    },[]);
+    useEffect(() => {
+      const token = localStorage.getItem('AuthToken');
+      if (token && isTokenExpired(token)) {
+        localStorage.removeItem('AuthToken'); // Remove token from local storage
+        localStorage.removeItem('userName'); // Remove userName from local storage
+        navigate('/'); // Redirect to the login page
+      }
+    }, []);
 
-    const navFunc = () =>{
-          // Check for token in your preferred storage (e.g., cookies, local storage)
-    const token = localStorage.getItem('AuthToken');
-    // console.log("tokencall1",token);
-
-    if (!token ) {
-         console.log("tokenCall2", token);
-      // No token found, initiate logout
-      // Clear any user data and redirect to logout or login page
-      localStorage.removeItem('AuthToken');
-      // Additional cleanup if needed (e.g., clear user profile data)
-      navigate('/'); // Redirect to logout or login page
-      return null; // Render nothing until the redirect occurs
-    }
-    }
-
-    
-
-    return <WrappedComponent {...props} />;
+    return <Component {...props} />;
   };
 
-  return EnhancedComponent;
+  return WrappedComponent;
 };
 
 export default withAuthentication;

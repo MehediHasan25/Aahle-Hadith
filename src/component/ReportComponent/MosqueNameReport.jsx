@@ -18,7 +18,7 @@ const MosqueNameReport = () => {
     const [listUpazila, setListUpazila] = useState([]);
     const [listMosque, setListMosque] = useState([]);
     const [mosqueReport,setMosqueReport] =useState({
-        ReportName: "",
+        ReportName: "Mosque Name Report",
         DistrictId: "",
         DivisionId: "",
         DivisionNameEn:"",
@@ -225,7 +225,7 @@ useEffect(() => {
 const handleUpaChange = e => {
    setMosqueReport({
     ...mosqueReport,
-    upazilaNameEn:e.target.valeu
+    upazilaNameEn:e.target.value
    });
 }
 
@@ -245,23 +245,82 @@ const handleUpaSuggestionClick = (suggetion) => {
 // Submit button
 const handleSubmit = async(e) =>{
     e.preventDefault();
-    const {DistrictId,DivisionId,upazilaId} = mosqueReport;
-    console.log("Submit Mosque Report Data");
+    const {ReportName,DistrictId,DivisionId,upazilaId,DivisionNameEn,DistrictNameEn,upazilaNameEn} = mosqueReport;
+   // console.log("Submit Mosque Report Data");
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
 
+    let divisionArr = listDivision.map(item => item.divisionNameEn);
+    let districtArr = listDistrict.map(item => item.districtNameEn);
+    let upazilaArr = listUpazila.map(item=> item.upazilaNameEn);
+
+    /////////////////////validation /////////////////////////////////////
+    if(ReportName === ""){
+        toast.error('Please Select Report Name',{duration: 4000,position: 'top-center'}); 
+        return;
+    }
+
+    if(DivisionNameEn === ""){
+        toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
+        return;
+    }
+
+     if(divisionArr.includes(DivisionNameEn) === false){
+        toast.error('Invalid Division Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+
+     if(DistrictNameEn === ""){
+        toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+
+     if(districtArr.includes(DistrictNameEn) === false){
+        toast.error('Invalid District Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+
+     if(upazilaNameEn === ""){
+        toast.error('Please Select Name of Upazila',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+
+     if(upazilaArr.includes(upazilaNameEn)=== false){
+        toast.error('Invalid Upazila Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+    /////////////////////validation /////////////////////////////////////
+
+
+
+
+
     let apiParams =`DistrictId=${DistrictId}&DivisionId=${DivisionId}&UpazilaId=${upazilaId}`;
-    console.log("MosqueParams", apiParams);
+   // console.log("MosqueParams", apiParams);
 
 
     try{
      let savMosqueData = await axios.get(GetReportMosqueNameList+apiParams,{headers});
-     console.log("savMosque", savMosqueData.data);
+    // console.log("savMosque", savMosqueData.data);
      let getMosqueData = savMosqueData.data;
 
      if(getMosqueData.success === true){
         setListMosque(getMosqueData._mosqueList);
         PdfMosqueDownload(getMosqueData._mosqueList);
+
+       setMosqueReport({
+            DistrictId: "",
+            DivisionId: "",
+            DivisionNameEn:"",
+            DistrictNameEn: "",
+            upazilaId:"",
+            upazilaNameEn:""
+        });
+        toast.success('Request Successfull!',{duration: 4000,position: 'top-center'}); 
+
+     }else{
+        toast.error('No Data Found For PDF',{duration: 4000,position: 'top-center'}); 
+
      }
 
     }catch(err){
@@ -282,7 +341,7 @@ const handleSubmit = async(e) =>{
 // Submit button
 
 
-const PdfDownloadFunc = (data) => {
+const PdfMosqueDownload = (data) => {
     // console.log("InsidePdfFunction", data);
      const { ReportName } = mosqueReport;
 
@@ -327,9 +386,9 @@ const PdfDownloadFunc = (data) => {
          startY: 45,
      };
 
-     let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
+     //let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
      // Generate table data
-     const tableRows = tableFormat.map((row, index) => [index + 1, row.divisionNameEn, row.districtNameEn, row.upazilaNameEn,row.mosqueNameEn]);
+     const tableRows = tableData.map((row, index) => [index + 1, row.divisionNameEn, row.districtNameEn, row.upazilaNameEn,row.mosqueNameEn]);
 
 
      // Configure the autotable plugin for cell border remove
@@ -381,7 +440,7 @@ const PdfDownloadFunc = (data) => {
                                 </label>
                                 <div className="col-md-8">
 
-                                    <select value={mosqueReport.ReportName} className="form-select" name="ReportName" aria-label="Default select example" onChange={handleReportNameChange}>
+                                    <select value={mosqueReport.ReportName} className="form-select" name="ReportName" aria-label="Default select example" onChange={handleReportNameChange} disabled>
                                         <option value="">---Select----</option>
                                         {reportName.map((item) => (
                                             <option key={item.id} value={item.nameOfReport}>{item.nameOfReport}</option>
@@ -499,4 +558,4 @@ const PdfDownloadFunc = (data) => {
   )
 }
 
-export default MosqueNameReport
+export default withAuthentication(MosqueNameReport);

@@ -20,7 +20,7 @@ const UpazilaNameReport = () => {
 
     const [listDistrict, setListDistrict] = useState([]);
     const [district, setDistrict] = useState({
-        ReportName: "",
+        ReportName: "Upazila Name Report",
         DistrictId: "",
         DivisionId: "",
         DistrictNameEn: "",
@@ -180,13 +180,19 @@ const UpazilaNameReport = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { DistrictId, DistrictNameEn } = district;
+        const {ReportName, DistrictId, DistrictNameEn } = district;
 
         let token = localStorage.getItem("AuthToken");
         const headers = { 'Authorization': 'Bearer ' + token };
 
         let divisionArr = listDivision.map(item => item.divisionNameEn);
         let districtArr = listDistrict.map(item => item.districtNameEn);
+
+        if(ReportName === ""){
+            toast.error('Please Select Report Name', { duration: 5000, position: 'top-center' });
+            return;
+        }
+
 
         if (asearch === "") {
             toast.error('Please Select Name of  Division', { duration: 5000, position: 'top-center' });
@@ -199,7 +205,7 @@ const UpazilaNameReport = () => {
         }
 
         if (DistrictNameEn === "") {
-            toast.error('Please Select Name of District (English)', { duration: 5000, position: 'top-center' });
+            toast.error('Please Select Name of District', { duration: 5000, position: 'top-center' });
             return;
         }
 
@@ -214,12 +220,28 @@ const UpazilaNameReport = () => {
 
         try {
             let upaData = await axios.get(GetReportUpazilaNameList + apiParams, { headers });
-            //console.log("UpaDataList", upaData.data);
+            console.log("UpaDataList", upaData.data);
             let savUpaData = upaData.data;
 
             if (savUpaData.success === true) {
                 setPdfUpaList(savUpaData._upazilaList);
                 PdfDownloadFunc(savUpaData._upazilaList);
+
+                setAsearch("");
+                setSelectVal("");
+                setDistrict({
+                    ...district,
+                    DistrictId: "",
+                    DivisionId: "",
+                    DistrictNameEn: "",
+                    DistrictNameBn: "",
+                    DistrictCode: "",
+                    AddedBy: localStorage.getItem('userName')
+                });
+
+                toast.success('Request Successfull!',{duration: 4000,position: 'top-center'}); 
+            }else{
+                toast.error('No Data Found For PDF',{duration: 4000,position: 'top-center'}); 
             }
 
         } catch (err) {
@@ -284,9 +306,10 @@ const UpazilaNameReport = () => {
             startY: 45,
         };
 
-        let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
+      //  let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
         // Generate table data
-        const tableRows = tableFormat.map((row, index) => [index + 1, row.divisionNameEn, row.districtNameEn, row.upazilaNameEn]);
+        const tableRows = tableData.map((row, index) => [index + 1, row.divisionNameEn, row.districtNameEn, row.upazilaNameEn]);
+        console.log("tableRows", tableRows);
 
 
         // Configure the autotable plugin for cell border remove
@@ -318,17 +341,7 @@ const UpazilaNameReport = () => {
 
         // Save the PDF
        doc.save(`${ReportName}.pdf`);
-
-//       const pdfDataUri = doc.output('file:///C:/Users/User/Downloads/Upazila%20Name%20Report%20(53).pdf');
-
-//   // Create a link element
-//   const link = document.createElement('a');
-//   link.href = pdfDataUri;
-//   link.download = 'sample.pdf';
-
-//   // Trigger the download
-//   link.click();
-
+      // Save the PDF as a Blob
     }
 
 
@@ -347,7 +360,7 @@ const UpazilaNameReport = () => {
                                 </label>
                                 <div className="col-md-8">
 
-                                    <select value={district.ReportName} className="form-select" name="ReportName" aria-label="Default select example" onChange={handleReportNameChange}>
+                                    <select value={district.ReportName} className="form-select" name="ReportName" aria-label="Default select example" onChange={handleReportNameChange} disabled>
                                         <option value="">---Select----</option>
                                         {reportName.map((item) => (
                                             <option key={item.id} value={item.nameOfReport}>{item.nameOfReport}</option>
