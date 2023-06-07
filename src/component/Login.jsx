@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/Login.css';
+// import '../css/Login.css';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from "react-router-dom";
 import { LoginAPI } from '../URL/ApiList';
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 
 
 
-const Login = () => {
+const Login = ({toggleBtn}) => {
   const [inputState, setInputState] = useState({
     userName: '',
     password: ""
@@ -89,11 +89,11 @@ const Login = () => {
   }
 
   return (
-    <div id='Login'>
-      <div className="wrapper login">
+    // <div id='Login'>
+      <div className="wrapper form">
         <h1>Sign In</h1>
         <p>Welcome back you've <br /> been missed!</p>
-        <form className="form">
+        <form className="">
 
           <input
             type="text"
@@ -111,10 +111,10 @@ const Login = () => {
             value={inputState.password}
             autoComplete='off'
           />
-
-          <p className="recover">
-            <a href="#">Recover Password</a>
-          </p>
+{/* 
+          <p className="recover mt-1">
+            <a href="#">Forgot your Password</a>
+          </p> */}
 
         </form>
         <button onClick={(e) => handleSubmit(e)}>Sign In</button>
@@ -127,10 +127,10 @@ const Login = () => {
             <i className="fab fa-facebook"></i>
           </div> */}
         <div className="not-member">
-          Not a member? <Link to="/register">Register Now</Link>
+          Not a member? <small><Link to="/" onClick={toggleBtn}>Register Now</Link></small>
         </div>
       </div>
-    </div>
+    // </div>
 
 
   )

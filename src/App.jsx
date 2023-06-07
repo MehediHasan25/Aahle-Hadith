@@ -30,8 +30,7 @@ import UpazilaWisePaymentReport from './component/ReportComponent/UpazilaWisePay
 
 
 import Hello from './component/hello';
-
-//import PDFdown from './component/TestFolder/PDFdown';
+import AuthLayout from './component/AuthLayout';
 //import PDFConverter from './component/TestFolder/PDFConverter';
 //import PDF2 from './component/TestFolder/PDF2';
 
@@ -42,9 +41,10 @@ function App() {
     <>
 
       <Routes>
-        <Route exact path="/" element={<Login />} />
-        <Route exact path="/register" element={<Register />} />
+        {/* <Route exact path="/" element={<Login />} /> */}
+        {/* <Route exact path="/register" element={<Register />} /> */}
         <Route exact path="/hello" element={<Hello />} />
+        <Route exact path="/" element={<AuthLayout />} />
 
         <Route element={<PrivateRoute/>}>
           <Route exact path="/details" element={<Details />} />

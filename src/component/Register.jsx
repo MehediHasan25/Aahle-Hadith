@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '../css/Register.css';
+// import '../css/Register.css';
 import { Link } from 'react-router-dom';
 import { RegisterAPI } from '../URL/ApiList';
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
 
-const Register = () => {
+const Register = ({toggleBtn}) => {
   const [inputState, setInputState] = useState({
     userName: '',
     email: '',
@@ -109,9 +109,9 @@ const Register = () => {
 
   return (
     <div id="Register">
-      <div className="wrapperRegister">
-        <h1>Sign Up</h1>
-        <form className="form">
+      <div className="wrapperRegister form">
+        <h1>Create Account</h1>
+        <form className="">
           <input
             type="text"
             placeholder="Enter username"
@@ -179,7 +179,7 @@ const Register = () => {
                 <i className="fab fa-facebook"></i>
               </div> */}
         <div className="not-member">
-          already a member? <Link to="/">Sign In</Link>
+          Already a member? <small><Link to="/" onClick={toggleBtn}>Sign In</Link></small>
         </div>
       </div>
     </div>

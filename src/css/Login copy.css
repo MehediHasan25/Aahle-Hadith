@@ -27,7 +27,7 @@ margin-bottom: 1.2rem;
   padding: 10px 20px;
 }
 .login{
-  animation: slide-up 0.5s ease;
+  /* animation: slide-up 0.5s ease; */
 }
 
 @keyframes slide-up {

@@ -5,16 +5,27 @@ import { Link, NavLink } from 'react-router-dom'
 
 const SidebarItem = ({item}) => {
     const [open, setopen] = useState(false)
+  //   const [active, setActive] = useState(false);
+  // const handleClick = () => {
+  //   const url = window.location.href;
+  //   console.log(url);
+  //   setActive(!active);
+  // };
+  // const url = window.location.href;
+  // console.log(url);
+  // if(url === item.path){
+  //   const activeLink = ({ isActive }) => (isActive ? `active` : "");
+  // }
   return (
     <div className={open ? "sidebar-item open":"sidebar-item"}>
       {
         item.childrens? <div className="sidebar-title" onClick={()=>setopen(!open)}>
-          <Link to={item.path}>
+          <NavLink >
           <span className="icon">
             {item.icon}
             <span className='title'>{item.title}</span>       
         </span>
-          </Link>
+          </NavLink>
         
         <div className="arrow-icon toggle_btn" onClick={()=>setopen(!open)}>
             <MdKeyboardArrowRight  size={25} color="white"/>
@@ -22,12 +33,12 @@ const SidebarItem = ({item}) => {
     </div> : 
     
     <div className="sidebar-title">
-        <Link to={item.path}>
+        <NavLink to={item.path}>
           <span className="icon">
             {item.icon}
             <span className='title'>{item.title}</span>       
         </span>
-          </Link>
+          </NavLink>
     </div>
       }
         
