@@ -74,6 +74,12 @@ export const GetReportMosqueNameList = hostIp + `api/v1/Report/mosque-list?`;
 // Donar Enrollment List Report 
 export const GetDonarEnrollmentList = hostIp + `api/v1/Report/enroll-list?`;
 
+// Month Wise Payment Report
+export const GetMonthWisePaymentReport = hostIp + `api/v1/Report/monthwise-payment-list?`;
+
+// Upazila Wise Payment Report 
+export const GetUpazilaWisePaymentReport = hostIp+ `api/v1/Report/upazilawise-payment-list?`
+
 
 
 

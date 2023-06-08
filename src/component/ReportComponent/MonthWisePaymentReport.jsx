@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { GetDivisionList, GetDistrictList, GetUpazilaList, GetMosqueList } from '../../URL/ApiList';
+import { GetDivisionList, GetDistrictList, GetUpazilaList, GetMosqueList,GetMonthWisePaymentReport } from '../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
 //import '../../../css/AutoComplete.css';
 import { reportName } from '../../../Utils/ReportName';
@@ -15,6 +15,8 @@ const MonthWisePaymentReport = () => {
     const [listDistrict, setListDistrict] = useState([]);
     const [listUpazila, setListUpazila] = useState([]);
     const [listMosque, setListMosque] = useState([]);
+    const [monthPay, setMonthPay] = useState([]);
+    const [discount, setDiscount] = useState("20");
     const [monthPayement, setMonthPayement] = useState({
         ReportName: "Month Wise Payment Report",
         DivisionId: "",
@@ -353,7 +355,7 @@ const handleYearMonthSearch = (e)=>{
  //////////////////////////////Submit button //////////////////////////////////////////////////
  const handleSubmit = async(e) =>{
     e.preventDefault();
-    const {ReportName,DivisionId,DivisionNameEn,DistrictId,DistrictNameEn,upazilaId,upazilaNameEn,MosqueId,MosqueNameEn} = monthPayement;
+    const {ReportName,DivisionId,DivisionNameEn,DistrictId,DistrictNameEn,upazilaId,upazilaNameEn,MosqueId,MosqueNameEn,year,month} = monthPayement;
     
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
@@ -410,11 +412,197 @@ const handleYearMonthSearch = (e)=>{
         return;
      }
 
+     if(year === ""){
+        toast.error('Please Select Year',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+
+     if(month === ""){
+        toast.error('Please Select Month',{duration: 4000,position: 'top-center'}); 
+        return;
+     }
+
     ////////////////////Validation ////////////////////////////////////
 
     console.log("statecheck", month);
-  
+
+    let apiParams = `DistrictId=${DistrictId === "" ? 0 : DistrictId}&DivisionId=${DivisionId === "" ? 0 : DivisionId}&UpazilaId=${upazilaId ===""? 0 : upazilaId }&MosqueId=${MosqueId===""? 0 : MosqueId}&PaymentYear=${year}&PaymentMonth=${month}`;
+    //  console.log("apiParams", apiParams);
+
+     try{
+        let savMonthPayment = await axios.get(GetMonthWisePaymentReport+apiParams,{headers});
+        // console.log("saveMonthWisePaymeht", savMonthPayment.data);
+        let monthSavPay = savMonthPayment.data;
+        if(monthSavPay.success === true){
+            toast.success('Requeset Successfull', { duration: 3000, position: 'top-center' });
+            setMonthPay(monthSavPay._listData);
+            PdfMonthPaymentDownload(monthSavPay._listData);
+             setMonthPayement({
+                ...monthPayement,
+                DivisionId: "",
+                DivisionNameEn: "",
+                DistrictId: "",
+                DistrictNameEn: "",
+                upazilaId: "",
+                upazilaNameEn: "",
+                MosqueId: "",
+                MosqueNameEn: "",
+                year:"",
+                month:""
+            });
+
+        }else{
+            toast.error('No Data Found', { duration: 3000, position: 'top-center' });
+            if(monthSavPay._listData === null){
+                setMonthPay([]);
+            }
+        }
+
+     }catch(err){
+        console.log("error", err);
+        if (err.response) {
+            let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+            toast.error(message, { duration: 5000, position: 'top-center' });
+        } else if (err.request) {
+            console.log('Error Connecting ...', err.request);
+            toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+        } else if (err) {
+            console.log(err.toString());
+            toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+        }
+     }
+
 }
+
+const PdfMonthPaymentDownload = (data) => {
+
+     const { ReportName,DivisionNameEn,DistrictNameEn,upazilaNameEn,MosqueNameEn,year,month} = monthPayement;
+
+     const doc = new jsPDF();
+     doc.setFontSize(20);
+
+     const title = 'Month Wise Payment Details';
+     const titleWidth = doc.getStringUnitWidth(title) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+     const startX = (doc.internal.pageSize.width - titleWidth) / 2;
+     const startY = 20;
+     doc.text(title, startX, startY);
+
+     // Add an underline
+     const underlineY = startY + 2;
+     const underlineWidth = doc.internal.pageSize.width - 40;
+     doc.setLineWidth(1);
+     doc.line(startX, underlineY, startX + underlineWidth, underlineY);
+
+
+     const textColor = [0, 220, 0]; // Red color (RGB format)
+     const textColorBlack = [0,0,0];
+
+
+     doc.setFontSize(14);
+     doc.text(70, 35, `For the Month of ${month} year ${year}`);
+
+
+
+     doc.setFontSize(12);
+     doc.text(14, 50, `Report Name:`);
+    
+     doc.setFontSize(12);
+     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+     doc.text(42, 50, `${ReportName}`);
+
+
+     doc.setFontSize(12);
+     doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+     doc.text(14, 60, `Division :`);
+
+     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+     doc.text(32, 60, `${DivisionNameEn === "" ? "" : DivisionNameEn }`);
+
+
+     doc.setFontSize(12);
+     doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+     doc.text(75, 60, `District :`);
+
+     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+     doc.text(91, 60, `${DistrictNameEn === "" ? "" : DistrictNameEn }`);
+
+
+     doc.setFontSize(12);
+     doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+     doc.text(138, 60, `Upazila :`);
+
+     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+     doc.text(155, 60, `${upazilaNameEn === "" ? "" : upazilaNameEn }`);
+
+     doc.setFontSize(12);
+     doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+     doc.text(14, 70, `Mosque :`);
+
+     doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+     doc.text(32, 70, `${MosqueNameEn === "" ? "" : MosqueNameEn }`);
+
+
+    //  const tableEndPosY = doc.autoTable.previous.finalY;
+    //  console.log('tablend', tableEndPosY);
+
+    
+
+
+
+
+
+
+     let previousValue = null;
+     let rowspan = 1;
+     // Table data
+     let tableData = data;
+
+     // Table columns
+     const tableColumns = ["SL", 'Actual ID', 'Organization ID', 'Name','Mobile No', 'Donation Amount', 'Discount(%)', 'Net Amount'];
+
+     
+     // Table options
+    //  const tableOptions = {
+    //      startY: yPos,
+    //  };
+
+     //let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
+
+     let totalDonationAmt = tableData.reduce(function(previousVal, currentVal) {
+        return previousVal + currentVal.donationAmt;
+       }, 0);
+
+       let totalNetAmt = tableData.reduce(function(previousVal, currentVal) {
+        return previousVal + currentVal.netAmount;
+       }, 0);
+
+       tableData = [...tableData, {mobileNo:"Total", donationAmt:totalDonationAmt, netAmount:totalNetAmt}];
+
+     // Generate table data
+     const tableRows = tableData.map((row, index) => [index + 1, row.donerActualId, row.organisationalId, row.donerName,row.mobileNo,row.donationAmt,discount+("%"),row.netAmount]);
+
+    // console.log("tableRows", tableData);
+
+
+     const styles = {
+         fontSize: 10, // Adjust this value to increase or decrease the font size
+     };
+
+     let yPos =80;
+    //  // Generate table
+     doc.autoTable({
+         head: [tableColumns],
+         body: tableRows,
+         startY: yPos,
+         theme: 'grid',
+         styles: styles
+     });
+
+
+     // Save the PDF
+     doc.save(`${ReportName}.pdf`);
+
+ }
 
   return (
     <div className="page-content p-4">
