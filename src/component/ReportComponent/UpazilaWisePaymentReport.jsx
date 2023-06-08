@@ -7,7 +7,6 @@ import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { removeConsecutiveDuplicatesForUpazila } from '../../../Utils/ReportFunction';
 import { year,month } from '../../../Utils/EnrollmentData';
 
 const UpazilaWisePaymentReport = () => {
@@ -33,8 +32,14 @@ const divSuggestions = listDivision.filter(option => option.divisionNameEn.toLow
 
    //AutoComplete District //////////
    const [showDistrictSuggestions, setShowDistrictSuggestions] = useState(false);
-   const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(upaPayment.DistrictNameEn.toLowerCase()) && option.divisionNameEn === upaPayment.DivisionNameEn);
+   //const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(upaPayment.DistrictNameEn.toLowerCase()) && option.divisionNameEn === upaPayment.DivisionNameEn);
 
+   let districtSuggestions;
+    if(upaPayment.DistrictNameEn!==""){
+     districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(upaPayment.DistrictNameEn.toLowerCase()) && option.divisionNameEn === upaPayment.DivisionNameEn);
+    }else{
+     districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(upaPayment.DistrictNameEn.toLowerCase()));
+    }
    //AutoComplete District //////////
 
    useEffect(() => {
@@ -194,40 +199,40 @@ const handleSubmit = (e) =>{
 
     ////////////////////////////////////Validation /////////////////////////////////
      /////////////////////validation /////////////////////////////////////
-     if(ReportName === ""){
-        toast.error('Please Select Report Name',{duration: 4000,position: 'top-center'}); 
-        return;
-    }
+    //  if(ReportName === ""){
+    //     toast.error('Please Select Report Name',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    // }
 
-    if(DivisionNameEn === ""){
-        toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
-        return;
-    }
+    // if(DivisionNameEn === ""){
+    //     toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    // }
 
-     if(divisionArr.includes(DivisionNameEn) === false){
+     if(DivisionNameEn!=="" && divisionArr.includes(DivisionNameEn) === false){
         toast.error('Invalid Division Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
         return;
      }
 
-     if(DistrictNameEn === ""){
-        toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
-        return;
-     }
+    //  if(DistrictNameEn === ""){
+    //     toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    //  }
 
-     if(districtArr.includes(DistrictNameEn) === false){
+     if(DistrictNameEn!=="" && districtArr.includes(DistrictNameEn) === false){
         toast.error('Invalid District Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
         return;
      }
 
-     if(year === ""){
-        toast.error('Please Select Year',{duration: 4000,position: 'top-center'}); 
-        return;
-     }
+    //  if(year === ""){
+    //     toast.error('Please Select Year',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    //  }
 
-     if(month === ""){
-        toast.error('Please Select Month',{duration: 4000,position: 'top-center'}); 
-        return;
-     }
+    //  if(month === ""){
+    //     toast.error('Please Select Month',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    //  }
 
      //////////////////////////////////////////Validation /////////////////////////////////////////////////////////
 
@@ -373,4 +378,4 @@ const handleSubmit = (e) =>{
   )
 }
 
-export default UpazilaWisePaymentReport
+export default withAuthentication(UpazilaWisePaymentReport);

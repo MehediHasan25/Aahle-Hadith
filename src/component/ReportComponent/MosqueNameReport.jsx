@@ -35,14 +35,34 @@ const divSuggestions = listDivision.filter(option => option.divisionNameEn.toLow
 
    //AutoComplete District //////////
    const [showDistrictSuggestions, setShowDistrictSuggestions] = useState(false);
-   const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(mosqueReport.DistrictNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn);
+//    const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(mosqueReport.DistrictNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn);
+//    const districtSuggestionsAll = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(mosqueReport.DistrictNameEn.toLowerCase()));
+
+    let districtSuggestions;
+   if(mosqueReport.DivisionNameEn!==""){
+    districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(mosqueReport.DistrictNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn);
+   }else{
+    districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(mosqueReport.DistrictNameEn.toLowerCase()));
+   }
 
    //AutoComplete District //////////
 
    
    //AutoComplete Upazila //////////
    const [showUpazilaSuggestions, setShowUpazilaSuggestions] = useState(false);
-   const upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn && option.districtNameEn === mosqueReport.DistrictNameEn);
+  // const upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn && option.districtNameEn === mosqueReport.DistrictNameEn);
+   //const upazilaSuggestionsAll = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase()));
+
+   let upazilaSuggestions;
+   if(mosqueReport.DivisionNameEn!=="" && mosqueReport.DistrictNameEn!==""){
+       upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn && option.districtNameEn === mosqueReport.DistrictNameEn);
+   }else if(mosqueReport.DivisionNameEn!==""){
+       upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase()) && option.divisionNameEn === mosqueReport.DivisionNameEn);
+   }else if(mosqueReport.DistrictNameEn!==""){
+       upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase())  && option.districtNameEn === mosqueReport.DistrictNameEn);
+   }else{
+       upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(mosqueReport.upazilaNameEn.toLowerCase()));
+   }
 
    //AutoComplete Upazila //////////
 
@@ -260,32 +280,32 @@ const handleSubmit = async(e) =>{
         return;
     }
 
-    if(DivisionNameEn === ""){
-        toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
-        return;
-    }
+    // if(DivisionNameEn === ""){
+    //     toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    // }
 
-     if(divisionArr.includes(DivisionNameEn) === false){
+     if(DivisionNameEn !== "" && divisionArr.includes(DivisionNameEn) === false){
         toast.error('Invalid Division Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
         return;
      }
 
-     if(DistrictNameEn === ""){
-        toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
-        return;
-     }
+    //  if(DistrictNameEn === ""){
+    //     toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    //  }
 
-     if(districtArr.includes(DistrictNameEn) === false){
+     if(DistrictNameEn !== "" && districtArr.includes(DistrictNameEn) === false){
         toast.error('Invalid District Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
         return;
      }
 
-     if(upazilaNameEn === ""){
-        toast.error('Please Select Name of Upazila',{duration: 4000,position: 'top-center'}); 
-        return;
-     }
+    //  if(upazilaNameEn === ""){
+    //     toast.error('Please Select Name of Upazila',{duration: 4000,position: 'top-center'}); 
+    //     return;
+    //  }
 
-     if(upazilaArr.includes(upazilaNameEn)=== false){
+     if(upazilaNameEn !== "" && upazilaArr.includes(upazilaNameEn)=== false){
         toast.error('Invalid Upazila Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
         return;
      }
@@ -295,7 +315,7 @@ const handleSubmit = async(e) =>{
 
 
 
-    let apiParams =`DistrictId=${DistrictId}&DivisionId=${DivisionId}&UpazilaId=${upazilaId}`;
+    let apiParams =`DistrictId=${DistrictId === "" ? 0 : DistrictId}&DivisionId=${DivisionId ==="" ? 0 : DivisionId}&UpazilaId=${upazilaId ==="" ? 0: upazilaId}`;
    // console.log("MosqueParams", apiParams);
 
 
@@ -499,11 +519,13 @@ const PdfMosqueDownload = (data) => {
                                         />
                                         {showDistrictSuggestions && (
                                             <ul className="suggestions">
-                                                {districtSuggestions.map(suggestion => (
+                                                {
+                                                districtSuggestions.map(suggestion => (
                                                     <li onClick={() => handleDisSuggestionClick(suggestion)} key={suggestion.districtId}>
                                                         {suggestion.districtNameEn}
                                                     </li>
-                                                ))}
+                                                ))
+                                                }
                                             </ul>
                                         )}
 
@@ -529,11 +551,13 @@ const PdfMosqueDownload = (data) => {
                                         />
                                         {showUpazilaSuggestions && (
                                             <ul className="suggestions">
-                                                {upazilaSuggestions.map(suggestion => (
+                                                { 
+                                                upazilaSuggestions.map(suggestion => (
                                                     <li onClick={() => handleUpaSuggestionClick(suggestion)} key={suggestion.upazilaId}>
                                                         {suggestion.upazilaNameEn}
                                                     </li>
-                                                ))}
+                                                ))
+                                                }
                                             </ul>
                                         )}
 

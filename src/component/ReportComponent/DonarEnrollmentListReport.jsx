@@ -42,20 +42,57 @@ const DonarEnrollmentListReport = () => {
 
     //AutoComplete District State//////////
     const [showDistrictSuggestions, setShowDistrictSuggestions] = useState(false);
-    const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(dEnrollList.DistrictNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn);
-
+   // const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(dEnrollList.DistrictNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn);
+    let districtSuggestions;
+    if(dEnrollList.DivisionNameEn!==""){
+     districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(dEnrollList.DistrictNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn);
+    }else{
+     districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(dEnrollList.DistrictNameEn.toLowerCase()));
+    }
     //AutoComplete District State //////////
 
 
     //AutoComplete Upazila State //////////
     const [showUpazilaSuggestions, setShowUpazilaSuggestions] = useState(false);
-    const upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(dEnrollList.upazilaNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn);
-
+   // const upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(dEnrollList.upazilaNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn);
+    
+   let upazilaSuggestions;
+    if(dEnrollList.DivisionNameEn!=="" && dEnrollList.DistrictNameEn!==""){
+        upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(dEnrollList.upazilaNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn);
+    }else if(dEnrollList.DivisionNameEn!==""){
+        upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(dEnrollList.upazilaNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn);
+    }else if(dEnrollList.DistrictNameEn!==""){
+        upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(dEnrollList.upazilaNameEn.toLowerCase())  && option.districtNameEn === dEnrollList.DistrictNameEn);
+    }else{
+        upazilaSuggestions = listUpazila.filter(option => option.upazilaNameEn.toLowerCase().includes(dEnrollList.upazilaNameEn.toLowerCase()));
+    }
     //AutoComplete Upazila State //////////
 
     //AutoComplete Mosque State //////////
     const [showMosqueSuggestions, setShowMosqueSuggestions] = useState(false);
-    const mosqueSuggestions = listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn && option.upazilaNameEn === dEnrollList.upazilaNameEn);
+    // const mosqueSuggestions = listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn && option.upazilaNameEn === dEnrollList.upazilaNameEn);
+    let mosqueSuggestions;
+
+    if(dEnrollList.DivisionNameEn!=="" && dEnrollList.DistrictNameEn!=="" && dEnrollList.upazilaNameEn!==""){
+        mosqueSuggestions=listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn &&  option.upazilaNameEn === dEnrollList.upazilaNameEn);
+     }else if(dEnrollList.DivisionNameEn!=="" && dEnrollList.DistrictNameEn!==""){
+        mosqueSuggestions=listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn && option.districtNameEn === dEnrollList.DistrictNameEn);
+     }else if(dEnrollList.DistrictNameEn!=="" && dEnrollList.upazilaNameEn!==""){
+        mosqueSuggestions=listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.districtNameEn === dEnrollList.DistrictNameEn &&  option.upazilaNameEn === dEnrollList.upazilaNameEn);
+     }else if(dEnrollList.DivisionNameEn!=="" &&  dEnrollList.upazilaNameEn!=="" ){
+        mosqueSuggestions=listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn &&  option.upazilaNameEn === dEnrollList.upazilaNameEn);
+     }else if(dEnrollList.DivisionNameEn!==""){
+         mosqueSuggestions = listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.divisionNameEn === dEnrollList.DivisionNameEn);
+     }else if(dEnrollList.DistrictNameEn!==""){
+         mosqueSuggestions =listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) && option.districtNameEn === dEnrollList.DistrictNameEn);
+     }else if(dEnrollList.upazilaNameEn!==""){
+         mosqueSuggestions=listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()) &&  option.upazilaNameEn === dEnrollList.upazilaNameEn);
+     }else{
+         mosqueSuggestions = listMosque.filter(option => option.mosqueNameEn.toLowerCase().includes(dEnrollList.MosqueNameEn.toLowerCase()));
+     }
+    
+    
+    
     //AutoComplete Mosque State //////////
 
     //AutoComplete Occpation State //////////
@@ -469,62 +506,62 @@ const DonarEnrollmentListReport = () => {
             return;
         }
 
-        if(DivisionNameEn === ""){
-            toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
-            return;
-        }
+        // if(DivisionNameEn === ""){
+        //     toast.error('Please Select Name of Division',{duration: 4000,position: 'top-center'}); 
+        //     return;
+        // }
 
-        if(divisionArr.includes(DivisionNameEn) === false){
+        if(DivisionNameEn!== "" && divisionArr.includes(DivisionNameEn) === false){
             toast.error('Invalid Division Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
             return;
          }
     
-         if(DistrictNameEn === ""){
-            toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
-            return;
-         }
+        //  if(DistrictNameEn === ""){
+        //     toast.error('Please Select Name of District',{duration: 4000,position: 'top-center'}); 
+        //     return;
+        //  }
     
-         if(districtArr.includes(DistrictNameEn) === false){
+         if(DistrictNameEn!=="" && districtArr.includes(DistrictNameEn) === false){
             toast.error('Invalid District Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
             return;
          }
     
-         if(upazilaNameEn === ""){
-            toast.error('Please Select Name of Upazila',{duration: 4000,position: 'top-center'}); 
-            return;
-         }
+        //  if(upazilaNameEn === ""){
+        //     toast.error('Please Select Name of Upazila',{duration: 4000,position: 'top-center'}); 
+        //     return;
+        //  }
     
-         if(upazilaArr.includes(upazilaNameEn)=== false){
+         if(upazilaNameEn !== "" && upazilaArr.includes(upazilaNameEn)=== false){
             toast.error('Invalid Upazila Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
             return;
          }
 
-         if(MosqueNameEn === ""){
-            toast.error('Please Select Name of Mosque',{duration: 4000,position: 'top-center'}); 
-            return;
-         }
+        //  if(MosqueNameEn === ""){
+        //     toast.error('Please Select Name of Mosque',{duration: 4000,position: 'top-center'}); 
+        //     return;
+        //  }
 
-         if(mosqueArr.includes(MosqueNameEn) === false){
+         if(MosqueNameEn!== "" && mosqueArr.includes(MosqueNameEn) === false){
             toast.error('Invalid Mosque Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
             return;
          }
 
-         if(OccupationNameEn === ""){
-            toast.error('Please Select Name of Occupation',{duration: 4000,position: 'top-center'}); 
-            return;
-         }
+        //  if(OccupationNameEn === ""){
+        //     toast.error('Please Select Name of Occupation',{duration: 4000,position: 'top-center'}); 
+        //     return;
+        //  }
 
-         if(occupationArr.includes(OccupationNameEn)=== false){
+         if(OccupationNameEn!== "" && occupationArr.includes(OccupationNameEn)=== false){
             toast.error('Invalid Occupation Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
             return;
          }
 
-         if(EducationNameEn === ""){
-            toast.error('Please Select Name of Education',{duration: 4000,position: 'top-center'}); 
-            return;
-         }
+        //  if(EducationNameEn === ""){
+        //     toast.error('Please Select Name of Education',{duration: 4000,position: 'top-center'}); 
+        //     return;
+        //  }
 
-         if(educationArr.includes(EducationNameEn)=== false){
+         if(EducationNameEn !== "" && educationArr.includes(EducationNameEn)=== false){
             toast.error('Invalid Education Name... Select from Auto Complete',{duration: 4000,position: 'top-center'}); 
             return;
          }
@@ -535,19 +572,47 @@ const DonarEnrollmentListReport = () => {
         //  }
         ////////////////////Validation ////////////////////////////////////
         let apiParams;
-        if(Status === ""){
-            apiParams = `DistrictId=${DistrictId}&DivisionId=${DivisionId}&UpazilaId=${upazilaId}&MosqueId=${MosqueId}&OccupationId=${OccupationId}&EducationId=${EducationId}&Status=`
-        }else{
-            apiParams = `DistrictId=${DistrictId}&DivisionId=${DivisionId}&UpazilaId=${upazilaId}&MosqueId=${MosqueId}&OccupationId=${OccupationId}&EducationId=${EducationId}&Status=${Status}`
-        }
+        // if(Status === ""){
+            apiParams = `DistrictId=${DistrictId === "" ? 0 : DistrictId}&DivisionId=${DivisionId === ""? 0 :DivisionId }&UpazilaId=${upazilaId === "" ? 0 : upazilaId}&MosqueId=${MosqueId === "" ? 0 :MosqueId }&OccupationId=${OccupationId===""? 0 : OccupationId}&EducationId=${EducationId === "" ? 0 : EducationId}&Status=${Status === ""? "" : Status}`
+        // }else{
+        //     apiParams = `DistrictId=${DistrictId}&DivisionId=${DivisionId}&UpazilaId=${upazilaId}&MosqueId=${MosqueId}&OccupationId=${OccupationId}&EducationId=${EducationId}&Status=${Status}`
+        // }
 
         // DistrictId=0&DivisionId=0&UpazilaId=0&MosqueId=0&OccupationId=0&EducationId=0&Status=
         //console.log("fullData", dEnrollList);
-        console.log("apiParms", apiParams);
+        //console.log("apiParms", apiParams);
 
         try{
-            let pdGetData = await axios.get(GetDonarEnrollmentList,{headers});
-            console.log("dataPdf", pdGetData.data);
+            let pdGetData = await axios.get(GetDonarEnrollmentList+apiParams,{headers});
+          //  console.log("dataPdf", pdGetData.data);
+            let getAllEnrollData = pdGetData.data;
+            if(getAllEnrollData.success === true){
+                toast.success('Requeset Successfull', { duration: 5000, position: 'top-center' });
+                setListDonarEnroll(getAllEnrollData._listData);
+               setDEnrollList({
+                   ...dEnrollList,
+                    DivisionId: "",
+                    DivisionNameEn: "",
+                    DistrictId: "",
+                    DistrictNameEn: "",
+                    upazilaId: "",
+                    upazilaNameEn: "",
+                    MosqueId: "",
+                    MosqueNameEn: "",
+                    OccupationId: "",
+                    OccupationNameEn: "",
+                    EducationId: "",
+                    EducationNameEn: "",
+                    Status: ""
+                });
+                PdfDonarEnrollDownload(getAllEnrollData._listData);
+
+            }else{
+                toast.error('No Data Found', { duration: 5000, position: 'top-center' });
+                if(getAllEnrollData._listData === null){
+                    setListDonarEnroll([]);
+                }
+            }
 
         }catch(err){
             console.log("error", err);
@@ -570,6 +635,123 @@ const DonarEnrollmentListReport = () => {
     //////////////////////////////Submit button //////////////////////////////////////////////////
 
 
+    const PdfDonarEnrollDownload = (data) => {
+        // console.log("InsidePdfFunction", data);
+         const { ReportName,DivisionNameEn,DistrictNameEn,upazilaNameEn,MosqueNameEn} = dEnrollList;
+    
+         const doc = new jsPDF();
+         doc.setFontSize(20);
+    
+         const title = 'Donar Enrollment List Report';
+         const titleWidth = doc.getStringUnitWidth(title) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+         const startX = (doc.internal.pageSize.width - titleWidth) / 2;
+         const startY = 20;
+         doc.text(title, startX, startY);
+    
+         // Add an underline
+         const underlineY = startY + 2;
+         const underlineWidth = doc.internal.pageSize.width - 40;
+         doc.setLineWidth(1);
+         doc.line(startX, underlineY, startX + underlineWidth, underlineY);
+    
+    
+         const textColor = [0, 220, 0]; // Red color (RGB format)
+         const textColorBlack = [0,0,0];
+    
+         doc.setFontSize(12);
+         doc.text(14, 40, `Report Name:`);
+    
+         doc.setFontSize(12);
+    
+         doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+         doc.text(42, 40, `${ReportName}`);
+
+
+         doc.setFontSize(12);
+         doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+         doc.text(14, 50, `Division :`);
+
+         doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+         doc.text(32, 50, `${DivisionNameEn === "" ? "" : DivisionNameEn }`);
+
+
+         doc.setFontSize(12);
+         doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+         doc.text(75, 50, `District :`);
+
+         doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+         doc.text(91, 50, `${DistrictNameEn === "" ? "" : DistrictNameEn }`);
+
+
+         doc.setFontSize(12);
+         doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+         doc.text(138, 50, `Upazila :`);
+
+         doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+         doc.text(155, 50, `${upazilaNameEn === "" ? "" : upazilaNameEn }`);
+
+         doc.setFontSize(12);
+         doc.setTextColor(textColorBlack[0], textColorBlack[1], textColorBlack[2]);
+         doc.text(14, 60, `Mosque :`);
+
+         doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+         doc.text(32, 60, `${MosqueNameEn === "" ? "" : MosqueNameEn }`);
+
+
+
+    
+    
+    
+         let previousValue = null;
+         let rowspan = 1;
+         // Table data
+         const tableData = data;
+    
+         // Table columns
+         const tableColumns = ["SL", 'Actual ID', 'Organization ID', 'Name','Mobile No', 'NID', 'Education', 'Occupation', 'Enroll Date', 'Status'];
+    
+         // Table options
+         const tableOptions = {
+             startY: 70,
+         };
+    
+         //let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
+         // Generate table data
+         const tableRows = tableData.map((row, index) => [index + 1, row.donerActualId, row.organisationalId, row.donerName,row.mobileNo,row.nidNo,row.eduQualification,row.occupationName,row.enrollmentDate,row.lifeStatus]);
+    
+    
+         // Configure the autotable plugin for cell border remove
+         // const tableConfig = {
+         //     willDrawCell: tableRows => {
+         //     if (tableRows.cell.raw === '') {
+         //         tableRows.cell.styles.lineWidth = 0; // Set border line width to 0 for empty cells
+         //         const isLastRow = tableRows.row.index === tableRows.table.body.length - 1;
+         //     }
+         //     },
+         // };
+    
+    
+    
+         const styles = {
+             fontSize: 8, // Adjust this value to increase or decrease the font size
+         };
+    
+         //console.log("TableRows", tableRows);
+    
+         // Generate table
+         doc.autoTable({
+             head: [tableColumns],
+             body: tableRows,
+             startY: tableOptions.startY,
+             theme: 'grid',
+             styles: styles,
+         });
+    
+         // Save the PDF
+         doc.save(`${ReportName}.pdf`);
+    
+     }
+    
 
 
 
@@ -813,4 +995,4 @@ const DonarEnrollmentListReport = () => {
     )
 }
 
-export default DonarEnrollmentListReport
+export default withAuthentication(DonarEnrollmentListReport);

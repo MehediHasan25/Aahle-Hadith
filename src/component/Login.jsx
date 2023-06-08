@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate  } from "react-router-dom";
 import { LoginAPI } from '../URL/ApiList';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 
@@ -61,7 +61,7 @@ const Login = ({toggleBtn}) => {
 
     try{
       let loginCall = await axios.post(LoginAPI, inputState);
-      // console.log("loginCall", loginCall.data);
+      console.log("loginCall", loginCall.data);
       let loginData = loginCall.data;
       localStorage.setItem("AuthToken", loginData.token);
       localStorage.setItem("userName",inputState.userName );

@@ -27,6 +27,7 @@ import UpazilaNameReport from './component/ReportComponent/UpazilaNameReport';
 import MosqueNameReport from './component/ReportComponent/MosqueNameReport';
 import DonarEnrollmentListReport from './component/ReportComponent/DonarEnrollmentListReport';
 import UpazilaWisePaymentReport from './component/ReportComponent/UpazilaWisePaymentReport';
+import MonthWisePaymentReport from './component/ReportComponent/MonthWisePaymentReport';
 
 
 import Hello from './component/hello';
@@ -64,6 +65,7 @@ function App() {
           <Route exact path="/mosque-name-rpt" element={<MainLayout><MosqueNameReport /></MainLayout>} />
           <Route exact path="/donar-enroll-rpt" element={<MainLayout><DonarEnrollmentListReport /></MainLayout>} />
           <Route exact path="/upazila-payment-rpt" element={<MainLayout><UpazilaWisePaymentReport /></MainLayout>} />
+          <Route exact path="/month-payment-rpt" element={<MainLayout><MonthWisePaymentReport /></MainLayout>} />
         </Route>
 
       </Routes>

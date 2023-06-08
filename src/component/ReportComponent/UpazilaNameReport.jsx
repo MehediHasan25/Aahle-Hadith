@@ -39,8 +39,14 @@ const UpazilaNameReport = () => {
 
     //AutoComplete District //////////
     const [showDistrictSuggestions, setShowDistrictSuggestions] = useState(false);
-    const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(district.DistrictNameEn.toLowerCase()) && option.divisionNameEn === asearch);
+    //const districtSuggestions = listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(district.DistrictNameEn.toLowerCase()) && option.divisionNameEn === asearch);
 
+    let districtSuggestions;
+    if(asearch!==""){
+     districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(district.DistrictNameEn.toLowerCase()) && option.divisionNameEn === asearch);
+    }else{
+     districtSuggestions =listDistrict.filter(option => option.districtNameEn.toLowerCase().includes(district.DistrictNameEn.toLowerCase()));
+    }
     //AutoComplete District //////////
 
     useEffect(() => {
@@ -194,33 +200,33 @@ const UpazilaNameReport = () => {
         }
 
 
-        if (asearch === "") {
-            toast.error('Please Select Name of  Division', { duration: 5000, position: 'top-center' });
-            return;
-        }
+        // if (asearch === "") {
+        //     toast.error('Please Select Name of  Division', { duration: 5000, position: 'top-center' });
+        //     return;
+        // }
 
-        if (divisionArr.includes(asearch) === false) {
+        if (asearch!=="" && divisionArr.includes(asearch) === false) {
             toast.error('Invalid Division Name... Select from Auto Complete', { duration: 5000, position: 'top-center' });
             return;
         }
 
-        if (DistrictNameEn === "") {
-            toast.error('Please Select Name of District', { duration: 5000, position: 'top-center' });
-            return;
-        }
+        // if (DistrictNameEn === "") {
+        //     toast.error('Please Select Name of District', { duration: 5000, position: 'top-center' });
+        //     return;
+        // }
 
-        if (districtArr.includes(district.DistrictNameEn) === false) {
+        if (DistrictNameEn!== "" && districtArr.includes(district.DistrictNameEn) === false) {
             toast.error('Invalid District Name... Select from Auto Complete', { duration: 5000, position: 'top-center' });
             return;
         }
 
 
-        let apiParams = `DistrictId=${DistrictId}&DivisionId=${selectVal}`;
+        let apiParams = `DistrictId=${DistrictId === "" ? 0 : DistrictId }&DivisionId=${selectVal === "" ? 0 : selectVal}`;
         //console.log("params", apiParams);
 
         try {
             let upaData = await axios.get(GetReportUpazilaNameList + apiParams, { headers });
-            console.log("UpaDataList", upaData.data);
+            // console.log("UpaDataList", upaData.data);
             let savUpaData = upaData.data;
 
             if (savUpaData.success === true) {
@@ -309,7 +315,7 @@ const UpazilaNameReport = () => {
       //  let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
         // Generate table data
         const tableRows = tableData.map((row, index) => [index + 1, row.divisionNameEn, row.districtNameEn, row.upazilaNameEn]);
-        console.log("tableRows", tableRows);
+        // console.log("tableRows", tableRows);
 
 
         // Configure the autotable plugin for cell border remove
