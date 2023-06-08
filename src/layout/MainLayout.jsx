@@ -13,7 +13,7 @@ const MainLayout = ({children}) => {
        {/* <div className="sidebar vh-100 shadow " style={{width:isOpen ?'235px':'50px'}}> */}
         <Sidebar isOpen={isOpen}/>
        {/* </div> */}
-       <div className="content" style={{paddingLeft:isOpen ?'235px':'50px'}}> 
+       <div className="content" style={{paddingLeft:isOpen ?'256px':'60px'}}> 
         <div style={{backgroundImage: `url("http://localhost:5173/assets/bg.png")`}}>
        
           {children}
