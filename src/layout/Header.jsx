@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { useNavigate  } from "react-router-dom";
 
 const Header = ({toggle}) => {
   const [isLoggedin, setIsLoggedin] = useState(true);
+
+  const navigate = useNavigate();
+
   const logout = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("AuthToken");
-    console.log('logout');
+    // console.log('logout');
     setIsLoggedin(false)
-    window.location.replace("/")
+    // window.location.replace("/")
+    navigate('/',{ replace: true });
   }
   return (
     <div className="header p-3 d-flex justify-content-between">

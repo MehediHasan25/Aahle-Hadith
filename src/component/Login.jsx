@@ -61,15 +61,15 @@ const Login = ({toggleBtn}) => {
 
     try{
       let loginCall = await axios.post(LoginAPI, inputState);
-      console.log("loginCall", loginCall.data);
+      //console.log("loginCall", loginCall.data);
       let loginData = loginCall.data;
       localStorage.setItem("AuthToken", loginData.token);
       localStorage.setItem("userName",inputState.userName );
       if(loginData.response === 1){
-        toast.success('Login Successfull',{duration: 4000,position: 'top-center'});   
+        toast.success('Login Successfull',{duration: 3000,position: 'top-center'});   
          navigate('/dashboard',{ replace: true });
       }else{
-        toast.error('Invalid Credentials',{duration: 5000,position: 'top-center'});
+        toast.error('Invalid Credentials',{duration: 3500,position: 'top-center'});
       }
 
     }catch(err){
