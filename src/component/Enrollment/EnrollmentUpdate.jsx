@@ -175,10 +175,7 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
   }
 
   const handleEdit = (id) => {
-    //console.log("Donar Id", id);
-    // navigate('/donar-update', { state: { donarId: id} });
     navigate('/donar-update', { state: { donarId: id } });
-
   }
 
 
@@ -209,13 +206,6 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
   }
   // Actual Id Handle change all function for AutoComplete
 
-  // const handleActIdSearchChange = (e) => {
-  //   setSelectAutoActualVal({
-  //     ...selectAutoActualVal,
-  //     actualIdSearch: e.target.value
-  //   });
-  // }
-
   const autocompleteActIdRef = useRef();
   useEffect(() => {
     const handleActIdClick = (event) => {
@@ -236,14 +226,6 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
       });
   }
 
-  // const handleActIdSearch = (searchTerm, val) => {
-  //   //  console.log("edusearch", searchTerm);
-  //   //  console.log("eduId", val);
-  //   setSelectAutoActualVal({
-  //     actualIdSearch: searchTerm,
-  //     actualIdVal: val
-  //   });
-  // }
 
   const handleActIdSuggestionClick = (suggetion) => {
     setSelectAutoActualVal({
@@ -258,12 +240,6 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
 
   // Organization Id Handle change all function for AutoComplete
 
-  // const handleOrgIdSearchChange = (e) => {
-  //   setSelectAutoOrgVal({
-  //     ...selectAutoOrgVal,
-  //     OrgIdSearch: e.target.value
-  //   });
-  // }
 
   const autocompleteOrdIdRef = useRef();
   useEffect(() => {
@@ -285,14 +261,7 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
     });
   }
 
-  // const handleOrdIdSearch = (searchTerm, val) => {
-  //   //  console.log("edusearch", searchTerm);
-  //   //  console.log("eduId", val);
-  //   setSelectAutoOrgVal({
-  //     OrgIdSearch: searchTerm,
-  //     OrgIdVal: val
-  //   });
-  // }
+ 
 
   const handleOrgIdSuggestionClick = (suggetion) => {
       setSelectAutoOrgVal({
@@ -321,39 +290,6 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
                 </label>
                 <div className="col-md-8">
                   {/*  */}
-
-                  {/* <div className='search-container'>
-                    <div className='search-inner'>
-                      <input
-                        type="text"
-                        placeholder="Type Actual ID"
-                        name="actualIdSearch"
-                        onChange={handleActIdSearchChange}
-                        value={selectAutoActualVal.actualIdSearch}
-                        autoComplete='off'
-                        style={{ width: "2000px" }}
-                      />
-                    </div>
-                    <div className='dropdown'>
-                      {
-                        listActualId.filter(item => {
-                          const searchTerm = selectAutoActualVal.actualIdSearch.toLowerCase();
-                          const fullName = item.display.toLowerCase();
-
-                          return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                        }).slice(0, 10)
-                          .map((item) => (
-                            <div
-                              key={item.id}
-                              onClick={() => handleActIdSearch(item.display, item.id)}
-                              className='dropdown-row'>
-                              {item.display}
-                            </div>
-                          ))
-                      }
-                    </div>
-                  </div> */}
-
               <div className="autocomplete" ref={autocompleteActIdRef}>
                     <input
                       value={selectAutoActualVal.actualIdSearch}
@@ -382,37 +318,6 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
                   Oraganizational ID
                 </label>
                 <div className="col-md-8">
-                  {/* <div className='search-container'>
-                    <div className='search-inner'>
-                      <input
-                        type="text"
-                        placeholder="Type Organization Id (English)"
-                        name="OrgIdSearch"
-                        onChange={handleOrgIdSearchChange}
-                        value={selectAutoOrgVal.OrgIdSearch}
-                        autoComplete='off'
-                        style={{ width: "2000px" }}
-                      />
-                    </div>
-                    <div className='dropdown'>
-                      {
-                        listOrgId.filter(item => {
-                          const searchTerm = selectAutoOrgVal.OrgIdSearch.toLowerCase();
-                          const fullName = item.display.toLowerCase();
-
-                          return searchTerm && fullName.includes(searchTerm) && fullName != searchTerm;
-                        }).slice(0, 10)
-                          .map((item) => (
-                            <div
-                              key={item.id}
-                              onClick={() => handleOrdIdSearch(item.display, item.id)}
-                              className='dropdown-row'>
-                              {item.display}
-                            </div>
-                          ))
-                      }
-                    </div>
-                  </div> */}
 
           <div className="autocomplete" ref={autocompleteOrdIdRef}>
                     <input
@@ -443,9 +348,6 @@ const orgIdSuggestions = listOrgId.filter(option => option.display.toLowerCase()
                 <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
                 <button type="button" className="btn btn-md btn-primary" onClick={handleSearchSubmit}>Search</button>
               </div>
-              {/* <div className="text-end">
-                <button type="button" className="btn btn-sm btn-primary" onClick={handleSearchSubmit}>Search</button>
-              </div> */}
             </form>
           </div>
         </div>

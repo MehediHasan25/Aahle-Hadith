@@ -14,15 +14,15 @@ const Sidebar = ({ isOpen }) => {
   // };
 
   return (
-    <div className="sidebar vh-100 shadow " style={{width:isOpen ?'235px':'50px'}}>
+    <div className="sidebar vh-100 shadow " style={{ width: isOpen ? '235px' : '50px' }}>
       <div className="inner_content">
 
-  {
-    menu.map((item, index) =>  <SidebarItem key={index} item={item} />)
-  }
+        {
+          menu.map((item, index) => <SidebarItem key={index} item={item} />)
+        }
       </div>
-     
-   </div>
+
+    </div>
   );
 };
 

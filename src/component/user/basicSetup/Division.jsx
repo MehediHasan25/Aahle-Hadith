@@ -3,13 +3,13 @@ import { BiEditAlt } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { GetDivisionCode, GetDivisionList, SaveDivision,DeleteDivision } from "../../../URL/ApiList";
+import { GetDivisionCode, GetDivisionList, SaveDivision, DeleteDivision } from "../../../URL/ApiList";
 import withAuthentication from "../../Protected/withAuthentication";
 import { useNavigate } from "react-router-dom";
 
 const Division = () => {
   const [division, setDivision] = useState({
-    DivisionId:"",
+    DivisionId: "",
     DivisionNameEn: "",
     DivisionNameBn: "",
     DivisionCode: "",
@@ -19,7 +19,7 @@ const Division = () => {
   const [listDivision, setListDivision] = useState([]);
   const [search, setSearch] = useState("");
   const [track, setTrack] = useState(false);
-  const [codeDivision, setCodeDivision]= useState("");
+  const [codeDivision, setCodeDivision] = useState("");
   const navigate = useNavigate();
   //const [divTrack, setDivTrack]= useState(false);
 
@@ -29,14 +29,14 @@ const Division = () => {
   }, []);
 
   useEffect(() => {
-    if(track === true){
+    if (track === true) {
       getDivision();
     }
 
     return (() => {
       setTrack(false);
     })
-   
+
   }, [track]);
 
 
@@ -56,72 +56,72 @@ const Division = () => {
     setSearch(e.target.value);
   };
 
-  const codeDivisionVal = (e)=>{
+  const codeDivisionVal = (e) => {
     setCodeDivision(e.target.value);
   }
 
   const divisionCode = async () => {
-    try{
-    let codeDiv = await axios.get(GetDivisionCode);
-    let divCode = codeDiv.data.divGenCode;
-   // console.log("divCode", divCode);
-    setCodeDivision(divCode);
-    }catch(err){
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+    try {
+      let codeDiv = await axios.get(GetDivisionCode);
+      let divCode = codeDiv.data.divGenCode;
+      // console.log("divCode", divCode);
+      setCodeDivision(divCode);
+    } catch (err) {
+      console.log("error", err);
+      if (err.response) {
+        let message = err.response.data.message;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   };
 
   const getDivision = async () => {
-    try{
+    try {
       let divGet = await axios.get(GetDivisionList);
       let getDivList = divGet.data._divisionList;
       setListDivision(getDivList);
-    }catch(err){
-      console.log("error",err);
+    } catch (err) {
+      console.log("error", err);
       if (err.response) {
         let message = err.response.data.message;
-        toast.error(message,{duration: 5000,position: 'top-center'});
+        toast.error(message, { duration: 5000, position: 'top-center' });
       } else if (err.request) {
         console.log('Error Connecting ...', err.request);
-        toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
       } else if (err) {
         console.log(err.toString());
-        toast.error(err.toString(),{duration: 5000,position: 'top-center'});
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
       }
     }
   }
 
 
   const handleSubmit = async (e) => {
-    
-    const {DivisionId,DivisionNameEn,DivisionNameBn,AddedBy} = division;
+
+    const { DivisionId, DivisionNameEn, DivisionNameBn, AddedBy } = division;
     e.preventDefault();
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
 
-    if(DivisionNameEn === ""){
-      toast.error('Please Enter Name of Division (English)',{duration: 5000,position: 'top-center'});
+    if (DivisionNameEn === "") {
+      toast.error('Please Enter Name of Division (English)', { duration: 5000, position: 'top-center' });
       return;
     }
 
-    if(DivisionNameBn === ""){
-      toast.error('Please Enter Name of Division (Bangla)',{duration: 5000,position: 'top-center'});
+    if (DivisionNameBn === "") {
+      toast.error('Please Enter Name of Division (Bangla)', { duration: 5000, position: 'top-center' });
       return;
-    }    
+    }
 
 
     let payload = {
-      DivisionId:DivisionId === "" ? 0 : DivisionId,
+      DivisionId: DivisionId === "" ? 0 : DivisionId,
       DivisionNameEn: DivisionNameEn,
       DivisionNameBn: DivisionNameBn,
       DivisionCode: codeDivision,
@@ -129,90 +129,90 @@ const Division = () => {
     }
 
 
-   // console.log("Payload", payload);
-    
+    // console.log("Payload", payload);
+
     try {
       let saveDiv = await axios.post(SaveDivision, payload, { headers });
       let newData = saveDiv.data.success;
-       
-      if(newData === true){
-        if(DivisionId > 0){
-          toast.success('Successfully Updated!',{duration: 4000,position: 'top-center'});  
-        
-        }else{
-          toast.success('Successfully Added!',{duration: 4000,position: 'top-center'});  
-        
+
+      if (newData === true) {
+        if (DivisionId > 0) {
+          toast.success('Successfully Updated!', { duration: 4000, position: 'top-center' });
+
+        } else {
+          toast.success('Successfully Added!', { duration: 4000, position: 'top-center' });
+
         }
-        
+
         divisionCode();
         setTrack(true);
         setDivision({
           ...division,
-          DivisionId:"",
+          DivisionId: "",
           DivisionNameEn: "",
           DivisionNameBn: "",
         });
 
-      }        
+      }
 
     } catch (error) {
-      console.log("error",err);
-      console.log("error",err.message);
-        if (err.response) {
-          let message = "Authentication Error!";
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+      console.log("error", err.message);
+      if (err.response) {
+        let message = "Authentication Error!";
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
- }
-
-
- const handleEdit =(editData) =>{
-  //console.log("Edit", editData);
-  const {divisionId,divisionNameEn,divisionNameBn,divisionCode,addedBy} = editData;
-  setCodeDivision(divisionCode);
-  setDivision({
-    ...division,
-    DivisionId: divisionId,
-    DivisionNameEn:divisionNameEn,
-    DivisionNameBn: divisionNameBn,
-    AddedBy:localStorage.getItem('userName')
-  });
- }
-
-
- const handleDelete = async(id) =>{
-  //console.log("id",id);
- 
-  try{
-   let deleteData = await axios.get(DeleteDivision+id);
-   //console.log("deleteRes", deleteData.data);
-   let resDel = deleteData.data.success;
-
-   if(resDel === true){
-    toast.success('Successfully Deleted!',{duration: 4000,position: 'top-center'});  
-    divisionCode();
-    setTrack(true);
-   }
-  }catch(err){
-    console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
   }
- }
+
+
+  const handleEdit = (editData) => {
+    //console.log("Edit", editData);
+    const { divisionId, divisionNameEn, divisionNameBn, divisionCode, addedBy } = editData;
+    setCodeDivision(divisionCode);
+    setDivision({
+      ...division,
+      DivisionId: divisionId,
+      DivisionNameEn: divisionNameEn,
+      DivisionNameBn: divisionNameBn,
+      AddedBy: localStorage.getItem('userName')
+    });
+  }
+
+
+  const handleDelete = async (id) => {
+    //console.log("id",id);
+
+    try {
+      let deleteData = await axios.get(DeleteDivision + id);
+      //console.log("deleteRes", deleteData.data);
+      let resDel = deleteData.data.success;
+
+      if (resDel === true) {
+        toast.success('Successfully Deleted!', { duration: 4000, position: 'top-center' });
+        divisionCode();
+        setTrack(true);
+      }
+    } catch (err) {
+      console.log("error", err);
+      if (err.response) {
+        let message = err.response.data.message;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
+    }
+  }
 
 
 
@@ -272,7 +272,7 @@ const Division = () => {
               </div>
               <div className="text-center">
                 <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
-                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() => window.location.reload()}>Refresh</button>
                 <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
               </div>
             </form>
@@ -306,21 +306,21 @@ const Division = () => {
                 </tr>
               </thead>
               <tbody>
-                {listDivision.filter((item)=>{
-                  return search.toLowerCase()==="" ? item : item.divisionNameEn.toLowerCase().includes(search.toLowerCase()) || item.divisionNameBn.toLowerCase().includes(search.toLowerCase())
-                  }).map(item => (
+                {listDivision.filter((item) => {
+                  return search.toLowerCase() === "" ? item : item.divisionNameEn.toLowerCase().includes(search.toLowerCase()) || item.divisionNameBn.toLowerCase().includes(search.toLowerCase())
+                }).map(item => (
                   <tr key={item.divisionId}>
                     <td>
                       <div className="act_icon">
 
-                      <span  onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></span>
-                      <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
+                        <span onClick={() => window.confirm("Are you sure you want to delete?") && handleDelete(item.divisionId)}><BsTrash /></span>
+                        <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
                       </div>
                     </td>
                     <td>{item.divisionNameEn}</td>
                     <td>{item.divisionNameBn}</td>
                     <td>{item.divisionCode}</td>
-                    
+
                   </tr>
                 ))}
               </tbody>

@@ -26,13 +26,6 @@ const UpazilaDistrict = ({ sendData }) => {
         getUpazila();
     }, []);
 
-    // if(saveComplete === true){
-    //     setCompData({
-    //         UpaSearch: "",
-    //         UpaId: "",
-    //         district: ""
-    //     });
-    // }
 
     const getUpazila = async (e) => {
         try {
@@ -64,12 +57,6 @@ const UpazilaDistrict = ({ sendData }) => {
     }
 
 
-    // const handleUpaSearchChange = (e) => {
-    //     setCompData({
-    //         ...compData,
-    //         UpaSearch: e.target.value
-    //     });
-    // }
 
     const autocompleteRef = useRef();
   useEffect(() => {
@@ -92,34 +79,7 @@ const UpazilaDistrict = ({ sendData }) => {
   }
 
 
-    // const handleUpaSearch = async (searchTerm, val) => {
-    //     // console.log("edusearch", searchTerm);
-    //     //console.log("eduId", val);
-    //     try {
-    //         let getDistrict = await axios.get(GetDistrictfromUpazila + val);
-    //         console.log("District", getDistrict.data.districtobj.districtNameEn);
-    //         let districtName = getDistrict.data.districtobj.districtNameEn;
-
-    //         setCompData({
-    //             UpaSearch: searchTerm,
-    //             UpaId: val,
-    //             district: districtName
-    //         });
-
-
-    //         sendData(searchTerm, val, districtName);
-
-    //         // setCompData({
-    //         //     UpaSearch: "",
-    //         //     UpaId: "",
-    //         //     district: ""
-    //         // });
-
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-
-    // }
+    
 
     const handleSuggestionClick = async(suggetion) => {
         //console.log("upaSug", suggetion.upazilaId);
@@ -159,41 +119,8 @@ const UpazilaDistrict = ({ sendData }) => {
                 <div className="row">
                     <label className="col-sm-4 col-form-label text-end">Upazila</label>
                     <div className="col-sm-8">
-                        {/*  */}
-
-                        {/* <div className='search-container'>
-                            <div className='search-inner'>
-                                <input
-                                    type="text"
-                                    placeholder="Type Upazila Name & Select (English)"
-                                    name="UpaSearch"
-                                    onChange={handleUpaSearchChange}
-                                    value={compData.UpaSearch}
-                                    autoComplete='off'
-                                    style={{ width: "2000px" }}
-                                />
-                            </div>
-                            <div className='dropdown'>
-                                {
-                                    listUpazila.filter(item => {
-                                        const searchTerm = compData.UpaSearch.toLowerCase();
-                                        const fullName = item.upazilaNameEn.toLowerCase();
-
-                                        return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                    }).slice(0, 10)
-                                        .map((item) => (
-                                            <div
-                                                key={item.upazilaId}
-                                                onClick={() => handleUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                                                className='dropdown-row'>
-                                                {item.upazilaNameEn}
-                                            </div>
-                                        ))
-                                }
-                            </div>
-                        </div> */}
-
-                             {/*  */}
+                        
+                     {/*  */}
                   <div className="autocomplete" ref={autocompleteRef}>
                     <input
                       value={compData.UpaSearch}
@@ -214,9 +141,6 @@ const UpazilaDistrict = ({ sendData }) => {
                   </div>
                   {/*  */}
 
-
-
-                        {/*  */}
                     </div>
                 </div>
             </div>

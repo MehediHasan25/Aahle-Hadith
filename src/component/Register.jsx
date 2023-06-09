@@ -7,7 +7,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
 
-const Register = ({toggleBtn}) => {
+const Register = ({ toggleBtn }) => {
   const [inputState, setInputState] = useState({
     userName: '',
     email: '',
@@ -27,7 +27,7 @@ const Register = ({toggleBtn}) => {
     const { name, value } = e.target;
 
     setInputState((prev) => {
-     // console.log('prevVal', prev);
+      // console.log('prevVal', prev);
       return {
         ...prev,
         [name]: value
@@ -46,35 +46,35 @@ const Register = ({toggleBtn}) => {
     }
 
     if (email === "") {
-      toast.error("Please Enter Your Email",{duration: 5000,position: 'top-center'});
+      toast.error("Please Enter Your Email", { duration: 5000, position: 'top-center' });
       return;
     }
 
-    
-    if(phoneNumber === ""){
-      toast.error("Please Enter Phone Number",{duration: 5000,position: 'top-center'});
+
+    if (phoneNumber === "") {
+      toast.error("Please Enter Phone Number", { duration: 5000, position: 'top-center' });
       return;
-  }
-  
-  if(new RegExp("^(?:\\+88|88)?(01[3-9]\\d{8})$").test(phoneNumber) === false){
-      toast.error("Please Enter Valid Phone Number",{duration: 5000,position: 'top-center'});
+    }
+
+    if (new RegExp("^(?:\\+88|88)?(01[3-9]\\d{8})$").test(phoneNumber) === false) {
+      toast.error("Please Enter Valid Phone Number", { duration: 5000, position: 'top-center' });
       return;
-  }
+    }
 
     if (address === "") {
-      toast.error("Please Enter the Address",{duration: 5000,position: 'top-center'});
+      toast.error("Please Enter the Address", { duration: 5000, position: 'top-center' });
       return;
     }
 
     if (password === "") {
-      toast.error("Please Enter Password",{duration: 5000,position: 'top-center'});
+      toast.error("Please Enter Password", { duration: 5000, position: 'top-center' });
       return;
     }
 
 
 
     if (password !== conPass) {
-      toast.error('Password and Confirm Password are not same',{duration: 5000,position: 'top-center'});
+      toast.error('Password and Confirm Password are not same', { duration: 5000, position: 'top-center' });
       return;
     }
 
@@ -82,26 +82,26 @@ const Register = ({toggleBtn}) => {
 
 
     try {
-      let registerCall = await axios.post(RegisterAPI,inputState);
+      let registerCall = await axios.post(RegisterAPI, inputState);
       // console.log("RegisterAPIcall", registerCall.data);
       let registerData = registerCall.data;
-      if(registerData.success){
-        toast.success('Registration Successfully Completed',{duration: 4000,position: 'top-center'});   
+      if (registerData.success) {
+        toast.success('Registration Successfully Completed', { duration: 4000, position: 'top-center' });
         navigate('/');
       }
 
     } catch (err) {
-      console.log("error",err);
-        if (err.response) {
-          let message = err.response.data.message;
-          toast.error(message,{duration: 5000,position: 'top-center'});
-        } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...',{duration: 5000,position: 'top-center'});
-        } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(),{duration: 5000,position: 'top-center'});
-        }
+      console.log("error", err);
+      if (err.response) {
+        let message = err.response.data.message;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
 
     }
 

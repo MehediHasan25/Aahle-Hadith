@@ -1,10 +1,10 @@
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BiEditAlt } from 'react-icons/bi';
 import { BsTrash } from 'react-icons/bs';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
-import { GetUpazilaList,GetMosqueList,GetMosqueCode,SaveMosque,DeleteMosque } from '../../../URL/ApiList';
+import { GetUpazilaList, GetMosqueList, GetMosqueCode, SaveMosque, DeleteMosque } from '../../../URL/ApiList';
 import withAuthentication from '../../Protected/withAuthentication';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,14 +17,14 @@ const Mosque = () => {
   const navigate = useNavigate();
   // upazila autoComplete//// 
 
-  const [mosque,setMosque] =useState({
-    MosqueId:"",
-    MosqueNameEn:"",
-    MosqueNameBn:"",
+  const [mosque, setMosque] = useState({
+    MosqueId: "",
+    MosqueNameEn: "",
+    MosqueNameBn: "",
     AddedBy: localStorage.getItem('userName')
   });
   const [listMosque, setListMosque] = useState([]);
-  const [codeMosque, setCodeMosque]= useState([]);
+  const [codeMosque, setCodeMosque] = useState([]);
   const [track, setTrack] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -34,21 +34,21 @@ const Mosque = () => {
 
   // Mosque Upazila AutoComplete state
 
-  useEffect(()=>{
+  useEffect(() => {
     getUpazila();
     getMosque();
     mosqueCode();
-  },[]);
+  }, []);
 
   useEffect(() => {
-    if(track === true){
+    if (track === true) {
       getMosque();
     }
 
     return (() => {
       setTrack(false);
     })
-   
+
   }, [track]);
 
 
@@ -56,17 +56,6 @@ const Mosque = () => {
 
 
   // Upazila ................
-  // const handleUpaSearchChange = (e) => {
-  //   setUpazilaSearch(e.target.value);
-  // }  
-  
-  // const handleUpaSearch = (searchTerm, val) => {
-  //   setUpazilaSearch(searchTerm);
-  //   setSelectUpaVal(val);
-  //   // console.log("Upasearch", searchTerm);
-  //   // console.log("UpaId", val);
-  
-  // }
 
   const autocompleteRef = useRef();
   useEffect(() => {
@@ -86,7 +75,7 @@ const Mosque = () => {
   }
 
   const handleSuggestionClick = (suggetion) => {
-   // console.log("suggestion", suggetion.divisionNameEn);
+    // console.log("suggestion", suggetion.divisionNameEn);
     setUpazilaSearch(suggetion.upazilaNameEn);
     setSelectUpaVal(suggetion.upazilaId)
     setShowUpaSugg(false);
@@ -115,47 +104,47 @@ const Mosque = () => {
     setSearch(e.target.value);
   };
 
-  const getUpazila = async(e) =>{
-    try{
+  const getUpazila = async (e) => {
+    try {
       let upaData = await axios.get(GetUpazilaList);
       //  console.log("upaDataList", upaData.data._upazilaList);
       let getUpaData = upaData.data._upazilaList;
       setListUpazila(getUpaData);
-    }catch(err){
+    } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   }
 
 
-  const getMosque = async() =>{
-    try{
+  const getMosque = async () => {
+    try {
       let getMosqueData = await axios.get(GetMosqueList);
       let getDataMosque = getMosqueData.data._mosqueList;
       // console.log("mosqueList", getDataMosque);
       setListMosque(getDataMosque);
 
-    }catch(err){
+    } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   }
 
@@ -163,27 +152,27 @@ const Mosque = () => {
   const mosqueCode = async () => {
     try {
       let codeMos = await axios.get(GetMosqueCode);
-       let mosqueCode = codeMos.data.mosqueCode;
+      let mosqueCode = codeMos.data.mosqueCode;
       // console.log("mosque", codeMos.data.mosqueCode);
       setCodeMosque(mosqueCode);
     } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   };
 
 
-  const handleSubmit = async(e) =>{
-    let {MosqueId,MosqueNameEn,MosqueNameBn,AddedBy} = mosque;
+  const handleSubmit = async (e) => {
+    let { MosqueId, MosqueNameEn, MosqueNameBn, AddedBy } = mosque;
     e.preventDefault();
     let upaArrData = listUpazila.map(item => item.upazilaNameEn);
 
@@ -191,88 +180,88 @@ const Mosque = () => {
     const headers = { 'Authorization': 'Bearer ' + token };
 
 
-    if(upazilaSearch === ""){
+    if (upazilaSearch === "") {
       //alert("Please Enter Data for auto Complete Search");
-      toast.error("Please Select Name of Upazila for auto Complete Search",{duration: 5000,position: 'top-center'});  
+      toast.error("Please Select Name of Upazila for auto Complete Search", { duration: 5000, position: 'top-center' });
       return
     }
 
-    if(upaArrData.includes(upazilaSearch) === false){
+    if (upaArrData.includes(upazilaSearch) === false) {
       //alert("Invalid Upazila Selected.. search from auto Complete");
-      toast.error("Please Select Data from auto Complete Search",{duration: 5000,position: 'top-center'});  
+      toast.error("Please Select Data from auto Complete Search", { duration: 5000, position: 'top-center' });
       return;
     }
 
-    if(MosqueNameEn === ""){
+    if (MosqueNameEn === "") {
       //alert("Please Enter Name of Mosque(English)");
-      toast.error("Invalid Upazila Selected.. search from auto Complete",{duration: 5000,position: 'top-center'});  
+      toast.error("Invalid Upazila Selected.. search from auto Complete", { duration: 5000, position: 'top-center' });
       return;
     }
 
-    if(MosqueNameBn === ""){
+    if (MosqueNameBn === "") {
       //alert("Please Enter Name of Mosque(Bangla)");
-      toast.error("Please Enter Name of Mosque(Bangla)",{duration: 5000,position: 'top-center'});  
+      toast.error("Please Enter Name of Mosque(Bangla)", { duration: 5000, position: 'top-center' });
       return;
     }
 
 
     let payload = {
-    MosqueId: MosqueId === ""? 0 : MosqueId,
-    UpazilaId:selectUpaVal,
-    MosqueNameEn:MosqueNameEn,
-    MosqueNameBn:MosqueNameBn,
-    MosqueCode:codeMosque,
-    AddedBy: AddedBy
+      MosqueId: MosqueId === "" ? 0 : MosqueId,
+      UpazilaId: selectUpaVal,
+      MosqueNameEn: MosqueNameEn,
+      MosqueNameBn: MosqueNameBn,
+      MosqueCode: codeMosque,
+      AddedBy: AddedBy
     }
 
     console.log("payload", payload);
 
-    try{
-      let subMosque = await axios.post(SaveMosque,payload,{headers});
+    try {
+      let subMosque = await axios.post(SaveMosque, payload, { headers });
       let subSuccess = subMosque.data.success;
-      if(subSuccess=== true){
-      if(MosqueId > 0){
-        toast.success('Successfully Updated!',{duration: 4000,position: 'top-center'});  
-      
-      }else{
-        toast.success('Successfully Added!',{duration: 4000,position: 'top-center'});   
+      if (subSuccess === true) {
+        if (MosqueId > 0) {
+          toast.success('Successfully Updated!', { duration: 4000, position: 'top-center' });
+
+        } else {
+          toast.success('Successfully Added!', { duration: 4000, position: 'top-center' });
+        }
+
+        mosqueCode();
+        setTrack(true);
+        setMosque({
+          ...mosque,
+          UpazilaId: "",
+          MosqueNameEn: "",
+          MosqueNameBn: ""
+        })
+        setUpazilaSearch("");
+
       }
 
-      mosqueCode();
-      setTrack(true);
-      setMosque({
-       ...mosque,
-        UpazilaId:"",
-        MosqueNameEn:"",
-        MosqueNameBn:""
-      })
-      setUpazilaSearch("");
-      
-    }
-
-    }catch(err){
+    } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   }
 
-  const handleEdit =(editData) =>{
+  const handleEdit = (editData) => {
     // console.log("edit", editData);
 
     setMosque({
       MosqueId: editData.mosqueId,
-      MosqueNameEn:editData.mosqueNameEn,
-      MosqueNameBn:editData.mosqueNameBn,
-      AddedBy:localStorage.getItem('userName')
+      MosqueNameEn: editData.mosqueNameEn,
+      MosqueNameBn: editData.mosqueNameBn,
+      AddedBy: localStorage.getItem('userName')
     });
 
     setCodeMosque(editData.mosqueCode);
@@ -281,32 +270,32 @@ const Mosque = () => {
   }
 
 
-  const handleDelete = async(id) =>{
+  const handleDelete = async (id) => {
     // console.log("delete Id", id);
     // console.log("api", DeleteMosque);
-    try{
-      let deleteData = await axios.get(DeleteMosque+id);
+    try {
+      let deleteData = await axios.get(DeleteMosque + id);
       // console.log("deleteRes", deleteData.data);
-        let resDel = deleteData.data.success;
-    
-       if(resDel === true){
-        toast.success('Successfully Deleted!',{duration: 4000,position: 'top-center'});  
+      let resDel = deleteData.data.success;
+
+      if (resDel === true) {
+        toast.success('Successfully Deleted!', { duration: 4000, position: 'top-center' });
         mosqueCode();
         setTrack(true);
-       }
-  
-    }catch(err){
+      }
+
+    } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   }
 
@@ -321,44 +310,12 @@ const Mosque = () => {
           <div className="form card p-3">
             <form action="" className="form-horizontal">
               <div className="mb-3 row">
-                
+
                 {/* Start */}
-          <label className="col-md-4 col-form-label">
+                <label className="col-md-4 col-form-label">
                   Name of Upazila
                 </label>
                 <div className="col-md-8">
-                  {/* <div className='search-container'>
-                    <div className='search-inner'>
-                      <input
-                        type="text"
-                        placeholder="Enter Upazila Name (English)"
-                        name="upazilaSearch"
-                        onChange={handleUpaSearchChange}
-                        value={upazilaSearch}
-                        autoComplete='off'
-                        style={{ width: "2000px" }}
-                      />
-                    </div>
-                    <div className='dropdown'>
-                      {
-                        listUpazila.filter(item => {
-                          const searchTerm = upazilaSearch.toLowerCase();
-                          const fullName = item.upazilaNameEn.toLowerCase();
-
-                          return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                        }).slice(0, 10)
-                          .map((item) => (
-                            <div
-                              key={item.upazilaId}
-                              onClick={() => handleUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                              className='dropdown-row'>
-                              {item.upazilaNameEn}
-                            </div>
-                          ))
-                      }
-                    </div>
-                  </div> */}
-
                   {/*  */}
                   <div className="autocomplete" ref={autocompleteRef}>
                     <input
@@ -381,8 +338,8 @@ const Mosque = () => {
                   {/*  */}
 
                 </div>
-            {/* End */}
-              
+                {/* End */}
+
               </div>
 
               <div className="mb-3 row">
@@ -396,7 +353,7 @@ const Mosque = () => {
                     name="MosqueNameEn"
                     onChange={handleMosqueChange}
                     value={mosque.MosqueNameEn}
-                    autoComplete='off' 
+                    autoComplete='off'
                   />
                 </div>
               </div>
@@ -432,19 +389,16 @@ const Mosque = () => {
               </div>
               <div className="text-center">
                 <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
-                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() => window.location.reload()}>Refresh</button>
                 <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
               </div>
-              {/* <div className="text-end">
-         <button type="button" className="btn btn-sm btn-primary" onClick={(e)=>handleSubmit(e)}>Submit</button>
-         </div> */}
             </form>
           </div>
         </div>
-    
+
       </div>
       <div className="row pt-4">
-      <div className="col-md-12">
+        <div className="col-md-12">
           <div className="table form-tbl">
             <form className="d-flex w-50">
               <input
@@ -460,48 +414,46 @@ const Mosque = () => {
             <table className="table table-striped table-bordered">
               <thead className='bg-success'>
                 <tr>
-                <th> Action</th>
+                  <th> Action</th>
                   <th>Division</th>
                   <th>Division (Bangla)</th>
-                  <th>District</th> 
-                  <th>District (Bangla)</th> 
-                  <th>Upazila</th> 
-                  <th>Upazila (Bangla)</th> 
-                  <th>Mosque</th> 
-                  <th>Mosque (Bangla)</th> 
+                  <th>District</th>
+                  <th>District (Bangla)</th>
+                  <th>Upazila</th>
+                  <th>Upazila (Bangla)</th>
+                  <th>Mosque</th>
+                  <th>Mosque (Bangla)</th>
                   <th>Mosque Code</th>
 
                 </tr>
               </thead>
               <tbody>
-                { listMosque.filter((item) => {
-                    return search.toLowerCase() === "" ? item : item.mosqueNameEn.toLowerCase().includes(search.toLowerCase()) || item.mosqueNameBn.toLowerCase().includes(search.toLowerCase())
-                  }).map((item)=>(
+                {listMosque.filter((item) => {
+                  return search.toLowerCase() === "" ? item : item.mosqueNameEn.toLowerCase().includes(search.toLowerCase()) || item.mosqueNameBn.toLowerCase().includes(search.toLowerCase())
+                }).map((item) => (
                   <tr key={item.mosqueId}>
                     <td>
                       <div className="act_icon">
-                      <span onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.mosqueId)}><BsTrash /></span>
-                      <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
+                        <span onClick={() => window.confirm("Are you sure you want to delete?") && handleDelete(item.mosqueId)}><BsTrash /></span>
+                        <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
                       </div>
                     </td>
-                  <td>{item.divisionNameEn}</td>
-                  <td>{item.divisionNameBn}</td>
-                  <td>{item.districtNameEn}</td>
-                  <td>{item.districtNameBn}</td>
-                  <td>{item.upazilaNameEn}</td>
-                  <td>{item.upazilaNameBn}</td>
-                  <td>{item.mosqueNameEn}</td>
-                  <td>{item.mosqueNameBn}</td>
-                  <td>{item.mosqueCode}</td>
-                  {/* <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.mosqueId)}><BsTrash/></td>
-                  <td onClick={() => handleEdit(item)}><BiEditAlt/></td> */}
-                </tr>
+                    <td>{item.divisionNameEn}</td>
+                    <td>{item.divisionNameBn}</td>
+                    <td>{item.districtNameEn}</td>
+                    <td>{item.districtNameBn}</td>
+                    <td>{item.upazilaNameEn}</td>
+                    <td>{item.upazilaNameBn}</td>
+                    <td>{item.mosqueNameEn}</td>
+                    <td>{item.mosqueNameBn}</td>
+                    <td>{item.mosqueCode}</td>
+                  </tr>
 
-                )) 
-                
-                
+                ))
+
+
                 }
-                
+
               </tbody>
             </table>
           </div>

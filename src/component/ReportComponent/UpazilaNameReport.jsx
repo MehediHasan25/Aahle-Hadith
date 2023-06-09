@@ -334,8 +334,6 @@ const UpazilaNameReport = () => {
             fontSize: 12, // Adjust this value to increase or decrease the font size
         };
 
-        //console.log("TableRows", tableRows);
-
         // Generate table
         doc.autoTable({
             head: [tableColumns],

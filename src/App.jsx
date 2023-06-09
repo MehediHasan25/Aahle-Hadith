@@ -28,9 +28,6 @@ import MosqueNameReport from './component/ReportComponent/MosqueNameReport';
 import DonarEnrollmentListReport from './component/ReportComponent/DonarEnrollmentListReport';
 import UpazilaWisePaymentReport from './component/ReportComponent/UpazilaWisePaymentReport';
 import MonthWisePaymentReport from './component/ReportComponent/MonthWisePaymentReport';
-
-
-import Hello from './component/hello';
 import AuthLayout from './component/AuthLayout';
 //import PDFConverter from './component/TestFolder/PDFConverter';
 //import PDF2 from './component/TestFolder/PDF2';
@@ -47,7 +44,7 @@ function App() {
         {/* <Route exact path="/hello" element={<Hello />} /> */}
         <Route exact path="/" element={<AuthLayout />} />
 
-        <Route element={<PrivateRoute/>}>
+        <Route element={<PrivateRoute />}>
           <Route exact path="/details" element={<Details />} />
           <Route exact path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
           <Route exact path="/division" element={<MainLayout><Division /></MainLayout>} />

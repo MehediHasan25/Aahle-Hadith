@@ -1,8 +1,8 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BiEditAlt } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
-import { GetDivisionList, GetDistrictList, GetDistrictCode,SaveDistrict,DeleteDistrict } from '../../../URL/ApiList';
+import { GetDivisionList, GetDistrictList, GetDistrictCode, SaveDistrict, DeleteDistrict } from '../../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
 import '../../../css/AutoComplete.css';
 //import Select from 'react-select';
@@ -45,18 +45,18 @@ const District = () => {
   }, []);
 
   useEffect(() => {
-    if(track === true){
+    if (track === true) {
       getDistrictData();
     }
 
     return (() => {
       setTrack(false);
     })
-   
+
   }, [track]);
 
 
-  
+
 
 
 
@@ -68,16 +68,16 @@ const District = () => {
       setListDivision(getDivList);
     } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   }
 
@@ -90,14 +90,14 @@ const District = () => {
     } catch (err) {
       console.log("error", err);
       if (err.response) {
-          let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-          toast.error(message, { duration: 5000, position: 'top-center' });
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
       } else if (err.request) {
-          console.log('Error Connecting ...', err.request);
-          toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
       } else if (err) {
-          console.log(err.toString());
-          toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
       }
     }
   };
@@ -110,48 +110,48 @@ const District = () => {
       setListDistrict(getDistrictData);
     } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
 
     }
   }
 
   // AutoComplete ///////////
 
-// DIVISION AUTOSEARCH
-const autocompleteRef = useRef();
-useEffect(() => {
-  const handleClick = (event) => {
-    if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
-      setShowSuggestions(false)
+  // DIVISION AUTOSEARCH
+  const autocompleteRef = useRef();
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target)) {
+        setShowSuggestions(false)
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick)
     }
-  };
-  document.addEventListener("click", handleClick);
-  return () => {
-    document.removeEventListener("click", handleClick)
+  }, [])
+
+  const handleChange = e => {
+    setAsearch(e.target.value);
   }
-}, [])
 
-const handleChange = e => {
-  setAsearch(e.target.value);
-}
+  const handleSuggestionClick = (suggetion) => {
+    //console.log("suggestion", suggetion.divisionNameEn);
+    setAsearch(suggetion.divisionNameEn);
+    setSelectVal(suggetion.divisionId);
+    setShowSuggestions(false);
+  }
 
-const handleSuggestionClick = (suggetion) => {
-  //console.log("suggestion", suggetion.divisionNameEn);
-  setAsearch(suggetion.divisionNameEn);
-  setSelectVal(suggetion.divisionId);
-  setShowSuggestions(false);
-}
-
-////////////////division AutoSearch
+  ////////////////division AutoSearch
 
   /// AutoComplete /////////////
 
@@ -173,56 +173,56 @@ const handleSuggestionClick = (suggetion) => {
     setSearch(e.target.value);
   };
 
-  const handleSubmit=async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const {DistrictId,DistrictNameEn,DistrictNameBn,AddedBy} = district;
+    const { DistrictId, DistrictNameEn, DistrictNameBn, AddedBy } = district;
     let token = localStorage.getItem("AuthToken");
     const headers = { 'Authorization': 'Bearer ' + token };
 
-    let divisionArr = listDivision.map(item=> item.divisionNameEn);
+    let divisionArr = listDivision.map(item => item.divisionNameEn);
 
-    if(asearch === ""){
-      toast.error('Please Enter Division',{duration: 5000,position: 'top-center'});
+    if (asearch === "") {
+      toast.error('Please Enter Division', { duration: 5000, position: 'top-center' });
       return;
     }
 
-    if(divisionArr.includes(asearch) === false){
-      toast.error('Invalid Division Name... Select from Auto Complete',{duration: 5000,position: 'top-center'});
+    if (divisionArr.includes(asearch) === false) {
+      toast.error('Invalid Division Name... Select from Auto Complete', { duration: 5000, position: 'top-center' });
       return;
     }
 
-    if(DistrictNameEn === ""){
-      toast.error('Please Enter Name of District (English)',{duration: 5000,position: 'top-center'});
+    if (DistrictNameEn === "") {
+      toast.error('Please Enter Name of District (English)', { duration: 5000, position: 'top-center' });
       return;
     }
 
-    if(DistrictNameEn === ""){
-      toast.error('Please Enter Name of District (Bangla)',{duration: 5000,position: 'top-center'});
+    if (DistrictNameEn === "") {
+      toast.error('Please Enter Name of District (Bangla)', { duration: 5000, position: 'top-center' });
       return;
     }
 
 
     let payload = {
       DistrictId: DistrictId === "" ? 0 : DistrictId,
-      DivisionId:selectVal, 
-      DistrictNameEn:DistrictNameEn,
-      DistrictNameBn:DistrictNameBn,
-      DistrictCode:codeDistrict,
+      DivisionId: selectVal,
+      DistrictNameEn: DistrictNameEn,
+      DistrictNameBn: DistrictNameBn,
+      DistrictCode: codeDistrict,
       AddedBy: AddedBy
     }
     console.log("submitPayload", payload);
 
-    try{
-      let saveDis = await axios.post(SaveDistrict,payload,{ headers });
+    try {
+      let saveDis = await axios.post(SaveDistrict, payload, { headers });
       let subDisData = saveDis.data.success;
-      if(subDisData=== true){
-        if(DistrictId > 0){
-          toast.success('Successfully Updated!',{duration: 4000,position: 'top-center'});  
-        
-        }else{
-          toast.success('Successfully Added!',{duration: 4000,position: 'top-center'});  
-        
+      if (subDisData === true) {
+        if (DistrictId > 0) {
+          toast.success('Successfully Updated!', { duration: 4000, position: 'top-center' });
+
+        } else {
+          toast.success('Successfully Added!', { duration: 4000, position: 'top-center' });
+
         }
 
         districtCode();
@@ -236,23 +236,23 @@ const handleSuggestionClick = (suggetion) => {
         setAsearch("");
       }
 
-    }catch(err){
+    } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
   }
 
-  const handleEdit = (editData) =>{
-   // console.log("edit",editData);
+  const handleEdit = (editData) => {
+    // console.log("edit",editData);
     setDistrict({
       ...district,
       DistrictId: editData.districtId,
@@ -269,34 +269,34 @@ const handleSuggestionClick = (suggetion) => {
 
   };
 
-  const handleDelete = async(id) =>{
+  const handleDelete = async (id) => {
     //console.log("id",id);
-   
-    try{
-     let deleteData = await axios.get(DeleteDistrict+id);
-     //console.log("deleteRes", deleteData.data);
-     let resDel = deleteData.data.success;
-  
-     if(resDel === true){
-      toast.success('Successfully Deleted!',{duration: 4000,position: 'top-center'});  
-      districtCode();
-      setTrack(true);
-     }
-    }catch(err){
+
+    try {
+      let deleteData = await axios.get(DeleteDistrict + id);
+      //console.log("deleteRes", deleteData.data);
+      let resDel = deleteData.data.success;
+
+      if (resDel === true) {
+        toast.success('Successfully Deleted!', { duration: 4000, position: 'top-center' });
+        districtCode();
+        setTrack(true);
+      }
+    } catch (err) {
       console.log("error", err);
-            if (err.response) {
-                let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
-                toast.error(message, { duration: 5000, position: 'top-center' });
-            } else if (err.request) {
-                console.log('Error Connecting ...', err.request);
-                toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
-            } else if (err) {
-                console.log(err.toString());
-                toast.error(err.toString(), { duration: 5000, position: 'top-center' });
-            }
+      if (err.response) {
+        let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
+        toast.error(message, { duration: 5000, position: 'top-center' });
+      } else if (err.request) {
+        console.log('Error Connecting ...', err.request);
+        toast.error('Error Connecting ...', { duration: 5000, position: 'top-center' });
+      } else if (err) {
+        console.log(err.toString());
+        toast.error(err.toString(), { duration: 5000, position: 'top-center' });
+      }
     }
-   }
-  
+  }
+
 
 
   return (
@@ -313,41 +313,9 @@ const handleSuggestionClick = (suggetion) => {
                   Name of Division
                 </label>
                 <div className="col-md-8">
-                  {/* <div className='search-container'>
-                    <div className='search-inner'>
-                      <input
-                        type="text"
-                        placeholder="Enter Division Name (English)"
-                        name="asearch"
-                        onChange={onChange}
-                        value={asearch}
-                        autoComplete='off'
-                        // style={{ width: "2000px" }}
-                      />
-                    </div>
-                    <div className='dropdown'>
-                      {
-                        listDivision.filter(item => {
-                          const searchTerm = asearch.toLowerCase();
-                          const fullName = item.divisionNameEn.toLowerCase();
 
-                          return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                        }).slice(0, 10)
-                          .map((item) => (
-                            <div
-                              key={item.divisionId}
-                              onClick={() => onSearch(item.divisionNameEn, item.divisionId)}
-                              className='dropdown-row'>
-                              {item.divisionNameEn}
-                            </div>
-                          ))
-                      }
-                    </div>
-                  </div> */}
-
-
-                                {/*  */}
-                                <div className="autocomplete" ref={autocompleteRef}>
+                  {/*  */}
+                  <div className="autocomplete" ref={autocompleteRef}>
                     <input
                       value={asearch}
                       onChange={handleChange}
@@ -367,7 +335,7 @@ const handleSuggestionClick = (suggetion) => {
                   </div>
                   {/*  */}
 
-                </div> 
+                </div>
               </div>
 
               < div className="mb-3 row">
@@ -427,12 +395,9 @@ const handleSuggestionClick = (suggetion) => {
 
               <div className="text-center">
                 <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
-                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
+                <button type="button" className="btn btn-md btn-warning" onClick={() => window.location.reload()}>Refresh</button>
                 <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
               </div>
-              {/* <div className="text-end">
-                <button type="button" className="btn btn-sm btn-primary" onClick={(e)=> handleSubmit(e)}>Submit</button>
-              </div> */}
 
             </form>
           </div>
@@ -468,24 +433,22 @@ const handleSuggestionClick = (suggetion) => {
               <tbody>
                 {
                   listDistrict.filter((item) => {
-                    return search.toLowerCase() === "" ? item : item.districtNameEn.toLowerCase().includes(search.toLowerCase())||item.districtNameBn.toLowerCase().includes(search.toLowerCase())
+                    return search.toLowerCase() === "" ? item : item.districtNameEn.toLowerCase().includes(search.toLowerCase()) || item.districtNameBn.toLowerCase().includes(search.toLowerCase())
                   }).map((item) => (
 
                     <tr key={item.districtId}>
-                       <td>
-                      <div className="act_icon">
+                      <td>
+                        <div className="act_icon">
 
-                      <span  onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.districtId)}><BsTrash /></span>
-                      <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
-                      </div>
-                    </td>
+                          <span onClick={() => window.confirm("Are you sure you want to delete?") && handleDelete(item.districtId)}><BsTrash /></span>
+                          <span onClick={() => handleEdit(item)}><BiEditAlt /></span>
+                        </div>
+                      </td>
                       <td>{item.divisionNameEn}</td>
                       <td>{item.divisionNameBn}</td>
                       <td>{item.districtNameEn}</td>
                       <td>{item.districtNameBn}</td>
                       <td>{item.districtCode}</td>
-                      {/* <td onClick={() =>window.confirm("Are you sure you want to delete?") && handleDelete(item.districtId)}><BsTrash /></td>
-                      <td onClick={() => handleEdit(item)}><BiEditAlt /></td> */}
                     </tr>
 
                   ))}

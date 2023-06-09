@@ -4,10 +4,10 @@ import withAuthentication from './Protected/withAuthentication'
 
 const Dashboard = () => {
   return (
-  <div>
+    <div>
       <h3>Dashboard</h3>
-    {/* <img src={BG} alt="" /> */}
-  </div>
+      {/* <img src={BG} alt="" /> */}
+    </div>
   )
 }
 

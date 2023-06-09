@@ -3,8 +3,8 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { useState } from 'react';
 
-const PDFConverter =() => {
-  const [val,setVal] = useState("Hello");
+const PDFConverter = () => {
+  const [val, setVal] = useState("Hello");
 
   const handleClick = () => {
     const doc = new jsPDF();
@@ -39,12 +39,12 @@ const PDFConverter =() => {
     doc.save('data.pdf');
   };
 
-  
-    return (
-      <div>
-        <button onClick={handleClick}>Convert and Download PDF</button>
-      </div>
-    );
+
+  return (
+    <div>
+      <button onClick={handleClick}>Convert and Download PDF</button>
+    </div>
+  );
 }
 
 export default PDFConverter;

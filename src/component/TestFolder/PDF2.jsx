@@ -1,12 +1,12 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-const  PDF2 =()=>{
-    const [val,setVal] = useState("Hello");
-    const[nameFile, setNameFile]= useState("myFile")
+const PDF2 = () => {
+  const [val, setVal] = useState("Hello");
+  const [nameFile, setNameFile] = useState("myFile")
 
- const handleClick = () => {
+  const handleClick = () => {
     const doc = new jsPDF();
 
     // Custom PDF content
@@ -20,7 +20,7 @@ const  PDF2 =()=>{
     // doc.setFontSize(12);
     doc.text(20, 30, 'This is some text data that will be included in the PDF.');
 
-        // doc.setFontSize(20);
+    // doc.setFontSize(20);
     doc.text(20, 40, 'Table Data:');
 
 
@@ -32,7 +32,7 @@ const  PDF2 =()=>{
     ];
 
     // Table columns
-    const tableColumns = ["SL",'Name', 'Age'];
+    const tableColumns = ["SL", 'Name', 'Age'];
 
     // Table options
     const tableOptions = {
@@ -40,7 +40,7 @@ const  PDF2 =()=>{
     };
 
     // Generate table data
-    const tableRows = tableData.map((row,index) => [index+1,row.name, row.age]);
+    const tableRows = tableData.map((row, index) => [index + 1, row.name, row.age]);
 
     // Generate table
     doc.autoTable({
@@ -53,13 +53,13 @@ const  PDF2 =()=>{
     doc.save(`${nameFile}.pdf`);
   };
 
-  
-    return (
-      <div>
-        <button onClick={handleClick}>Convert and Download PDF</button>
-      </div>
-    );
-  
+
+  return (
+    <div>
+      <button onClick={handleClick}>Convert and Download PDF</button>
+    </div>
+  );
+
 }
 
 export default PDF2;

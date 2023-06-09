@@ -5,10 +5,6 @@ import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import { GetDivisionList, GetDistrictList, GetDistrictCode, SaveDistrict, DeleteDistrict } from '../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
-//import '../../../css/AutoComplete.css';
-//import Select from 'react-select';
-//import withAuthentication from '../../Protected/withAuthentication';
- //import '../css/Auto.css';
 
 
 const Hello = () => {
@@ -62,9 +58,9 @@ const Hello = () => {
     setAsearch(suggetion.divisionNameEn);
     setDistrict({
       ...district,
-      DivisionId:suggetion.divisionId
+      DivisionId: suggetion.divisionId
     })
-    
+
     setShowSuggestions(false);
   }
 

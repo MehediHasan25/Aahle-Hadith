@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { GetDivisionList, GetDistrictList, GetUpazilaList, GetMosqueList,GetMonthWisePaymentReport } from '../../URL/ApiList';
 import toast, { Toaster } from 'react-hot-toast';
-//import '../../../css/AutoComplete.css';
 import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
@@ -424,7 +423,7 @@ const handleYearMonthSearch = (e)=>{
 
     ////////////////////Validation ////////////////////////////////////
 
-    console.log("statecheck", month);
+    // console.log("statecheck", month);
 
     let apiParams = `DistrictId=${DistrictId === "" ? 0 : DistrictId}&DivisionId=${DivisionId === "" ? 0 : DivisionId}&UpazilaId=${upazilaId ===""? 0 : upazilaId }&MosqueId=${MosqueId===""? 0 : MosqueId}&PaymentYear=${year}&PaymentMonth=${month}`;
     //  console.log("apiParams", apiParams);
@@ -542,31 +541,11 @@ const PdfMonthPaymentDownload = (data) => {
      doc.text(32, 70, `${MosqueNameEn === "" ? "" : MosqueNameEn }`);
 
 
-    //  const tableEndPosY = doc.autoTable.previous.finalY;
-    //  console.log('tablend', tableEndPosY);
-
-    
-
-
-
-
-
-
-     let previousValue = null;
-     let rowspan = 1;
      // Table data
      let tableData = data;
 
      // Table columns
      const tableColumns = ["SL", 'Actual ID', 'Organization ID', 'Name','Mobile No', 'Donation Amount', 'Discount(%)', 'Net Amount'];
-
-     
-     // Table options
-    //  const tableOptions = {
-    //      startY: yPos,
-    //  };
-
-     //let tableFormat = removeConsecutiveDuplicatesForUpazila(tableData);
 
      let totalDonationAmt = tableData.reduce(function(previousVal, currentVal) {
         return previousVal + currentVal.donationAmt;
@@ -581,7 +560,6 @@ const PdfMonthPaymentDownload = (data) => {
      // Generate table data
      const tableRows = tableData.map((row, index) => [index + 1, row.donerActualId, row.organisationalId, row.donerName,row.mobileNo,row.donationAmt,discount+("%"),row.netAmount]);
 
-    // console.log("tableRows", tableData);
 
 
      const styles = {

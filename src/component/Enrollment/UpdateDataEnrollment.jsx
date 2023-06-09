@@ -954,13 +954,6 @@ const UpdateDataEnrollment = () => {
 
 
 
-    // const handlePerUpaSearchChange = (e) => {
-    //     setSelectAutoPerUpaVal({
-    //         ...selectAutoPerUpaVal,
-    //         PerUpaSearch: e.target.value
-    //     });
-    // }
-
     const autocompletePerUpaRef = useRef();
     useEffect(() => {
         const handlePerUpaClick = (event) => {
@@ -982,25 +975,6 @@ const UpdateDataEnrollment = () => {
     }
 
 
-    // const handlePerUpaSearch = async (searchTerm, val) => {
-
-    //     try {
-    //         let getDistrict = await axios.get(GetDistrictfromUpazila + val);
-    //         console.log("District", getDistrict.data.districtobj.districtNameEn);
-    //         let districtName = getDistrict.data.districtobj.districtNameEn;
-
-    //         setSelectAutoPerUpaVal({
-    //             PerUpaSearch: searchTerm,
-    //             PerUpazilaId: val,
-    //             PerDistrict: districtName
-    //         });
-
-
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-
-    // }
 
     const handlePerUpaSuggestionClick = async(suggetion) => {
         try {
@@ -1249,25 +1223,7 @@ const UpdateDataEnrollment = () => {
                                     autoComplete='off'
                                 />
                             </div>
-                            {/* <div className="row mb-3">
-
-                                <div className="col-md-6">
-                                    <div className="row">
-                                        <label  className="col-sm-4 col-form-label text-end">Upazila</label>
-                                        <div className="col-sm-8">
-                                        <input type="email" className="form-control" id="inputEmail3" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                   <div className="row">
-                                   <label  className="col-sm-4 col-form-label text-end">District</label>
-                                    <div className="col-sm-8">
-                                    <input type="email" className="form-control" id="inputEmail3" />
-                                    </div>
-                                   </div>
-                                </div>
-                            </div> */}
+                            
 
                             {/* PreUpazila */}
 
@@ -1278,38 +1234,7 @@ const UpdateDataEnrollment = () => {
                                         <label className="col-sm-4 col-form-label text-end">Upazila</label>
                                         <div className="col-sm-8">
                                             {/*  */}
-{/* 
-                                            <div className='search-container'>
-                                                <div className='search-inner'>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Type Upazila Name & Select (English)"
-                                                        name="PreUpaSearch"
-                                                        onChange={handlePreUpaSearchChange}
-                                                        value={selectAutoPreUpaVal.PreUpaSearch}
-                                                        autoComplete='off'
-                                                        style={{ width: "2000px" }}
-                                                    />
-                                                </div>
-                                                <div className='dropdown'>
-                                                    {
-                                                        listUpazila.filter(item => {
-                                                            const searchTerm = selectAutoPreUpaVal.PreUpaSearch.toLowerCase();
-                                                            const fullName = item.upazilaNameEn.toLowerCase();
 
-                                                            return searchTerm && fullName.startsWith(searchTerm) && fullName != searchTerm;
-                                                        }).slice(0, 10)
-                                                            .map((item) => (
-                                                                <div
-                                                                    key={item.upazilaId}
-                                                                    onClick={() => handlePreUpaSearch(item.upazilaNameEn, item.upazilaId)}
-                                                                    className='dropdown-row'>
-                                                                    {item.upazilaNameEn}
-                                                                </div>
-                                                            ))
-                                                    }
-                                                </div>
-                                            </div> */}
 
                              <div className="autocomplete" ref={autocompletePreRef}>
                                     <input

@@ -1,7 +1,7 @@
 import { hostIp } from './IpAddress';
 
 export const RegisterAPI = hostIp + `api/v1/Login/registration`;
-export const  LoginAPI = hostIp + `api/v1/Login/login`;
+export const LoginAPI = hostIp + `api/v1/Login/login`;
 
 
 // Division API
@@ -33,32 +33,32 @@ export const GetMosqueList = hostIp + `api/v1/Mosque/get-mosque`;
 
 // Occupation
 export const SaveOccupation = hostIp + `api/v1/BasicSetup/occupation-save`;
-export const  GetOccupationList = hostIp + `api/v1/BasicSetup/occupation-list`;
+export const GetOccupationList = hostIp + `api/v1/BasicSetup/occupation-list`;
 export const DeleteOccupation = hostIp + `api/v1/BasicSetup/Delete-Occup/`;
 
 // Education
 export const SaveEducation = hostIp + `api/v1/BasicSetup/eduqua-save`;
-export const  GetEducationList = hostIp + `api/v1/BasicSetup/eduqua-list`;
+export const GetEducationList = hostIp + `api/v1/BasicSetup/eduqua-list`;
 export const DeleteEducaiton = hostIp + `api/v1/BasicSetup/Delete-EduQua/`;
 
 // Donation Amount
 export const SaveDonationAmt = hostIp + `api/v1/BasicSetup/donation-save`;
-export const  GetDonationAmtList = hostIp + `api/v1/BasicSetup/donamt-list`;
+export const GetDonationAmtList = hostIp + `api/v1/BasicSetup/donamt-list`;
 export const DeleteDonationAmt = hostIp + `api/v1/BasicSetup/Delete-DonAmt/`;
 
 //Donar Enrollment Page
-export const GetDistrictfromUpazila = hostIp +`api/v1/DonarEnrollment/donar-district/`;
+export const GetDistrictfromUpazila = hostIp + `api/v1/DonarEnrollment/donar-district/`;
 export const SaveEnrollmentData = hostIp + `api/v1/DonarEnrollment/donenrol-save`;
 
 // Update Enrollment Page 
-export const GetEnrollmentData = hostIp +`api/v1/DonarEnrollment/donenrol-list?DonerActualId=&OrganisationalId=`;
+export const GetEnrollmentData = hostIp + `api/v1/DonarEnrollment/donenrol-list?DonerActualId=&OrganisationalId=`;
 export const DeleteEnrollData = hostIp + `api/v1/DonarEnrollment/donenrol-delete/`;
-export const GetEnrollmentDataBySearch = hostIp+ `api/v1/DonarEnrollment/donenrol-list?`
+export const GetEnrollmentDataBySearch = hostIp + `api/v1/DonarEnrollment/donenrol-list?`
 export const GetActualIdandOrgId = hostIp + `api/v1/DonarEnrollment/ActOrgId-list`;
 export const GetDonarAllData = hostIp + `api/v1/DonarEnrollment/donenrol-byId/`;
 
 // Donar Payment Entry
-export const DonarPaymentActualID = hostIp +`api/v1/DonarPaymentEntry/ActOrg-list`;
+export const DonarPaymentActualID = hostIp + `api/v1/DonarPaymentEntry/ActOrg-list`;
 export const DonarPaymentSave = hostIp + `api/v1/DonarPaymentEntry/donarpayment-save`;
 
 // Monthly Donar Payment 
@@ -78,7 +78,7 @@ export const GetDonarEnrollmentList = hostIp + `api/v1/Report/enroll-list?`;
 export const GetMonthWisePaymentReport = hostIp + `api/v1/Report/monthwise-payment-list?`;
 
 // Upazila Wise Payment Report 
-export const GetUpazilaWisePaymentReport = hostIp+ `api/v1/Report/upazilawise-payment-list?`
+export const GetUpazilaWisePaymentReport = hostIp + `api/v1/Report/upazilawise-payment-list?`
 
 
 

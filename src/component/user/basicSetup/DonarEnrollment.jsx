@@ -24,18 +24,6 @@ const DonarEnrollment = () => {
                     Update
                 </div>
 
-            {/* <div class="form-check">
-                <input class="form-check-input" type="radio" name="update" checked= {update} onClick={()=> handleNew()} />
-                <label class="form-check-label" for="exampleRadios1">
-                    New
-                </label>
-            </div>
-            <div className="form-check">
-                <input className="form-check-input" type="radio" name="update" onClick={()=> handleUpdate()}/>
-                    <label className="form-check-label" htmlFor="exampleRadios2">
-                        Update
-                    </label>
-            </div> */}
             </div>
 
 

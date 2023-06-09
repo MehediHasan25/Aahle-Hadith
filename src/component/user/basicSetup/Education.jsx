@@ -231,9 +231,7 @@ const Education = () => {
                 <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
                 <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
               </div>
-                            {/* <div className="text-end">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
-                            </div> */}
+                        
                         </form>
                     </div>
                 </div>

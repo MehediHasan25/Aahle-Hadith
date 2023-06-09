@@ -1,18 +1,18 @@
-import React,{useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiEditAlt } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { SaveDonationAmt,GetDonationAmtList,DeleteDonationAmt } from '../../../URL/ApiList';
+import { SaveDonationAmt, GetDonationAmtList, DeleteDonationAmt } from '../../../URL/ApiList';
 import withAuthentication from '../../Protected/withAuthentication';
 import { useNavigate } from 'react-router-dom';
 
 const DonationAmount = () => {
     const [donationAmount, setDonationAmount] = useState({
-        DonationAmtId:"",
-        DonationAmt:"",
-        DonationAmtBng:"",
-        sts:true
+        DonationAmtId: "",
+        DonationAmt: "",
+        DonationAmtBng: "",
+        sts: true
     });
 
     const [listDonationAmount, setListDonationAmount] = useState([]);
@@ -21,21 +21,21 @@ const DonationAmount = () => {
     const navigate = useNavigate();
 
 
-    useEffect(()=>{
+    useEffect(() => {
         getDonationAmt();
-    },[]);
+    }, []);
 
 
     useEffect(() => {
-        if(track === true){
+        if (track === true) {
             getDonationAmt();
         }
-    
+
         return (() => {
-          setTrack(false);
+            setTrack(false);
         })
-       
-      }, [track]);
+
+    }, [track]);
 
 
 
@@ -55,17 +55,17 @@ const DonationAmount = () => {
 
 
 
-    const getDonationAmt = async()=>{
+    const getDonationAmt = async () => {
         let token = localStorage.getItem("AuthToken");
         const headers = { 'Authorization': 'Bearer ' + token };
 
-        try{
-            let getDonaAmt = await axios.get(GetDonationAmtList,{headers});
+        try {
+            let getDonaAmt = await axios.get(GetDonationAmtList, { headers });
             let getAmtList = getDonaAmt.data._listData;
             // console.log("list", getAmtList);
             setListDonationAmount(getAmtList);
 
-        }catch(err){
+        } catch (err) {
             console.log("error", err);
             if (err.response) {
                 let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
@@ -82,21 +82,21 @@ const DonationAmount = () => {
     }
 
 
-    const handleSubmit = async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // let banglaNumber = /[০-৯]+(\.[০-৯]*)?$/;
         let token = localStorage.getItem("AuthToken");
         const headers = { 'Authorization': 'Bearer ' + token };
-        const {DonationAmtId,DonationAmt,DonationAmtBng,sts} = donationAmount;
-        
+        const { DonationAmtId, DonationAmt, DonationAmtBng, sts } = donationAmount;
 
-        if(DonationAmt === ""){
-            toast.error('Please Enter Donation Amount',{duration: 5000,position: 'top-center'});
+
+        if (DonationAmt === "") {
+            toast.error('Please Enter Donation Amount', { duration: 5000, position: 'top-center' });
             return;
         }
 
-        if(DonationAmtBng === ""){
-            toast.error('Please Enter Donation Amount (Bangla)',{duration: 5000,position: 'top-center'});
+        if (DonationAmtBng === "") {
+            toast.error('Please Enter Donation Amount (Bangla)', { duration: 5000, position: 'top-center' });
             return;
         }
 
@@ -106,37 +106,37 @@ const DonationAmount = () => {
         // }
 
         const payload = {
-            DonationAmtId:DonationAmtId === "" ? 0 : DonationAmtId,
-            DonationAmt:parseInt(DonationAmt),
-            DonationAmtBng:DonationAmtBng,
-            sts:sts
+            DonationAmtId: DonationAmtId === "" ? 0 : DonationAmtId,
+            DonationAmt: parseInt(DonationAmt),
+            DonationAmtBng: DonationAmtBng,
+            sts: sts
         }
 
-       // console.log("Donation Amount Payload", payload);
+        // console.log("Donation Amount Payload", payload);
 
-        try{
-            let saveAmt = await axios.post(SaveDonationAmt,payload,{headers});
+        try {
+            let saveAmt = await axios.post(SaveDonationAmt, payload, { headers });
             let AmtSave = saveAmt.data.success;
-            
-            if(AmtSave === true){
-                if(DonationAmtId > 0){
-                  toast.success('Successfully Updated!',{duration: 4000,position: 'top-center'});  
-                
-                }else{
-                  toast.success('Successfully Added!',{duration: 4000,position: 'top-center'});  
-                
+
+            if (AmtSave === true) {
+                if (DonationAmtId > 0) {
+                    toast.success('Successfully Updated!', { duration: 4000, position: 'top-center' });
+
+                } else {
+                    toast.success('Successfully Added!', { duration: 4000, position: 'top-center' });
+
                 }
 
                 setTrack(true);
                 setDonationAmount({
-                ...donationAmount,
-                DonationAmtId:"",
-                DonationAmt:"",
-                DonationAmtBng:""
-            });
-        }
+                    ...donationAmount,
+                    DonationAmtId: "",
+                    DonationAmt: "",
+                    DonationAmtBng: ""
+                });
+            }
 
-        }catch(err){
+        } catch (err) {
             console.log("error", err);
             if (err.response) {
                 let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
@@ -152,34 +152,34 @@ const DonationAmount = () => {
     }
 
 
-    const handleEdit =(editData)=>{
-       // console.log("edit", editData);
-        const {donationAmtId,donationAmt,donationAmtBng,sts} = editData;
+    const handleEdit = (editData) => {
+        // console.log("edit", editData);
+        const { donationAmtId, donationAmt, donationAmtBng, sts } = editData;
 
         setDonationAmount({
-            DonationAmtId:donationAmtId,
-            DonationAmt:donationAmt,
-            DonationAmtBng:donationAmtBng,
-            sts:sts
+            DonationAmtId: donationAmtId,
+            DonationAmt: donationAmt,
+            DonationAmtBng: donationAmtBng,
+            sts: sts
         });
 
     }
 
 
-    const handleDelete = async(id) =>{
+    const handleDelete = async (id) => {
         //  console.log("id",id);
         let token = localStorage.getItem("AuthToken");
         const headers = { 'Authorization': 'Bearer ' + token };
-       
-        try{
-         let deleteData = await axios.get(DeleteDonationAmt+id, {headers});
-         let resDel = deleteData.data.success;
-      
-         if(resDel === true){
-          toast.success('Successfully Deleted!',{duration: 4000,position: 'top-center'});  
-          setTrack(true);
-         }
-        }catch(err){
+
+        try {
+            let deleteData = await axios.get(DeleteDonationAmt + id, { headers });
+            let resDel = deleteData.data.success;
+
+            if (resDel === true) {
+                toast.success('Successfully Deleted!', { duration: 4000, position: 'top-center' });
+                setTrack(true);
+            }
+        } catch (err) {
             console.log("error", err);
             if (err.response) {
                 let message = err.response.status === 401 ? "Authentication Error" : "Bad Request";;
@@ -192,8 +192,7 @@ const DonationAmount = () => {
                 toast.error(err.toString(), { duration: 5000, position: 'top-center' });
             }
         }
-       }
-     
+    }
 
 
 
@@ -201,8 +200,9 @@ const DonationAmount = () => {
 
 
 
-  return (
-    <div className="page-content p-4">
+
+    return (
+        <div className="page-content p-4">
             <div className="pg_title">
                 <h3>Donation Amount</h3>
             </div>
@@ -244,13 +244,10 @@ const DonationAmount = () => {
                                 </div>
                             </div>
                             <div className="text-center">
-                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
-                <button type="button" className="btn btn-md btn-warning" onClick={() =>  window.location.reload()}>Refresh</button>
-                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
-              </div>
-                            {/* <div className="text-end">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
-                            </div> */}
+                                <button type="button" className="btn btn-md btn-danger" onClick={() => navigate("/dashboard")}>Close</button>
+                                <button type="button" className="btn btn-md btn-warning" onClick={() => window.location.reload()}>Refresh</button>
+                                <button type="button" className="btn btn-md btn-primary" onClick={(e) => handleSubmit(e)}>Submit</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -258,7 +255,7 @@ const DonationAmount = () => {
             </div>
 
             <div className="row pt-4">
-            <div className="col-md-12">
+                <div className="col-md-12">
                     <div className="table form-tbl">
                         <form className="d-flex w-50">
                             <input
@@ -304,7 +301,7 @@ const DonationAmount = () => {
                 </div>
             </div>
         </div>
-  )
+    )
 }
 
 export default withAuthentication(DonationAmount);
