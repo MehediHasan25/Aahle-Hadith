@@ -7,7 +7,8 @@ import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 
 
 
@@ -26,6 +27,7 @@ const MosqueNameReport = () => {
         upazilaId:"",
         upazilaNameEn:""
     });
+    const[excpdf, setExcpdf] = useState("");
 
 //AutoComplete Division //////////
 const [showDivSuggestions, setShowDivSuggestions] = useState(false);
@@ -263,7 +265,7 @@ const handleUpaSuggestionClick = (suggetion) => {
 
 
 // Submit button
-const handleSubmit = async(e) =>{
+const handleSubmit = async(e,data) =>{
     e.preventDefault();
     const {ReportName,DistrictId,DivisionId,upazilaId,DivisionNameEn,DistrictNameEn,upazilaNameEn} = mosqueReport;
    // console.log("Submit Mosque Report Data");
@@ -321,14 +323,20 @@ const handleSubmit = async(e) =>{
 
     try{
      let savMosqueData = await axios.get(GetReportMosqueNameList+apiParams,{headers});
-    // console.log("savMosque", savMosqueData.data);
+    //  console.log("savMosque", savMosqueData.data);
      let getMosqueData = savMosqueData.data;
 
      if(getMosqueData.success === true){
         setListMosque(getMosqueData._mosqueList);
-        PdfMosqueDownload(getMosqueData._mosqueList);
+        // console.log("response",getMosqueData._mosqueList);
+        if(data === "Excel"){
+            exportToExcel(getMosqueData._mosqueList);
+        }else{ 
+            PdfMosqueDownload(getMosqueData._mosqueList);
+        }
 
        setMosqueReport({
+            ...mosqueReport,
             DistrictId: "",
             DivisionId: "",
             DivisionNameEn:"",
@@ -336,6 +344,7 @@ const handleSubmit = async(e) =>{
             upazilaId:"",
             upazilaNameEn:""
         });
+        setExcpdf("");
         toast.success('Request Successfull!',{duration: 4000,position: 'top-center'}); 
 
      }else{
@@ -364,6 +373,8 @@ const handleSubmit = async(e) =>{
 const PdfMosqueDownload = (data) => {
     // console.log("InsidePdfFunction", data);
      const { ReportName } = mosqueReport;
+
+    //  console.log("mosquePDF", mosqueReport);
 
      const doc = new jsPDF();
      doc.setFontSize(20);
@@ -441,6 +452,29 @@ const PdfMosqueDownload = (data) => {
      doc.save(`${ReportName}.pdf`);
 
  }
+
+
+ const exportToExcel = (data) => {
+    const { ReportName } = mosqueReport;
+    // console.log("report",mosqueReport.ReportName);
+
+    const formattedData = data.map((item) => ({
+      'Division Name': item.divisionNameEn,
+      'District Name': item.districtNameEn,
+      'Upazila Name': item.upazilaNameEn,
+      'Mosque Name': item.mosqueNameEn
+    }));
+  
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  
+    const fileName = `${ReportName}.xlsx`;
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+    saveAs(blob, fileName);
+  };
 
 
 
@@ -568,7 +602,8 @@ const PdfMosqueDownload = (data) => {
                             </div>
 
                             <div className="text-end">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"PDF")}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"Excel")}>Excel Download</button>
                             </div>
 
                         </form>

@@ -7,6 +7,8 @@ import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 import { removeConsecutiveDuplicatesForUpazila } from '../../../Utils/ReportFunction';
 
 
@@ -17,6 +19,8 @@ const UpazilaNameReport = () => {
     const [listDivision, setListDivision] = useState([]);
     const [selectVal, setSelectVal] = useState("");
     // Division autoComplete////
+
+    const[excpdf, setExcpdf] = useState("");
 
     const [listDistrict, setListDistrict] = useState([]);
     const [district, setDistrict] = useState({
@@ -183,7 +187,12 @@ const UpazilaNameReport = () => {
     // District AutoSearch
 
     /// AutoComplete /////////////
-    const handleSubmit = async (e) => {
+
+    
+
+
+
+    const handleSubmit = async (e,data) => {
         e.preventDefault();
 
         const {ReportName, DistrictId, DistrictNameEn } = district;
@@ -226,12 +235,18 @@ const UpazilaNameReport = () => {
 
         try {
             let upaData = await axios.get(GetReportUpazilaNameList + apiParams, { headers });
-            // console.log("UpaDataList", upaData.data);
+            //  console.log("UpaDataList", upaData.data);
             let savUpaData = upaData.data;
 
             if (savUpaData.success === true) {
                 setPdfUpaList(savUpaData._upazilaList);
-                PdfDownloadFunc(savUpaData._upazilaList);
+
+                if(data === "Excel"){
+                    exportToExcel(savUpaData._upazilaList);
+                }else{
+                    PdfDownloadFunc(savUpaData._upazilaList);
+                }
+              
 
                 setAsearch("");
                 setSelectVal("");
@@ -244,6 +259,7 @@ const UpazilaNameReport = () => {
                     DistrictCode: "",
                     AddedBy: localStorage.getItem('userName')
                 });
+                setExcpdf("");
 
                 toast.success('Request Successfull!',{duration: 4000,position: 'top-center'}); 
             }else{
@@ -348,6 +364,44 @@ const UpazilaNameReport = () => {
       // Save the PDF as a Blob
     }
 
+    const exportToExcel = (data) => {
+        const { ReportName } = district;
+
+        const formattedData = data.map((item) => ({
+          'Division Name': item.divisionNameEn,
+          'District Name': item.districtNameEn,
+          'Upazila Name': item.upazilaNameEn,
+        }));
+
+        ///////////////////////Experiment///////////////////
+        // let newData = [{
+        //     "Name":"Ishan",
+        //     "Age":30,
+        //     "address":"Mohakhali"
+        // }];
+
+        // const tab1 = [].concat(formattedData).concat([{}]).concat(newData);
+
+        // const finalData = [...tab1];
+
+        // const worksheet = XLSX.utils.json_to_sheet(finalData);
+        ///////////////////////Experiment///////////////////
+
+
+        console.log("format", formattedData);
+      
+       const worksheet = XLSX.utils.json_to_sheet(formattedData);
+       
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      
+        const fileName = `${ReportName}.xlsx`;
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      
+        saveAs(blob, fileName);
+      };
+      
 
     return (
         <div className="page-content p-4">
@@ -437,7 +491,8 @@ const UpazilaNameReport = () => {
                             </div>
 
                             <div className="text-end">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"PDF")}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"Excel")}>Excel Download</button>
                             </div>
 
                         </form>

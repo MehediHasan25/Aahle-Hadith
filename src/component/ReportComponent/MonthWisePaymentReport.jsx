@@ -6,6 +6,8 @@ import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 import { year,month } from '../../../Utils/EnrollmentData';
 
 
@@ -29,6 +31,8 @@ const MonthWisePaymentReport = () => {
         year:"",
         month:""
     });
+
+    const[excpdf, setExcpdf] = useState("");
 
      //AutoComplete Division State //////////
      const [showDivSuggestions, setShowDivSuggestions] = useState(false);
@@ -352,7 +356,7 @@ const handleYearMonthSearch = (e)=>{
 ///////////////////////////////////////////Year and month handle Search /////////////////////////////////////
 
  //////////////////////////////Submit button //////////////////////////////////////////////////
- const handleSubmit = async(e) =>{
+ const handleSubmit = async(e,data) =>{
     e.preventDefault();
     const {ReportName,DivisionId,DivisionNameEn,DistrictId,DistrictNameEn,upazilaId,upazilaNameEn,MosqueId,MosqueNameEn,year,month} = monthPayement;
     
@@ -434,8 +438,14 @@ const handleYearMonthSearch = (e)=>{
         let monthSavPay = savMonthPayment.data;
         if(monthSavPay.success === true){
             toast.success('Requeset Successfull', { duration: 3000, position: 'top-center' });
+            // console.log("monthly", monthSavPay._listData);
             setMonthPay(monthSavPay._listData);
-            PdfMonthPaymentDownload(monthSavPay._listData);
+            if(data === "Excel"){
+                exportToExcel(monthSavPay._listData);
+            }else{
+               PdfMonthPaymentDownload(monthSavPay._listData);
+            }
+            
              setMonthPayement({
                 ...monthPayement,
                 DivisionId: "",
@@ -449,6 +459,8 @@ const handleYearMonthSearch = (e)=>{
                 year:"",
                 month:""
             });
+
+            setExcpdf("");
 
         }else{
             toast.error('No Data Found', { duration: 3000, position: 'top-center' });
@@ -581,6 +593,78 @@ const PdfMonthPaymentDownload = (data) => {
      doc.save(`${ReportName}.pdf`);
 
  }
+
+
+
+ const exportToExcel = (data) => {
+    const { ReportName,DivisionNameEn,DistrictNameEn,upazilaNameEn,MosqueNameEn, year,month} = monthPayement;
+    
+
+    const formattedData1 =[
+        {"Division Name": DivisionNameEn, "District Name": DistrictNameEn, 'Upazila Name': upazilaNameEn,'Mosque Name': MosqueNameEn}
+      ];
+
+    const formattedData2 = data.map((item) => ({
+        "Year":year,
+        "Month":month,
+        'Actual ID': item.donerActualId,
+        'Organizational ID': item.organisationalId,
+        'Name': item.donerName,
+        'Mobile No': item.mobileNo,
+        'Donation Amount': item.donationAmt,
+        "Discount":discount+'%',
+        'Net Amount':item.netAmount
+      }));
+    
+     
+    
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.aoa_to_sheet([]);
+    
+      // Add headers for table 1
+      const headers1 = Object.keys(formattedData1[0]);
+      XLSX.utils.sheet_add_aoa(worksheet, [headers1], { origin: 'A1' });
+    
+      // Add data for table 1
+      const dataRows1 = formattedData1.map((item) => Object.values(item));
+      XLSX.utils.sheet_add_aoa(worksheet, dataRows1, { origin: 'A2' });
+    
+      // Add headers for table 2
+      const headers2 = Object.keys(formattedData2[0]);
+      const table2StartRow = dataRows1.length + 4;
+      XLSX.utils.sheet_add_aoa(worksheet, [headers2], { origin: `A${table2StartRow}` });
+    
+     // console.log("For2",formattedData2 );
+      // Add data for table 2
+      const dataRows2 = formattedData2.map((item) => Object.values(item));
+     
+      let totalDonationAmount = formattedData2.reduce((acc, item) => acc + item['Donation Amount'], 0);
+      let totalDiscount = discount+'%';
+      let totalNetAmount = formattedData2.reduce((acc, item) => acc + item["Net Amount"], 0);
+    //  const totalRow = [
+    //     ['Actual ID', 'Total'],
+    //     ['Organizational ID',""],
+    //     ['Name', ''],
+    //     ['Mobile No', ''],
+    //     ['Donation Amount', totalDonationAmount],
+    //     ["Discount",discount+'%'],
+    //     ['Net Amount',totalNetAmount]
+    //   ];
+      let total = ['', "", "","","","Total",totalDonationAmount,totalDiscount,totalNetAmount];
+       dataRows2.push(total);
+    //   // let dataTab2Row = [...dataRows2,totalRow];
+    //   console.log("dataRow2", dataRows2);
+      XLSX.utils.sheet_add_aoa(worksheet, dataRows2, { origin: `A${table2StartRow + 1}` });
+    
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    
+      const fileName = `${ReportName}.xlsx`;
+      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+      saveAs(blob, fileName);
+  };
 
   return (
     <div className="page-content p-4">
@@ -771,7 +855,8 @@ const PdfMonthPaymentDownload = (data) => {
                     
 
                     <div className="text-end">
-                        <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>PDF Download</button>
+                        <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"PDF")}>PDF Download</button>
+                        <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"Excel")}>Excel Download</button>
                     </div>
 
                 </form>

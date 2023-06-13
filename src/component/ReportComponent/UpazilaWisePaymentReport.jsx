@@ -7,13 +7,18 @@ import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 import { year,month } from '../../../Utils/EnrollmentData';
+
 
 const UpazilaWisePaymentReport = () => {
     const [listDivision, setListDivision] = useState([]);
     const [listDistrict, setListDistrict] = useState([]);
     const [discount, setDiscount] = useState("20");
     const [upazilaPayment, setUpazilaPayment] = useState([]);
+
+    const[excpdf, setExcpdf] = useState("");
 
     const [upaPayment, setUpaPayment] = useState({
         ReportName: "Upazila Wise Payment Report",
@@ -188,7 +193,7 @@ const handleReportNameChange = (e) => {
 
 
 /////////////////////////////////////////// Handle Submit ///////////////////////////////////////////////////
-const handleSubmit = async(e) =>{
+const handleSubmit = async(e,dataFormat) =>{
     e.preventDefault();
    const { ReportName,DistrictId,DivisionId,DistrictNameEn,DivisionNameEn,year,month} = upaPayment;
 
@@ -239,19 +244,27 @@ const handleSubmit = async(e) =>{
 
     //  DistrictId=0&DivisionId=0&PaymentYear=2023&PaymentMonth=
     
-     console.log("upaPayment", upaPayment);
+    //  console.log("upaPayment", upaPayment);
 
      let apiParams = `DistrictId=${DistrictId === "" ? 0 : DistrictId}&DivisionId=${DivisionId === "" ? 0 : DivisionId}&PaymentYear=${year}&PaymentMonth=${month}`;
 
      try{
         let savUpaPay = await axios.get(GetUpazilaWisePaymentReport+apiParams,{headers});
-        console.log("savUpa", savUpaPay.data);
+        // console.log("savUpa", savUpaPay.data);
         let upaSave = savUpaPay.data;
 
         if(upaSave.success === true){
             toast.success('Requeset Successfull', { duration: 3000, position: 'top-center' });
+            // console.log("response", upaSave._listData);
             setUpazilaPayment(upaSave._listData);
-            PdfUpazilaPaymentDownload(upaSave._listData);
+
+            if(dataFormat === 'Excel'){
+                exportToExcel(upaSave._listData);
+            }else{
+                PdfUpazilaPaymentDownload(upaSave._listData);
+            }
+            
+          
              setUpaPayment({
                ...upaPayment,
                 DistrictId: "",
@@ -261,6 +274,8 @@ const handleSubmit = async(e) =>{
                 year:"",
                 month:""
             });
+
+            setExcpdf("");
 
         }else{
             toast.error('No Data Found', { duration: 3000, position: 'top-center' });
@@ -421,6 +436,52 @@ const PdfUpazilaPaymentDownload = (data) => {
 }
 
 
+const exportToExcel = (data) => {
+    const { ReportName } = upaPayment;
+    
+    const formattedData = data.map((item) => ({
+      'Division Name': item.divisionNameEn,
+      'District Name': item.districtNameEn,
+      'Upazila Name': item.upazilaNameEn,
+      'Payment Year': item.paymentYear,
+      'Payment Month': item.paymentMonth,
+      'Donation Amount': item.donationAmt,
+      "DisCount": discount+'%',
+      "Net Amount":item.netAmount
+    }));
+
+    let totalDonationAmount = data.reduce((acc, item) => acc + item.donationAmt, 0);
+    let totalDiscount = `${discount}%`;
+    let totalNetAmount = data.reduce((acc, item) => acc + item.netAmount, 0);
+
+    const totalRow = {
+        'Division Name': '',
+        'District Name': '',
+        'Upazila Name': "",
+        'Payment Year':"",
+        'Payment Month':"Total",
+        'Donation Amount': totalDonationAmount,
+        "DisCount": totalDiscount,
+        "Net Amount":totalNetAmount
+      };
+  
+    const worksheet = XLSX.utils.json_to_sheet([...formattedData, totalRow]);;
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  
+    const fileName = `${ReportName}.xlsx`;
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+    saveAs(blob, fileName);
+  };
+
+
+
+
+
+
+
   return (
     <div className="page-content p-4">
             <div className="pg_title">
@@ -542,7 +603,8 @@ const PdfUpazilaPaymentDownload = (data) => {
 
 
                             <div className="text-end">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"PDF")}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"Excel")}>Excel Download</button>
                             </div>
 
                         </form>

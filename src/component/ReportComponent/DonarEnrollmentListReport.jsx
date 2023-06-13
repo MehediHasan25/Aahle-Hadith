@@ -7,6 +7,8 @@ import { reportName } from '../../../Utils/ReportName';
 import withAuthentication from '../Protected/withAuthentication';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
 
 
 const DonarEnrollmentListReport = () => {
@@ -33,6 +35,8 @@ const DonarEnrollmentListReport = () => {
         EducationNameEn: "",
         Status: ""
     });
+
+    const[excpdf, setExcpdf] = useState("");
 
     //AutoComplete Division State //////////
     const [showDivSuggestions, setShowDivSuggestions] = useState(false);
@@ -486,7 +490,7 @@ const DonarEnrollmentListReport = () => {
 
 
     //////////////////////////////Submit button //////////////////////////////////////////////////
-    const handleSubmit = async(e) =>{
+    const handleSubmit = async(e,data) =>{
         e.preventDefault();
         const {ReportName,DivisionId,DivisionNameEn,DistrictId,DistrictNameEn,upazilaId,upazilaNameEn,MosqueId,MosqueNameEn,OccupationId,OccupationNameEn,EducationId,EducationNameEn,Status} = dEnrollList;
         
@@ -584,11 +588,16 @@ const DonarEnrollmentListReport = () => {
 
         try{
             let pdGetData = await axios.get(GetDonarEnrollmentList+apiParams,{headers});
-          //  console.log("dataPdf", pdGetData.data);
+            //  console.log("dataPdf", pdGetData.data);
             let getAllEnrollData = pdGetData.data;
             if(getAllEnrollData.success === true){
                 toast.success('Requeset Successfull', { duration: 5000, position: 'top-center' });
                 setListDonarEnroll(getAllEnrollData._listData);
+                if(data === "Excel"){
+                    exportToExcel(getAllEnrollData._listData);
+                }else{
+                    PdfDonarEnrollDownload(getAllEnrollData._listData);
+                }
                setDEnrollList({
                    ...dEnrollList,
                     DivisionId: "",
@@ -605,7 +614,8 @@ const DonarEnrollmentListReport = () => {
                     EducationNameEn: "",
                     Status: ""
                 });
-                PdfDonarEnrollDownload(getAllEnrollData._listData);
+               setExcpdf("");
+               
 
             }else{
                 toast.error('No Data Found', { duration: 5000, position: 'top-center' });
@@ -751,6 +761,107 @@ const DonarEnrollmentListReport = () => {
          doc.save(`${ReportName}.pdf`);
     
      }
+
+    //  const exportToExcel = (data) => {
+    //     const { ReportName } = district;
+
+    //     const formattedData = data.map((item) => ({
+    //       'Division Name': DivisionNameEn,
+    //       'District Name': DistrictNameEn,
+    //       'Upazila Name': upazilaNameEn,
+    //       'Mosque Name': MosqueNameEn,
+    //       'Actual ID' : item.donerActualId,
+    //       'Organisational ID': item.organisationalId,
+    //       'Donar Name' : item.donerName,
+    //       'Mobile No': item.mobileNo,
+    //       'NID':item.nidNo,
+    //       'Education':item.eduQualification,
+    //       'Occupation':item.occupationName,
+    //       'Enroll Date':item.enrollmentDate,
+    //       'Status':item.lifeStatus
+    //     }));
+
+    //     console.log("format", formattedData);
+      
+    //    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+       
+    //     const workbook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    //     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      
+    //     const fileName = `${ReportName}.xlsx`;
+    //     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      
+    //     saveAs(blob, fileName);
+    //   };
+      
+
+
+    const exportToExcel = (data) => {
+        const { ReportName,DivisionNameEn,DistrictNameEn,upazilaNameEn,MosqueNameEn} = dEnrollList;
+        
+
+        const formattedData1 =[
+            {"Division Name": DivisionNameEn, "District Name": DistrictNameEn, 'Upazila Name': upazilaNameEn,'Mosque Name': MosqueNameEn}
+          ];
+
+        const formattedData2 = data.map((item) => ({
+            'Actual ID': item.donerActualId,
+            'Organizational ID': item.organisationalId,
+            'Name': item.donerName,
+            'Mobile No': item.mobileNo,
+            'NID': item.nidNo,
+            'Education':item.eduQualification,
+            'Occupation': item.occupationName,
+            'Enroll Date': item.enrollmentDate,
+            'Status':item.lifeStatus
+          }));
+        
+         
+        
+          const workbook = XLSX.utils.book_new();
+          const worksheet = XLSX.utils.aoa_to_sheet([]);
+        
+          // Add headers for table 1
+          const headers1 = Object.keys(formattedData1[0]);
+          XLSX.utils.sheet_add_aoa(worksheet, [headers1], { origin: 'A1' });
+        
+          // Add data for table 1
+          const dataRows1 = formattedData1.map((item) => Object.values(item));
+          XLSX.utils.sheet_add_aoa(worksheet, dataRows1, { origin: 'A2' });
+        
+          // Add headers for table 2
+          const headers2 = Object.keys(formattedData2[0]);
+          const table2StartRow = dataRows1.length + 4;
+          XLSX.utils.sheet_add_aoa(worksheet, [headers2], { origin: `A${table2StartRow}` });
+        
+         // console.log("For2",formattedData2 );
+          // Add data for table 2
+          const dataRows2 = formattedData2.map((item) => Object.values(item));
+         
+        //   let totalAge = formattedData2.reduce((acc, item) => acc + item["Years Old (Table 2)"], 0);
+        //  const totalRow = [
+        //   ['Full Name (Table 2)', 'Total'],
+        //   ['Years Old (Table 2)', totalAge],
+        //   ['Current City (Table 2)', ""],
+        //   ];
+        //   let total = ['Total', totalAge, ""];
+        //   dataRows2.push(total);
+        //   // let dataTab2Row = [...dataRows2,totalRow];
+        //   console.log("dataRow2", dataRows2);
+          XLSX.utils.sheet_add_aoa(worksheet, dataRows2, { origin: `A${table2StartRow + 1}` });
+        
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        
+          const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        
+          const fileName = `${ReportName}.xlsx`;
+          const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        
+          saveAs(blob, fileName);
+      };
+    
+   
     
 
 
@@ -982,7 +1093,8 @@ const DonarEnrollmentListReport = () => {
                             </div>
 
                             <div className="text-end">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e)}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"PDF")}>PDF Download</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={(e) => handleSubmit(e,"Excel")}>Excel Download</button>
                             </div>
 
                         </form>
